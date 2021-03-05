@@ -4,9 +4,12 @@ from Login.models import Country, CountryForm
 
 @csrf_exempt
 def Login(request):
-    if request.method == 'POST':
-        return redirect('Login')
-    else:
-        countryForm = CountryForm()
-        return render(request, 'Login.html', { 'countryForm' : countryForm })
+    SysBadMsg = ''
 
+    if request.method == 'POST':
+        return redirect('Login/Dashboard')
+    else:
+        return render(request, 'Login.html', { 'SysBadMsg' : SysBadMsg })
+
+def Dashboard(request):
+    return render(request, 'Dashboard.html')
