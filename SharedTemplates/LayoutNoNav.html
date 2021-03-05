@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock %} - PWS</title>
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet"  />
+        <script src="{% static 'bootstrap/js/jquery-3.3.1.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+        {% block script %}{% endblock %}
+    </head>
+    <body>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="container body-content">
+            {% block content %}{% endblock %}
+            <hr/>
+            <footer><p>&copy;&nbsp;{% now 'Y' %}&nbsp;- PWS BUILD 20210304&nbsp;(DEPLOY 01)</p></footer>
+        </div>
+    </body>
+</html>

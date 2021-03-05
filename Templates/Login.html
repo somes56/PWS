@@ -1,0 +1,53 @@
+{% extends 'LayoutNoNav.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %} Login {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/Login.js' %}"></script>
+{% endblock script %}
+
+
+
+{% block content %}
+<div class="row">
+    <div class="panel panel-default" id="w">
+        <div class="panel-heading">
+            <h3>Pioneerpac Warehouse System - Login</h3>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="panel-body">
+                <div class="col-md-8">
+                    <form class="form-horizontal" method="POST">
+                        <div class="alert alert-danger"><strong> Invalid Login ID or Password.</strong></div>
+                        {% render_field countryForm.Name id="Name" class="form-control input-sm"  %}
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Login ID</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Password</label>
+                            <div class="col-md-5">
+                                <input type="password" class="form-control"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-3">
+                                <input type="submit" value="Log In" class="btn btn-success">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+    
