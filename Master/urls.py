@@ -3,5 +3,6 @@ from Master import views
 
 urlpatterns = [
     path('Customer', views.Customer, name='Customer'),
-    path('UpsertMstCountry', views.UpsertMstCountry, name='UpsertMstCountry')
+    path('CustomerForm', views.CustomerForm, name='CustomerForm'),
+    path('UpsertCountry', views.UpsertCountry, name='UpsertCountry')
 ]

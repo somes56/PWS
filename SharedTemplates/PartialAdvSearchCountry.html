@@ -1,0 +1,17 @@
+<table class="table">
+    <tr>
+        <th style="width:15%">ISO Code</th>
+        <th style="width:30%">Name</th>
+        <th style="width:15%"></th>
+    </tr>
+    
+    
+    {% for Country in Countries %}
+    <tr>
+        <td>{{ Country.IsoCode }}</td>
+        <td>{{ Country.Name }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Country.ID }}', '{{ Country.Name }}');">select</button></td>
+    </tr>
+    {% endfor %}
+        
+</table>

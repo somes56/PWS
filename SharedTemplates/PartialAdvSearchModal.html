@@ -1,0 +1,50 @@
+﻿{% load static %}
+<div id="AdvSearchModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <form role="form">
+            
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <h3 class="modal-title" id="AdvSearchModalTitle"></h3>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <div class="input-group" id="searchcrit">
+                                    <input type="text" class="form-control input-sm" id="SearchString" name="SearchString" value="">
+                                    <span class="input-group-addon   input-sm">
+                                        <span class="glyphicon glyphicon-search" onclick="Search();"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div id="AdvSearchLoadingBar" style="display:none">
+                                    <img id="img-spinner" src="{% static 'spinner/bert-loader.gif' %}" alt="Loading..."/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="TargetID" id="TargetID" value="" />
+                        </div>
+                        <div id="SearchResult" style="height:300px;overflow:auto"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

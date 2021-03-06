@@ -1,11 +1,45 @@
-from Master.models import Country
+from Master.models import Country, State, Term
 from datetime import datetime
+from django.db.models import Q
 from django.utils import timezone
 import requests
 
 class pwsRepo:
 
-    def UpsertMstCountry():
+    def AdvSearchState(SearchBy=''):
+        States = []
+
+        try:
+            States = State.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')
+        except Exception as e:
+            States = []
+            print(e)
+
+        return States
+        
+    def AdvSearchCountry(SearchBy=''):
+        Countries = []
+
+        try:
+            Countries = Country.objects.filter(Q(Name__icontains=SearchBy) | Q(IsoCode__icontains=SearchBy), IsActive=True).order_by('Name')
+        except Exception as e:
+            Countries = []
+            print(e)
+
+        return Countries
+        
+    def AdvSearchTerm(SearchBy=''):
+        Terms = []
+
+        try:
+            Terms = Term.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')
+        except Exception as e:
+            Terms = []
+            print(e)
+
+        return Terms
+
+    def UpsertCountry():
         rtn = False
         insert = 0
 

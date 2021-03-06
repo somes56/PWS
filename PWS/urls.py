@@ -21,5 +21,5 @@ urlpatterns = [
     path('', include('Login.urls')),
     path('Login/', include('Login.urls')),
     path('Master/', include('Master.urls')),
-    # path('Cmn/', include('Cmn.urls'))
+    path('Cmn/', include('Cmn.urls'))
 ]

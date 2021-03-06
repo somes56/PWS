@@ -1,0 +1,16 @@
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th></th>
+    </tr>
+
+    
+    {% for State in States  %}
+    <tr>
+        <td>{{ State.Name }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ State.ID }}', '{{ State.Name }}');">select</button></td>
+    </tr>
+    {% endfor %}
+        
+
+</table>

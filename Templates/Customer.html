@@ -8,4 +8,9 @@
 {% block content %}
 <h2>Customer</h2>
 <hr />
+
+<div id="CompanyListLoading"  style="display:none">
+    <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+</div>
+
 {% endblock content %}

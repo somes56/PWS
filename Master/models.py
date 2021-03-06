@@ -19,6 +19,7 @@ class Term(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     Name = models.CharField(max_length=50, null=True)
     Type = models.IntegerField()
+    IsActive = models.BooleanField(default=False)
     CreateDate = models.DateTimeField(null=True, default=datetime.today())
     CreateBy = models.UUIDField(null=True)
     UpdateDate = models.DateTimeField(null=True, default=datetime.today())
@@ -26,3 +27,41 @@ class Term(models.Model):
     
     class Meta:
         db_table = 'mst_Term'
+
+class State(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Name = models.CharField(max_length=50, null=True)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = 'mst_State'
+
+class Customer(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Name = models.CharField(max_length=250)
+    Pic = models.CharField(max_length=100, null=True, default=None)
+    MobileNo = models.CharField(max_length=25, null=True, default=None)
+    TelNo =  models.CharField(max_length=25, null=True, default=None)
+    FaxNo = models.CharField(max_length=25, null=True, default=None)
+    Email = models.CharField(max_length=50, null=True, default=None)
+    Address = models.TextField()
+    City = models.CharField(max_length=100, null=True, default=None)
+    PostCode = models.IntegerField(default=0)
+    State = models.ForeignKey(State, db_column='StateID', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    Country = models.ForeignKey(Country, db_column='CountryID', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    Term = models.ForeignKey(Term, db_column='TermID', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    LimitAmount = models.DecimalField(max_digits=6, decimal_places=2, null=True, default=0)
+    IsAllowInvoice = models.BooleanField(default=False)
+    IsAllowDo = models.BooleanField(default=False)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+    
+    class Meta:
+        db_table = 'mst_Customer'

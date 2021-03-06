@@ -3,9 +3,173 @@
 {% block title %} Dashboard {% endblock title %}
 
 {% block script %}
+<script type="text/javascript" src="{% static 'scripts/CompanyForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
 {% endblock script %}
+
+{% load widget_tweaks %}
 
 {% block content %}
 <h2>Customer Registration</h2>
 <hr />
+
+<form method="POST">
+    
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+    
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Company :</label>
+                <div class="col-md-8">
+                    {% render_field Form.Name id="Name" class="form-control input-sm" %}
+                    {% render_field Form.CustomerID|attr:"hidden:true" id="CustomerID" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Contact Person :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Pic id="Pic" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Address :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Address style="resize:none" id="Address" rows="5" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Mobile No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.MobileNo id="MobileNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">City :</label>
+                <div class="col-md-3">
+                    {% render_field Form.City id="City" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Tel No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.TelNo id="TelNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Post Code :</label>
+                <div class="col-md-3">
+                    {% render_field Form.PostCode|attr:"onkeypress : return Numbers();" id="PostCode" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Fax No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.FaxNo id="FaxNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">State :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.StateName|attr:"readonly:readonly" id="StateName" class="form-control input-sm"  %}
+                        {% render_field Form.StateID|attr:"hidden:true" id="StateID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchState();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Email :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Email id="Email" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Country :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.CountryName|attr:"readonly:readonly" id="CountryName" class="form-control input-sm"  %}
+                        {% render_field Form.CountryID|attr:"hidden:true" id="CountryID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchCountry();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Term :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.TermName|attr:"readonly:readonly" id="TermName" class="form-control input-sm"  %}
+                        {% render_field Form.TermID|attr:"hidden:true" id="TermID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchTerm();"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-3">
+                    <div class="form-inline">
+                        {% render_field Form.IsAllowInvoice id="IsAllowInvoice" class="checkbox" %}&nbsp;Allow Invoice
+                    </div>
+                </div>
+ 
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Limit Amount :</label>
+                <div class="col-md-3">
+                    {% render_field Form.LimitAmount|attr:"onkeypress : return NumberDecimals();" id="LimitAmount" class="form-control input-sm"  %}
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-3">
+                    <div class="form-inline">
+                        {% render_field Form.IsAllowDo id="IsAllowDo" class="checkbox" %}&nbsp;Allow Do
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success" onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
 {% endblock content %}
