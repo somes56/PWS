@@ -140,3 +140,7 @@ function SubmitValidation(){
         return true;
     }
 }
+
+function ResetForm(){
+    window.location.href = '/Master/CustomerForm'
+}

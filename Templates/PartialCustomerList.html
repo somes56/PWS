@@ -1,0 +1,30 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Name</th>
+            <th>Contact Person</th>
+            <th>Tel No</th>
+            <th>Mobile No</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Customer in Customers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Customer.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeleteCustomer('{{ Customer.ID }}', '{{ Customer.Name }}')"></span>
+            </td>
+            <td>{{ Customer.Name }}</td>
+            <td>{{ Customer.Pic }}</td>
+            <td>{{ Customer.TelNo }}</td>
+            <td>{{ Customer.MobileNo }}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>
