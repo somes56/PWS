@@ -142,5 +142,5 @@ function SubmitValidation(){
 }
 
 function ResetForm(){
-    window.location.href = '/Master/CustomerForm'
+    window.location.href = `/Master/CustomerForm`
 }

@@ -32,9 +32,8 @@ function Search() {
         }
     }
 
-    //var url = $('#RootURL').val() + "CMN/AdvSearch" + objcrit.fn + "?" + px + "str=" + SearchStr;
-    var url = '/Cmn/AdvSearch' + objcrit.fn;
-    url = SearchStr === '' ? url : url + '/' + SearchStr;
+    var url = `/Cmn/AdvSearch${objcrit.fn}`;
+    url = SearchStr === '' ? url : url + `/${SearchStr}`
 
     $('#AdvSearchLoadingBar').show();
 

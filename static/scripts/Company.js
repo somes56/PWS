@@ -18,8 +18,9 @@ $(function(){
 
 function PartialCustomerList() {
     var SearchStr = $('#SearchString').val();
-    var url = "/Master/PartialCustomerList";
-    url = SearchStr === '' ? url : url + '/' + SearchStr;
+
+    var url = `/Master/PartialCustomerList`;
+    url = SearchStr === '' ? url : url + `/${SearchStr}`
 
     $('#PartialCustomerListLoading').show();
 
@@ -42,7 +43,7 @@ function DeleteCustomer(CustomerID, CustomerName){
     var Dlg = confirm(`Are you sure to delete ${CustomerName} ?`)
 
     if(Dlg == true){
-        var url = "/Master/DeleteCustomer/" + CustomerID + "/";
+        var url = `/Master/DeleteCustomer/${CustomerID}/`
         $.ajax({
             url: url,
             cache: false,
@@ -64,11 +65,11 @@ function DeleteCustomer(CustomerID, CustomerName){
 }
 
 function GoToAddPage(){
-    window.location.href = "/Master/CustomerForm"
+    window.location.href = `/Master/CustomerForm`
 }
 
 function GoToEditPage(CustomerID){
-    window.location.href =  "/Master/CustomerForm/" + CustomerID + "/"
+    window.location.href = `/Master/CustomerForm/${CustomerID}/`
 }
 
 
