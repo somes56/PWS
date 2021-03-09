@@ -16,11 +16,12 @@ $(function(){
     });
 })
 
-function PartialCustomerList() {
+function PartialCustomerList(PageNumber = '0') {
     var SearchStr = $('#SearchString').val();
 
     var url = `/Master/PartialCustomerList`;
     url = SearchStr === '' ? url : url + `/${SearchStr}`
+    url = PageNumber !='0' ? url + `?page=${PageNumber}` : url;
 
     $('#PartialCustomerListLoading').show();
 

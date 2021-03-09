@@ -1,3 +1,25 @@
+{% if Customers.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+  {% if Customers.has_previous %}
+    <li><a onclick="PartialCustomerList('{{ Customers.previous_page_number }}')">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in Customers.paginator.page_range %}
+    {% if Customers.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a onclick="PartialCustomerList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if Customers.has_next %}
+    <li><a onclick="PartialCustomerList('{{ Customers.next_page_number }}')">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
 <table class="table table-bordered">
     <thead>
         <tr>

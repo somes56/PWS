@@ -1,9 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
-
 from DataAccess.PWSRepo import pwsRepo
 from Master.formModels import CustomerFormModel
 from Master.models import Country, Customer, State, Term
@@ -14,7 +14,18 @@ def CustomerList(request):
 def PartialCustomerList(request, SearchBy=''):
     Customers = []
     Customers = pwsRepo.PartialCustomerList(SearchBy)
-    return render(request, 'PartialCustomerList.html', { 'Customers' : Customers })
+
+    Page = request.GET.get('page', 1)
+    _Paginator = Paginator(Customers, 5)
+    
+    try:
+        CustomerPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        CustomerPaginator = _Paginator.page(1)
+    except EmptyPage:
+        CustomerPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, 'PartialCustomerList.html', { 'Customers' : CustomerPaginator })
 
 @csrf_exempt
 def CustomerForm(request, CustomerID=None):
