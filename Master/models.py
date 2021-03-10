@@ -65,3 +65,18 @@ class Customer(models.Model):
     
     class Meta:
         db_table = 'mst_Customer'
+
+class Port(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Code = models.CharField(max_length=10)
+    Name = models.CharField(max_length=250)
+    Country = models.ForeignKey(Country, db_column='CountryID', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    IsSpecial = models.BooleanField(default=False)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+    
+    class Meta:
+        db_table = 'mst_Port'

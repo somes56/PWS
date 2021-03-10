@@ -1,4 +1,4 @@
-from Master.models import Country, State, Term, Customer
+from Master.models import Country, State, Term, Customer, Port
 from datetime import datetime
 from django.db.models import Q
 from django.utils import timezone
@@ -12,7 +12,6 @@ class pwsRepo:
         try:
             States = State.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')
         except Exception as e:
-            States = []
             print(e)
 
         return States
@@ -23,7 +22,6 @@ class pwsRepo:
         try:
             Countries = Country.objects.filter(Q(Name__icontains=SearchBy) | Q(IsoCode__icontains=SearchBy), IsActive=True).order_by('Name')
         except Exception as e:
-            Countries = []
             print(e)
 
         return Countries
@@ -34,7 +32,6 @@ class pwsRepo:
         try:
             Terms = Term.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')
         except Exception as e:
-            Terms = []
             print(e)
 
         return Terms
@@ -43,12 +40,21 @@ class pwsRepo:
         Customers = []
 
         try:
-            Customers = Customer.objects.filter(IsActive=True, Name__icontains=SearchBy)
+            Customers = Customer.objects.filter(IsActive=True, Name__icontains=SearchBy)[:100]
         except Exception as e:
-            Customers = []
             print(e)
 
         return Customers
+        
+    def PartialPortList(SearchBy=''):
+        Ports = []
+        
+        try:
+            Ports = Port.objects.filter(IsActive=True, Name__icontains=SearchBy)[:100]
+        except Exception as e:
+            print(e)
+
+        return Ports
 
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
@@ -56,10 +62,19 @@ class pwsRepo:
         try:
             CustomerDto = Customer.objects.get(ID=CustomerID, IsActive=True)
         except Exception as e:
-            CustomerDto = Customer();
             print(e)
         
         return CustomerDto
+        
+    def LoadPort(PortID):
+        PortDto = Port()
+        
+        try:
+            PortDto = Port.objects.get(ID=PortID, IsActive=True)
+        except Exception as e:
+            print(e)
+        
+        return PortDto
 
 
     def UpsertCountry():
@@ -145,6 +160,43 @@ class pwsRepo:
             print(e)
         
         return { 'rtn' : rtn, 'CustomerID' : CustomerID }
+        
+    def UpsertPort(Dto):
+        rtn = False
+        PortID = None
+        CountryDto = None
+        UpsertDto = None
+        
+        try:
+            CountryDto = Country.objects.get(ID=Dto['CountryID'])
+            
+            if Dto['PortID'] == None:
+                
+                UpsertDto = Port.objects.create(Code=Dto['Code'], Name=Dto['Name'], IsSpecial=Dto['IsSpecial'],
+                            Country=CountryDto, IsActive=True, CreateDate=datetime.now(tz=timezone.utc), CreateBy=None,
+                            UpdateDate=datetime.now(tz=timezone.utc), UpdateBy=None)
+                            
+                if UpsertDto.ID:
+                    rtn = True
+                    PortID = UpsertDto.ID
+                    
+            else:
+                UpsertDto = Port.objects.get(ID=Dto['PortID'])
+                UpsertDto.Code = Dto['Code']
+                UpsertDto.Name = Dto['Name']
+                UpsertDto.IsSpecial = Dto['IsSpecial']
+                UpsertDto.Country = CountryDto
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc) 
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                PortID = Dto['PortID']
+                        
+        except Exception as e:
+            print(e)
+        
+        return { 'rtn' : rtn, 'PortID' : PortID }
     
     def DeleteCustomer(CustomerID):
         rtn = False
@@ -155,6 +207,21 @@ class pwsRepo:
             CustomerDto.UpdateDate = datetime.now(tz=timezone.utc) 
             CustomerDto.UpdateBy = None
             CustomerDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+        
+        return rtn
+        
+    def DeletePort(PortID):
+        rtn = False
+
+        try:
+            PortDto = Port.objects.get(ID=PortID)
+            PortDto.IsActive = False
+            PortDto.UpdateDate = datetime.now(tz=timezone.utc) 
+            PortDto.UpdateBy = None
+            PortDto.save()
             rtn = True
         except Exception as e:
             print(e)

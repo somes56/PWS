@@ -1,0 +1,50 @@
+{% if Ports.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+  {% if Ports.has_previous %}
+    <li><a onclick="PartialPortList('{{ Ports.previous_page_number }}')">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in Ports.paginator.page_range %}
+    {% if Ports.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a onclick="PartialPortList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if Ports.has_next %}
+    <li><a onclick="PartialPortList('{{ Ports.next_page_number }}')">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Port in Ports %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Port.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeletePort('{{ Port.ID }}', '{{ Port.Name }}')"></span>
+            </td>
+            <td>{{ Port.Code }}</td>
+            <td>{{ Port.Name }}</td>
+            <td>{{ Port.Country.Name }}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>

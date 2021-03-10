@@ -1,5 +1,5 @@
 from django import forms
-from Master.models import Customer
+from Master.models import Customer, Port
 
 class CustomerFormModel(forms.ModelForm):
     CustomerID = forms.UUIDField(required=False)
@@ -24,4 +24,18 @@ class CustomerFormModel(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['CustomerID', 'Name', 'Pic', 'MobileNo', 'TelNo', 'FaxNo', 'Email', 'Address', 'City', 'PostCode', 'StateID', 'StateName', 'CountryID', 'CountryName', 'TermID', 'TermName', 'LimitAmount', 'IsAllowInvoice', 'IsAllowDo']
+        fields = ['CustomerID', 'Name', 'Pic', 'MobileNo', 'TelNo', 'FaxNo', 'Email', 
+                  'Address', 'City', 'PostCode', 'StateID', 'StateName', 'CountryID', 
+                  'CountryName', 'TermID', 'TermName', 'LimitAmount', 'IsAllowInvoice', 'IsAllowDo']
+
+class PortFormModel(forms.ModelForm):
+    PortID = forms.UUIDField(required=False)
+    Code = forms.CharField(max_length=10, required=False)
+    Name = forms.CharField(max_length=250, required=False)
+    CountryID = forms.UUIDField(required=False)
+    CountryName = forms.CharField(max_length=50, required=False)
+    IsSpecial = forms.BooleanField(required=False)
+    
+    class Meta:
+        model = Port
+        fields = ['PortID', 'Code', 'Name', 'CountryID', 'CountryName', 'IsSpecial']

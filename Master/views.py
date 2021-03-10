@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
 from DataAccess.PWSRepo import pwsRepo
-from Master.formModels import CustomerFormModel
+from Master.formModels import CustomerFormModel, PortFormModel
 from Master.models import Country, Customer, State, Term
 
 def CustomerList(request):
@@ -16,7 +16,7 @@ def PartialCustomerList(request, SearchBy=''):
     Customers = pwsRepo.PartialCustomerList(SearchBy)
 
     Page = request.GET.get('page', 1)
-    _Paginator = Paginator(Customers, 5)
+    _Paginator = Paginator(Customers, 50)
     
     try:
         CustomerPaginator = _Paginator.page(Page)
@@ -134,12 +134,90 @@ def CustomerForm(request, CustomerID=None):
 
         return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : newCustomerFormModel })
 
+def PortList(request):
+    return render(request, 'Port.html')
+    
+def PartialPortList(request, SearchBy=''):
+    Ports = []
+    Ports = pwsRepo.PartialPortList(SearchBy)
+
+    Page = request.GET.get('page', 1)
+    _Paginator = Paginator(Ports, 50)
+    
+    try:
+        PortPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        PortPaginator = _Paginator.page(1)
+    except EmptyPage:
+        PortPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, 'PartialPortList.html', { 'Ports' : PortPaginator })
+    
+@csrf_exempt
+def PortForm(request, PortID=None):
+    SysGoodMsg = ''
+    SysBadMsg = ''
+    
+    if request.method == 'GET' : 
+        portFormModel = PortFormModel()
+        
+        if PortID == None:
+            portFormModel = mstBL.InitialisePortFormModel(None)
+        else:
+            portFormModel = mstBL.InitialisePortFormModel(PortID)
+            
+        return render(request, 'PortForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : portFormModel })
+    
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        portFormModel = PortFormModel()
+        _post = PortFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertPort(_Form)
+            
+            if _Form['PortID'] != None:
+                IsUpdate = True
+
+            if UpsertResult['rtn'] == True:
+                portFormModel = mstBL.InitialisePortFormModel(UpsertResult['PortID'])
+                
+                if IsUpdate == False:
+                    SysGoodMsg = 'Inserted Successfully'
+                else:
+                    SysGoodMsg = 'Updated Successfully'
+
+            else:
+                portFormModel = mstBL.InitialiseErrorPortFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = 'Insert Fail'
+                else:
+                    SysBadMsg = 'Update Fail'
+
+        else:
+            SysBadMsg = 'Invalid Input'
+
+        return render(request, 'PortForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : portFormModel })
+
 @csrf_exempt
 def DeleteCustomer(request, CustomerID=None):
     rtn = False
 
     if request.method == 'POST':
         rtn = pwsRepo.DeleteCustomer(CustomerID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+@csrf_exempt
+def DeletePort(request, PortID=None):
+    rtn = False
+
+    if request.method == 'POST':
+        rtn = pwsRepo.DeletePort(PortID)
     else:
         rtn = False
     return HttpResponse(rtn)
