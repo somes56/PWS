@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
 from DataAccess.PWSRepo import pwsRepo
-from Master.formModels import CustomerFormModel, PortFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel
 from Master.models import Country, Customer, State, Term
 
 def CustomerList(request):
@@ -134,6 +134,16 @@ def CustomerForm(request, CustomerID=None):
 
         return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : newCustomerFormModel })
 
+@csrf_exempt
+def DeleteCustomer(request, CustomerID=None):
+    rtn = False
+
+    if request.method == 'POST':
+        rtn = pwsRepo.DeleteCustomer(CustomerID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
 def PortList(request):
     return render(request, 'Port.html')
     
@@ -203,21 +213,90 @@ def PortForm(request, PortID=None):
         return render(request, 'PortForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : portFormModel })
 
 @csrf_exempt
-def DeleteCustomer(request, CustomerID=None):
-    rtn = False
-
-    if request.method == 'POST':
-        rtn = pwsRepo.DeleteCustomer(CustomerID)
-    else:
-        rtn = False
-    return HttpResponse(rtn)
-
-@csrf_exempt
 def DeletePort(request, PortID=None):
     rtn = False
 
     if request.method == 'POST':
         rtn = pwsRepo.DeletePort(PortID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+def UnitList(request):
+    return render(request, 'Unit.html')
+    
+def PartialUnitList(request, SearchBy=''):
+    Units = []
+    Units = pwsRepo.PartialUnitList(SearchBy)
+
+    Page = request.GET.get('page', 1)
+    _Paginator = Paginator(Units, 50)
+    
+    try:
+        UnitPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        UnitPaginator = _Paginator.page(1)
+    except EmptyPage:
+        UnitPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, 'PartialUnitList.html', { 'Units' : UnitPaginator })
+    
+@csrf_exempt
+def UnitForm(request, UnitID=None):
+    SysGoodMsg = ''
+    SysBadMsg = ''
+    
+    if request.method == 'GET' : 
+        unitFormModel = UnitFormModel()
+        
+        if UnitID == None:
+            unitFormModel = mstBL.InitialiseUnitFormModel(None)
+        else:
+            unitFormModel = mstBL.InitialiseUnitFormModel(UnitID)
+            
+        return render(request, 'UnitForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : unitFormModel })
+    
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        unitFormModel = UnitFormModel()
+        _post = UnitFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertUnit(_Form)
+            
+            if _Form['UnitID'] != None:
+                IsUpdate = True
+
+            if UpsertResult['rtn'] == True:
+                unitFormModel = mstBL.InitialiseUnitFormModel(UpsertResult['UnitID'])
+                
+                if IsUpdate == False:
+                    SysGoodMsg = 'Inserted Successfully'
+                else:
+                    SysGoodMsg = 'Updated Successfully'
+
+            else:
+                unitFormModel = mstBL.InitialiseErrorUnitFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = 'Insert Fail'
+                else:
+                    SysBadMsg = 'Update Fail'
+
+        else:
+            SysBadMsg = 'Invalid Input'
+
+        return render(request, 'UnitForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : unitFormModel })
+
+@csrf_exempt
+def DeleteUnit(request, UnitID=None):
+    rtn = False
+
+    if request.method == 'POST':
+        rtn = pwsRepo.DeleteUnit(UnitID)
     else:
         rtn = False
     return HttpResponse(rtn)

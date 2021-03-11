@@ -1,0 +1,50 @@
+{% if Units.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+  {% if Units.has_previous %}
+    <li><a onclick="PartialUnitList('{{ Units.previous_page_number }}')">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in Units.paginator.page_range %}
+    {% if Units.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a onclick="PartialUnitList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if Units.has_next %}
+    <li><a onclick="PartialUnitList('{{ Units.next_page_number }}')">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Short Name</th>
+            <th>Full Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Unit in Units %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Unit.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeletePort('{{ Unit.ID }}', '{{ Unit.ShortName }}')"></span>
+            </td>
+            <td>{{ Unit.Code }}</td>
+            <td>{{ Unit.ShortName }}</td>
+            <td>{{ Unit.FullName }}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>

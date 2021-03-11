@@ -1,4 +1,4 @@
-from Master.models import Country, State, Term, Customer, Port
+from Master.models import Country, State, Term, Customer, Port, Unit
 from datetime import datetime
 from django.db.models import Q
 from django.utils import timezone
@@ -40,7 +40,7 @@ class pwsRepo:
         Customers = []
 
         try:
-            Customers = Customer.objects.filter(IsActive=True, Name__icontains=SearchBy)[:100]
+            Customers = Customer.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')[:100]
         except Exception as e:
             print(e)
 
@@ -50,11 +50,21 @@ class pwsRepo:
         Ports = []
         
         try:
-            Ports = Port.objects.filter(IsActive=True, Name__icontains=SearchBy)[:100]
+            Ports = Port.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')[:100]
         except Exception as e:
             print(e)
 
         return Ports
+
+    def PartialUnitList(SearchBy=''):
+        Units = []
+        
+        try:
+            Units = Unit.objects.filter(Q(ShortName__icontains=SearchBy) | Q(FullName__icontains=SearchBy), IsActive=True).order_by('ShortName', 'FullName')[:100]
+        except Exception as e:
+            print(e)
+
+        return Units
 
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
@@ -76,6 +86,15 @@ class pwsRepo:
         
         return PortDto
 
+    def LoadUnit(UnitID):
+        UnitDto = Unit()
+        
+        try:
+            UnitDto = Unit.objects.get(ID=UnitID, IsActive=True)
+        except Exception as e:
+            print(e)
+        
+        return UnitDto
 
     def UpsertCountry():
         rtn = False
@@ -197,6 +216,40 @@ class pwsRepo:
             print(e)
         
         return { 'rtn' : rtn, 'PortID' : PortID }
+
+    def UpsertUnit(Dto):
+        rtn = False
+        UnitID = None
+        UpsertDto = None
+        
+        try:
+            
+            if Dto['UnitID'] == None:
+                
+                UpsertDto = Unit.objects.create(Code=Dto['Code'], ShortName=Dto['ShortName'], FullName=Dto['FullName'],
+                            IsActive=True, CreateDate=datetime.now(tz=timezone.utc), CreateBy=None,
+                            UpdateDate=datetime.now(tz=timezone.utc), UpdateBy=None)
+                            
+                if UpsertDto.ID:
+                    rtn = True
+                    UnitID = UpsertDto.ID
+                    
+            else:
+                UpsertDto = Unit.objects.get(ID=Dto['UnitID'])
+                UpsertDto.Code = Dto['Code']
+                UpsertDto.ShortName = Dto['ShortName']
+                UpsertDto.FullName = Dto['FullName']
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc) 
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                UnitID = Dto['UnitID']
+                        
+        except Exception as e:
+            print(e)
+        
+        return { 'rtn' : rtn, 'UnitID' : UnitID }
     
     def DeleteCustomer(CustomerID):
         rtn = False
@@ -222,6 +275,21 @@ class pwsRepo:
             PortDto.UpdateDate = datetime.now(tz=timezone.utc) 
             PortDto.UpdateBy = None
             PortDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+        
+        return rtn
+        
+    def DeleteUnit(UnitID):
+        rtn = False
+
+        try:
+            UnitDto = Unit.objects.get(ID=UnitID)
+            UnitDto.IsActive = False
+            UnitDto.UpdateDate = datetime.now(tz=timezone.utc) 
+            UnitDto.UpdateBy = None
+            UnitDto.save()
             rtn = True
         except Exception as e:
             print(e)

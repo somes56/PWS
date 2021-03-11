@@ -1,5 +1,6 @@
-from Master.formModels import PortFormModel
+from Master.formModels import PortFormModel, UnitFormModel
 from DataAccess.PWSRepo import pwsRepo
+
 class mstBL:
 
     def InitialisePortFormModel(PortID=None):
@@ -31,6 +32,36 @@ class mstBL:
             form.initial['CountryID'] = _Form['CountryID']
             form.initial['CountryName'] = _Form['CountryName']
             form.initial['IsSpecial'] = _Form['IsSpecial']
+        except Exception as e:
+            print(e)
+        
+        return form
+
+    def InitialiseUnitFormModel(UnitID=None):
+        form = UnitFormModel()
+
+        try:
+            if UnitID == None:
+                form.initial['UnitID'] = None
+            else:
+                Dto = pwsRepo.LoadUnit(UnitID)
+                form.initial['UnitID'] = Dto.ID
+                form.initial['Code'] = Dto.Code
+                form.initial['ShortName'] = Dto.ShortName
+                form.initial['FullName'] = Dto.FullName
+        except Exception as e:
+            print(e)
+
+        return form
+        
+    def InitialiseErrorUnitFormModel(_Form):
+        form = UnitFormModel()
+
+        try:
+            form.initial['UnitID'] = _Form['UnitID']
+            form.initial['Code'] = _Form['Code']
+            form.initial['ShortName'] = _Form['ShortName']
+            form.initial['ShortName'] = _Form['ShortName']
         except Exception as e:
             print(e)
         

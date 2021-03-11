@@ -1,5 +1,5 @@
 from django import forms
-from Master.models import Customer, Port
+from Master.models import Customer, Port, Unit
 
 class CustomerFormModel(forms.ModelForm):
     CustomerID = forms.UUIDField(required=False)
@@ -39,3 +39,13 @@ class PortFormModel(forms.ModelForm):
     class Meta:
         model = Port
         fields = ['PortID', 'Code', 'Name', 'CountryID', 'CountryName', 'IsSpecial']
+
+class UnitFormModel(forms.ModelForm):
+    UnitID = forms.UUIDField(required=False)
+    Code = forms.CharField(max_length=10, required=False)
+    ShortName = forms.CharField(max_length=50, required=False)
+    FullName = forms.CharField(max_length=250, required=False)
+
+    class Meta:
+        model = Unit
+        fields = ['UnitID', 'Code', 'ShortName', 'FullName']

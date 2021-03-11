@@ -1,0 +1,76 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Unit Form {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/UnitForm.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Unit Registration</h2>
+<hr />
+
+<form method="POST">
+    
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+    
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Code :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Code id="Code" class="form-control input-sm" %}
+                    {% render_field Form.UnitID|attr:"hidden:true" id="UnitID" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Short Name :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ShortName id="ShortName" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Full Name :</label>
+                <div class="col-md-3">
+                    {% render_field Form.FullName id="FullName" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success" onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}
