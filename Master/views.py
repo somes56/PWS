@@ -36,66 +36,27 @@ def CustomerForm(request, CustomerID=None):
         customerFormModel = CustomerFormModel()
         
         if CustomerID == None:
-            customerFormModel.initial['CustomerID'] = None
+            customerFormModel = mstBL.InitialiseCustomerFormModel(None)
         else:
-            CustomerDto = pwsRepo.LoadCustomer(CustomerID)
-            customerFormModel.initial['CustomerID'] = CustomerDto.ID
-            customerFormModel.initial['Name'] = CustomerDto.Name
-            customerFormModel.initial['Pic'] = CustomerDto.Pic 
-            customerFormModel.initial['MobileNo'] = CustomerDto.MobileNo 
-            customerFormModel.initial['TelNo'] = CustomerDto.TelNo
-            customerFormModel.initial['FaxNo'] = CustomerDto.FaxNo 
-            customerFormModel.initial['Email'] = CustomerDto.Email 
-            customerFormModel.initial['Address'] = CustomerDto.Address 
-            customerFormModel.initial['City'] = CustomerDto.City 
-            customerFormModel.initial['PostCode'] = CustomerDto.PostCode 
-            customerFormModel.initial['StateID'] = CustomerDto.State.ID
-            customerFormModel.initial['StateName'] = CustomerDto.State.Name
-            customerFormModel.initial['CountryID'] = CustomerDto.Country.ID
-            customerFormModel.initial['CountryName'] = CustomerDto.Country.Name
-            customerFormModel.initial['TermID'] = CustomerDto.Term.ID
-            customerFormModel.initial['TermName'] = CustomerDto.Term.Name
-            customerFormModel.initial['LimitAmount'] = CustomerDto.LimitAmount
-            customerFormModel.initial['IsAllowInvoice'] = CustomerDto.IsAllowInvoice
-            customerFormModel.initial['IsAllowDo'] = CustomerDto.IsAllowDo
+            customerFormModel = mstBL.InitialiseCustomerFormModel(CustomerID)
             
         return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : customerFormModel })
 
     else:
         IsUpdate = False
         UpsertResult = {}
-        newCustomerFormModel = CustomerFormModel()
-        customerFormModel = CustomerFormModel(request.POST)
+        customerFormModel = CustomerFormModel()
+        _post = CustomerFormModel(request.POST)
 
-        if customerFormModel.is_valid():
-            _Form = customerFormModel.cleaned_data
+        if _post.is_valid():
+            _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertCustomer(_Form)
             
             if _Form['CustomerID'] != None:
                 IsUpdate = True
 
             if UpsertResult['rtn'] == True:
-
-                CustomerDto = pwsRepo.LoadCustomer(UpsertResult['CustomerID'])
-                newCustomerFormModel.initial['CustomerID'] = CustomerDto.ID
-                newCustomerFormModel.initial['Name'] = CustomerDto.Name
-                newCustomerFormModel.initial['Pic'] = CustomerDto.Pic 
-                newCustomerFormModel.initial['MobileNo'] = CustomerDto.MobileNo 
-                newCustomerFormModel.initial['TelNo'] = CustomerDto.TelNo
-                newCustomerFormModel.initial['FaxNo'] = CustomerDto.FaxNo 
-                newCustomerFormModel.initial['Email'] = CustomerDto.Email 
-                newCustomerFormModel.initial['Address'] = CustomerDto.Address 
-                newCustomerFormModel.initial['City'] = CustomerDto.City 
-                newCustomerFormModel.initial['PostCode'] = CustomerDto.PostCode 
-                newCustomerFormModel.initial['StateID'] = CustomerDto.State.ID
-                newCustomerFormModel.initial['StateName'] = CustomerDto.State.Name
-                newCustomerFormModel.initial['CountryID'] = CustomerDto.Country.ID
-                newCustomerFormModel.initial['CountryName'] = CustomerDto.Country.Name
-                newCustomerFormModel.initial['TermID'] = CustomerDto.Term.ID
-                newCustomerFormModel.initial['TermName'] = CustomerDto.Term.Name
-                newCustomerFormModel.initial['LimitAmount'] = CustomerDto.LimitAmount
-                newCustomerFormModel.initial['IsAllowInvoice'] = CustomerDto.IsAllowInvoice
-                newCustomerFormModel.initial['IsAllowDo'] = CustomerDto.IsAllowDo
+                customerFormModel = mstBL.InitialiseCustomerFormModel(UpsertResult['CustomerID'])
 
                 if IsUpdate == False:
                     SysGoodMsg = 'Inserted Successfully'
@@ -103,26 +64,7 @@ def CustomerForm(request, CustomerID=None):
                     SysGoodMsg = 'Updated Successfully'
 
             else:
-                
-                newCustomerFormModel.initial['CustomerID'] = _Form['CustomerID']
-                newCustomerFormModel.initial['Name'] = _Form['Name']
-                newCustomerFormModel.initial['Pic'] = _Form['Pic']
-                newCustomerFormModel.initial['MobileNo'] = _Form['MobileNo']
-                newCustomerFormModel.initial['TelNo'] = _Form['TelNo']
-                newCustomerFormModel.initial['FaxNo'] = _Form['FaxNo']
-                newCustomerFormModel.initial['Email'] = _Form['Email']
-                newCustomerFormModel.initial['Address'] = _Form['Address']
-                newCustomerFormModel.initial['City'] = _Form['City'] 
-                newCustomerFormModel.initial['PostCode'] = _Form['PostCode'] 
-                newCustomerFormModel.initial['StateID'] = _Form['StateID']
-                newCustomerFormModel.initial['StateName'] = _Form['StateName']
-                newCustomerFormModel.initial['CountryID'] = _Form['CountryID']
-                newCustomerFormModel.initial['CountryName'] = _Form['CountryName']
-                newCustomerFormModel.initial['TermID'] = _Form['TermID']
-                newCustomerFormModel.initial['TermName'] = _Form['TermName']
-                newCustomerFormModel.initial['LimitAmount'] = _Form['LimitAmount']
-                newCustomerFormModel.initial['IsAllowInvoice'] = _Form['IsAllowInvoice']
-                newCustomerFormModel.initial['IsAllowDo'] = _Form['IsAllowDo']
+                customerFormModel = mstBL.InitialiseErrorCustomerFormModel(_Form)
 
                 if IsUpdate == False:
                     SysBadMsg = 'Insert Fail'
@@ -132,7 +74,7 @@ def CustomerForm(request, CustomerID=None):
         else:
             SysBadMsg = 'Invalid Input'
 
-        return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : newCustomerFormModel })
+        return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : customerFormModel })
 
 @csrf_exempt
 def DeleteCustomer(request, CustomerID=None):
