@@ -1,0 +1,48 @@
+{% if ContainerSizes.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+  {% if ContainerSizes.has_previous %}
+    <li><a onclick="PartialContainerSizeList('{{ ContainerSizes.previous_page_number }}')">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in ContainerSizes.paginator.page_range %}
+    {% if ContainerSizes.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a onclick="PartialContainerSizeList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if ContainerSizes.has_next %}
+    <li><a onclick="PartialContainerSizeList('{{ ContainerSizes.next_page_number }}')">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for ContainerSize in ContainerSizes %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ ContainerSize.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeleteContainerSize('{{ ContainerSize.ID }}', '{{ ContainerSize.Name }}')"></span>
+            </td>
+            <td>{{ ContainerSize.Code }}</td>
+            <td>{{ ContainerSize.Name }}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>

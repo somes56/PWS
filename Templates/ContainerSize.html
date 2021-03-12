@@ -1,24 +1,24 @@
 {% extends 'Layout.html' %}
 {% load static %}
-{% block title %} Unit {% endblock title %}
+{% block title %} Container Size {% endblock title %}
 
 {% block script %}
-<script type="text/javascript" src="{% static 'scripts/Unit.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/ContainerSize.js' %}"></script>
 {% endblock script %}
 
 
 {% block content %}
 
-<h2>Unit</h2>
+<h2>Container Size</h2>
 <hr />
 
 <div class="row">
     <div class="form-group">
         <div class="col-md-9">
             <div class="input-group">
-                <input type="text" class="form-control input-sm" id="SearchString" name="SearchString" value="" placeholder="Search Unit">
+                <input type="text" class="form-control input-sm" id="SearchString" name="SearchString" value="" placeholder="Search Container Size">
                 <span class="input-group-addon   input-sm">
-                    <span class="glyphicon glyphicon-search" onclick="PartialUnitList()"></span>
+                    <span class="glyphicon glyphicon-search" onclick="PartialContainerSizeList()"></span>
                 </span>
             </div>
         </div>
@@ -29,12 +29,12 @@
 </div>
 
 
-<div id="PartialUnitListLoading"  style="display:none">
+<div id="PartialContainerSizeListLoading"  style="display:none">
     <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
 </div>
 
 <div class="row">&nbsp;</div>
 
-<div id="PartialUnitList"></div>
+<div id="PartialContainerSizeList"></div>
 
 {% endblock content %}

@@ -23,5 +23,12 @@ urlpatterns = [
     path('UnitForm/<uuid:UnitID>/', views.UnitForm, name='UnitForm'),
     path('DeleteUnit/<uuid:UnitID>/', views.DeleteUnit, name='DeleteUnit'),
 
+    path('ContainerSizeList', views.ContainerSizeList, name='ContainerSizeList'),
+    path('PartialContainerSizeList', views.PartialContainerSizeList, name='PartialContainerSizeList'),
+    path('PartialContainerSizeList/<str:SearchBy>/', views.PartialContainerSizeList, name='PartialContainerSizeList'),
+    path('ContainerSizeForm', views.ContainerSizeForm, name='ContainerSizeForm'),
+    path('ContainerSizeForm/<uuid:ContainerSizeID>/', views.ContainerSizeForm, name='ContainerSizeForm'),
+    path('DeleteContainerSize/<uuid:ContainerSizeID>/', views.DeleteContainerSize, name='DeleteContainerSize'),
+
     path('UpsertCountry', views.UpsertCountry, name='UpsertCountry')
 ]

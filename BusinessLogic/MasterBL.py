@@ -1,4 +1,4 @@
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel
 from DataAccess.PWSRepo import pwsRepo
 
 class mstBL:
@@ -121,7 +121,38 @@ class mstBL:
             form.initial['UnitID'] = _Form['UnitID']
             form.initial['Code'] = _Form['Code']
             form.initial['ShortName'] = _Form['ShortName']
-            form.initial['ShortName'] = _Form['ShortName']
+            form.initial['FullName'] = _Form['FullName']
+        except Exception as e:
+            print(e)
+        
+        return form
+        
+    def InitialiseContainerSizeFormModel(ContainerSizeID=None):
+        form = ContainerSizeFormModel()
+
+        try:
+            if ContainerSizeID == None:
+                form.initial['ContainerSizeID'] = None
+                form.initial['Teus'] = 1
+            else:
+                Dto = pwsRepo.LoadContainerSize(ContainerSizeID)
+                form.initial['ContainerSizeID'] = Dto.ID
+                form.initial['Code'] = Dto.Code
+                form.initial['Name'] = Dto.Name
+                form.initial['Teus'] = Dto.Teus
+        except Exception as e:
+            print(e)
+
+        return form
+        
+    def InitialiseErrorContainerSizeFormModel(_Form):
+        form = ContainerSizeFormModel()
+
+        try:
+            form.initial['ContainerSizeID'] = _Form['ContainerSizeID']
+            form.initial['Code'] = _Form['Code']
+            form.initial['Name'] = _Form['Name']
+            form.initial['Teus'] = _Form['Teus']
         except Exception as e:
             print(e)
         

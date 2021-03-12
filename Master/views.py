@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
 from DataAccess.PWSRepo import pwsRepo
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel
 from Master.models import Country, Customer, State, Term
 
 def CustomerList(request):
@@ -239,6 +239,84 @@ def DeleteUnit(request, UnitID=None):
 
     if request.method == 'POST':
         rtn = pwsRepo.DeleteUnit(UnitID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+def ContainerSizeList(request):
+    return render(request, 'ContainerSize.html')
+    
+def PartialContainerSizeList(request, SearchBy=''):
+    ContainerSizes = []
+    ContainerSizes = pwsRepo.PartialContainerSizeList(SearchBy)
+
+    Page = request.GET.get('page', 1)
+    _Paginator = Paginator(ContainerSizes, 50)
+    
+    try:
+        ContainerSizePaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        ContainerSizePaginator = _Paginator.page(1)
+    except EmptyPage:
+        ContainerSizePaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, 'PartialContainerSizeList.html', { 'ContainerSizes' : ContainerSizePaginator })
+    
+@csrf_exempt
+def ContainerSizeForm(request, ContainerSizeID=None):
+    SysGoodMsg = ''
+    SysBadMsg = ''
+    
+    if request.method == 'GET' : 
+        containerSizeFormModel = ContainerSizeFormModel()
+        
+        if ContainerSizeID == None:
+            containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(None)
+        else:
+            containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(ContainerSizeID)
+            
+        return render(request, 'ContainerSizeForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : containerSizeFormModel })
+    
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        containerSizeFormModel = ContainerSizeFormModel()
+        _post = ContainerSizeFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertContainerSize(_Form)
+            
+            if _Form['ContainerSizeID'] != None:
+                IsUpdate = True
+
+            if UpsertResult['rtn'] == True:
+                containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(UpsertResult['ContainerSizeID'])
+                
+                if IsUpdate == False:
+                    SysGoodMsg = 'Inserted Successfully'
+                else:
+                    SysGoodMsg = 'Updated Successfully'
+
+            else:
+                containerSizeFormModel = mstBL.InitialiseErrorContainerSizeFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = 'Insert Fail'
+                else:
+                    SysBadMsg = 'Update Fail'
+
+        else:
+            SysBadMsg = 'Invalid Input'
+
+        return render(request, 'ContainerSizeForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : containerSizeFormModel })
+
+@csrf_exempt
+def DeleteContainerSize(request, ContainerSizeID=None):
+    rtn = False
+
+    if request.method == 'POST':
+        rtn = pwsRepo.DeleteContainerSize(ContainerSizeID)
     else:
         rtn = False
     return HttpResponse(rtn)

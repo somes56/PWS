@@ -94,3 +94,17 @@ class Unit(models.Model):
     
     class Meta:
         db_table = 'mst_Unit'
+        
+class ContainerSize(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Code = models.CharField(max_length=10)
+    Name = models.CharField(max_length=250)
+    Teus = models.IntegerField(default=0)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+    
+    class Meta:
+        db_table = 'mst_ContainerSize'

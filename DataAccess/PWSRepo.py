@@ -1,4 +1,4 @@
-from Master.models import Country, State, Term, Customer, Port, Unit
+from Master.models import Country, State, Term, Customer, Port, Unit, ContainerSize
 from datetime import datetime
 from django.db.models import Q
 from django.utils import timezone
@@ -65,6 +65,16 @@ class pwsRepo:
             print(e)
 
         return Units
+        
+    def PartialContainerSizeList(SearchBy=''):
+        ContainerSizes = []
+        
+        try:
+            ContainerSizes = ContainerSize.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')[:100]
+        except Exception as e:
+            print(e)
+        
+        return ContainerSizes
 
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
@@ -95,6 +105,16 @@ class pwsRepo:
             print(e)
         
         return UnitDto
+        
+    def LoadContainerSize(ContainerSizeID):
+        ContainerSizeDto = ContainerSize()
+        
+        try:
+            ContainerSizeDto = ContainerSize.objects.get(ID=ContainerSizeID, IsActive=True)
+        except Exception as e:
+            print(e)
+        
+        return ContainerSizeDto
 
     def UpsertCountry():
         rtn = False
@@ -250,6 +270,40 @@ class pwsRepo:
             print(e)
         
         return { 'rtn' : rtn, 'UnitID' : UnitID }
+        
+    def UpsertContainerSize(Dto):
+        rtn = False
+        ContainerSizeID = None
+        UpsertDto = None
+        
+        try:
+            
+            if Dto['ContainerSizeID'] == None:
+                
+                UpsertDto = ContainerSize.objects.create(Code=Dto['Code'], Name=Dto['Name'], Teus=Dto['Teus'],
+                            IsActive=True, CreateDate=datetime.now(tz=timezone.utc), CreateBy=None,
+                            UpdateDate=datetime.now(tz=timezone.utc), UpdateBy=None)
+                            
+                if UpsertDto.ID:
+                    rtn = True
+                    ContainerSizeID = UpsertDto.ID
+                    
+            else:
+                UpsertDto = ContainerSize.objects.get(ID=Dto['ContainerSizeID'])
+                UpsertDto.Code = Dto['Code']
+                UpsertDto.Name = Dto['Name']
+                UpsertDto.Teus = Dto['Teus']
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc) 
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                ContainerSizeID = Dto['ContainerSizeID']
+                        
+        except Exception as e:
+            print(e)
+        
+        return { 'rtn' : rtn, 'ContainerSizeID' : ContainerSizeID }
     
     def DeleteCustomer(CustomerID):
         rtn = False
@@ -286,6 +340,21 @@ class pwsRepo:
 
         try:
             UnitDto = Unit.objects.get(ID=UnitID)
+            UnitDto.IsActive = False
+            UnitDto.UpdateDate = datetime.now(tz=timezone.utc) 
+            UnitDto.UpdateBy = None
+            UnitDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+        
+        return rtn
+
+    def DeleteContainerSize(ContainerSizeID):
+        rtn = False
+
+        try:
+            UnitDto = ContainerSize.objects.get(ID=ContainerSizeID)
             UnitDto.IsActive = False
             UnitDto.UpdateDate = datetime.now(tz=timezone.utc) 
             UnitDto.UpdateBy = None

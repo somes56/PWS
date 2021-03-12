@@ -1,5 +1,5 @@
 from django import forms
-from Master.models import Customer, Port, Unit
+from Master.models import Customer, Port, Unit, ContainerSize
 
 class CustomerFormModel(forms.ModelForm):
     CustomerID = forms.UUIDField(required=False)
@@ -49,3 +49,13 @@ class UnitFormModel(forms.ModelForm):
     class Meta:
         model = Unit
         fields = ['UnitID', 'Code', 'ShortName', 'FullName']
+        
+class ContainerSizeFormModel(forms.ModelForm):
+    ContainerSizeID = forms.UUIDField(required=False)
+    Code = forms.CharField(max_length=10, required=False)
+    Name = forms.CharField(max_length=250, required=False)
+    Teus = forms.ChoiceField(choices=[(0,0), (1,1), (2,2)], widget=forms.RadioSelect())
+    
+    class Meta:
+        model = ContainerSize
+        fields = ['ContainerSizeID', 'Code', 'Name', 'Teus']
