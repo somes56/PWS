@@ -108,3 +108,19 @@ class ContainerSize(models.Model):
     
     class Meta:
         db_table = 'mst_ContainerSize'
+        
+class Vessel(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Code = models.CharField(max_length=10)
+    Name = models.CharField(max_length=250)
+    PortOperator = models.ForeignKey(Customer, db_column='PortOperatorID', related_name='PortOperator', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    Psa = models.ForeignKey(Customer, db_column='PsaID', related_name='Psa', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    ShippingAgent = models.ForeignKey(Customer, db_column='ShippingAgentID', related_name='ShippingAgent', on_delete=models.PROTECT, unique=False, null=True, default=None)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+    
+    class Meta:
+        db_table = 'mst_Vessel'

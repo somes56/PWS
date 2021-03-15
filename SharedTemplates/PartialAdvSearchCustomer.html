@@ -1,0 +1,16 @@
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th></th>
+    </tr>
+
+    
+    {% for Customer in Customers  %}
+    <tr>
+        <td>{{ Customer.Name }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Customer.ID }}', '{{ Customer.Name }}');">select</button></td>
+    </tr>
+    {% endfor %}
+        
+
+</table>

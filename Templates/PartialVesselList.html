@@ -1,0 +1,48 @@
+{% if Vessels.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+  {% if Vessels.has_previous %}
+    <li><a onclick="PartialVesselList('{{ Vessels.previous_page_number }}')">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in Vessels.paginator.page_range %}
+    {% if Vessels.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a onclick="PartialVesselList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if Vessels.has_next %}
+    <li><a onclick="PartialVesselList('{{ Vessels.next_page_number }}')">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Vessel in Vessels %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Vessel.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeleteVessel('{{ Vessel.ID }}', '{{ Vessel.Name }}')"></span>
+            </td>
+            <td>{{ Vessel.Code }}</td>
+            <td>{{ Vessel.Name }}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>

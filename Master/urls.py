@@ -30,5 +30,12 @@ urlpatterns = [
     path('ContainerSizeForm/<uuid:ContainerSizeID>/', views.ContainerSizeForm, name='ContainerSizeForm'),
     path('DeleteContainerSize/<uuid:ContainerSizeID>/', views.DeleteContainerSize, name='DeleteContainerSize'),
 
+    path('VesselList', views.VesselList, name='VesselList'),
+    path('PartialVesselList', views.PartialVesselList, name='PartialVesselList'),
+    path('PartialVesselList/<str:SearchBy>/', views.PartialVesselList, name='PartialVesselList'),
+    path('VesselForm', views.VesselForm, name='VesselForm'),
+    path('VesselForm/<uuid:VesselID>/', views.VesselForm, name='VesselForm'),
+    path('DeleteVessel/<uuid:VesselID>/', views.DeleteVessel, name='DeleteVessel'),
+
     path('UpsertCountry', views.UpsertCountry, name='UpsertCountry')
 ]

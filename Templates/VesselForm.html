@@ -1,0 +1,113 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Vessel Form {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/VesselForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Vessel Registration</h2>
+<hr />
+
+<form method="POST">
+    
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+    
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Code :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Code id="Code" class="form-control input-sm" %}
+                    {% render_field Form.VesselID|attr:"hidden:true" id="VesselID" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Name :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Name id="Name" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Port Operator :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.PortOperatorName|attr:"readonly:readonly" id="PortOperatorName" class="form-control input-sm"  %}
+                        {% render_field Form.PortOperatorID|attr:"hidden:true" id="PortOperatorID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchPortOperator();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Psa :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.PsaName|attr:"readonly:readonly" id="PsaName" class="form-control input-sm"  %}
+                        {% render_field Form.PsaID|attr:"hidden:true" id="PsaID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchPsa();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Shipping Agent :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.ShippingAgentName|attr:"readonly:readonly" id="ShippingAgentName" class="form-control input-sm"  %}
+                        {% render_field Form.ShippingAgentID|attr:"hidden:true" id="ShippingAgentID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchShippingAgent();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success" onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}

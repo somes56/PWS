@@ -1,4 +1,4 @@
-from Master.models import Country, State, Term, Customer, Port, Unit, ContainerSize
+from Master.models import Country, State, Term, Customer, Port, Unit, ContainerSize, Vessel
 from datetime import datetime
 from django.db.models import Q
 from django.utils import timezone
@@ -35,6 +35,16 @@ class pwsRepo:
             print(e)
 
         return Terms
+
+    def AdvSearchCustomer(SearchBy=''):
+        Customers = []
+
+        try:
+            Customers = Customer.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')
+        except Exception as e:
+            print(e)
+
+        return Customers
 
     def PartialCustomerList(SearchBy=''):
         Customers = []
@@ -76,6 +86,16 @@ class pwsRepo:
         
         return ContainerSizes
 
+    def PartialVesselList(SearchBy=''):
+        Vessels = []
+        
+        try:
+            Vessels = Vessel.objects.filter(IsActive=True, Name__icontains=SearchBy).order_by('Name')[:100]
+        except Exception as e:
+            print(e)
+        
+        return Vessels
+
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
 
@@ -115,6 +135,16 @@ class pwsRepo:
             print(e)
         
         return ContainerSizeDto
+
+    def LoadVessel(VesselID):
+        VesselDto = Vessel()
+        
+        try:
+            VesselDto = Vessel.objects.get(ID=VesselID, IsActive=True)
+        except Exception as e:
+            print(e)
+        
+        return VesselDto
 
     def UpsertCountry():
         rtn = False
@@ -304,6 +334,48 @@ class pwsRepo:
             print(e)
         
         return { 'rtn' : rtn, 'ContainerSizeID' : ContainerSizeID }
+
+    def UpsertVessel(Dto):
+        rtn = False
+        VesselID = None
+        PortOperatorDto = None
+        PsaDto = None
+        ShippingAgentDto = None
+        UpsertDto = None
+        
+        try:
+            PortOperatorDto = Customer.objects.get(ID=Dto['PortOperatorID'])
+            PsaDto = Customer.objects.get(ID=Dto['PsaID'])
+            ShippingAgentDto = Customer.objects.get(ID=Dto['ShippingAgentID'])
+            
+            if Dto['VesselID'] == None:
+                
+                UpsertDto = Vessel.objects.create(Code=Dto['Code'], Name=Dto['Name'], PortOperator=PortOperatorDto,
+                            Psa=PsaDto, ShippingAgent=ShippingAgentDto, IsActive=True, CreateDate=datetime.now(tz=timezone.utc), 
+                            CreateBy=None, UpdateDate=datetime.now(tz=timezone.utc), UpdateBy=None)
+                            
+                if UpsertDto.ID:
+                    rtn = True
+                    VesselID = UpsertDto.ID
+                    
+            else:
+                UpsertDto = Vessel.objects.get(ID=Dto['VesselID'])
+                UpsertDto.Code = Dto['Code']
+                UpsertDto.Name = Dto['Name']
+                UpsertDto.PortOperator = PortOperatorDto
+                UpsertDto.Psa = PsaDto
+                UpsertDto.ShippingAgent = ShippingAgentDto
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc) 
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                VesselID = Dto['VesselID']
+                        
+        except Exception as e:
+            print(e)
+        
+        return { 'rtn' : rtn, 'VesselID' : VesselID }
     
     def DeleteCustomer(CustomerID):
         rtn = False
@@ -354,11 +426,26 @@ class pwsRepo:
         rtn = False
 
         try:
-            UnitDto = ContainerSize.objects.get(ID=ContainerSizeID)
-            UnitDto.IsActive = False
-            UnitDto.UpdateDate = datetime.now(tz=timezone.utc) 
-            UnitDto.UpdateBy = None
-            UnitDto.save()
+            ContainerSizeDto = ContainerSize.objects.get(ID=ContainerSizeID)
+            ContainerSizeDto.IsActive = False
+            ContainerSizeDto.UpdateDate = datetime.now(tz=timezone.utc) 
+            ContainerSizeDto.UpdateBy = None
+            ContainerSizeDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+        
+        return rtn
+
+    def DeleteVessel(VesselID):
+        rtn = False
+
+        try:
+            VesselDto = Vessel.objects.get(ID=VesselID)
+            VesselDto.IsActive = False
+            VesselDto.UpdateDate = datetime.now(tz=timezone.utc) 
+            VesselDto.UpdateBy = None
+            VesselDto.save()
             rtn = True
         except Exception as e:
             print(e)

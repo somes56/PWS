@@ -1,4 +1,4 @@
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel
 from DataAccess.PWSRepo import pwsRepo
 
 class mstBL:
@@ -153,6 +153,46 @@ class mstBL:
             form.initial['Code'] = _Form['Code']
             form.initial['Name'] = _Form['Name']
             form.initial['Teus'] = _Form['Teus']
+        except Exception as e:
+            print(e)
+        
+        return form
+
+    def InitialiseVesselFormModel(VesselID=None):
+        form = VesselFormModel()
+
+        try:
+            if VesselID == None:
+                form.initial['VesselID'] = None
+            else:
+                Dto = pwsRepo.LoadVessel(VesselID)
+                form.initial['VesselID'] = Dto.ID
+                form.initial['Code'] = Dto.Code
+                form.initial['Name'] = Dto.Name
+                form.initial['PortOperatorID'] = Dto.PortOperator.ID
+                form.initial['PortOperatorName'] = Dto.PortOperator.Name
+                form.initial['PsaID'] = Dto.Psa.ID
+                form.initial['PsaName'] = Dto.Psa.Name
+                form.initial['ShippingAgentID'] = Dto.ShippingAgent.ID
+                form.initial['ShippingAgentName'] = Dto.ShippingAgent.Name
+        except Exception as e:
+            print(e)
+
+        return form
+        
+    def InitialiseErrorVesselFormModel(_Form):
+        form = VesselFormModel()
+
+        try:
+            form.initial['VesselID'] = _Form['VesselID']
+            form.initial['Code'] = _Form['Code']
+            form.initial['Name'] = _Form['Name']
+            form.initial['PortOperatorID'] = _Form['PortOperatorID']
+            form.initial['PortOperatorName'] = _Form['PortOperatorName']
+            form.initial['PsaID'] = _Form['PsaID']
+            form.initial['PsaName'] = _Form['PsaName']
+            form.initial['ShippingAgentID'] = _Form['ShippingAgentID']
+            form.initial['ShippingAgentName'] = _Form['ShippingAgentName']
         except Exception as e:
             print(e)
         

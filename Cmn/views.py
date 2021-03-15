@@ -15,3 +15,8 @@ def AdvSearchTerm(request, SearchBy=''):
     Terms = []
     Terms = pwsRepo.AdvSearchTerm(SearchBy)
     return render(request, 'PartialAdvSearchTerm.html', { 'Terms' : Terms })
+
+def AdvSearchCustomer(request, SearchBy=''):
+    Customers = []
+    Customers = pwsRepo.AdvSearchCustomer(SearchBy)
+    return render(request, 'PartialAdvSearchCustomer.html', { 'Customers' : Customers })

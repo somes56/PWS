@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
 from DataAccess.PWSRepo import pwsRepo
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel
 from Master.models import Country, Customer, State, Term
 
 def CustomerList(request):
@@ -317,6 +317,84 @@ def DeleteContainerSize(request, ContainerSizeID=None):
 
     if request.method == 'POST':
         rtn = pwsRepo.DeleteContainerSize(ContainerSizeID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+def VesselList(request):
+    return render(request, 'Vessel.html')
+    
+def PartialVesselList(request, SearchBy=''):
+    Vessels = []
+    Vessels = pwsRepo.PartialVesselList(SearchBy)
+
+    Page = request.GET.get('page', 1)
+    _Paginator = Paginator(Vessels, 50)
+    
+    try:
+        VesselPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        VesselPaginator = _Paginator.page(1)
+    except EmptyPage:
+        VesselPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, 'PartialVesselList.html', { 'Vessels' : VesselPaginator })
+    
+@csrf_exempt
+def VesselForm(request, VesselID=None):
+    SysGoodMsg = ''
+    SysBadMsg = ''
+    
+    if request.method == 'GET' : 
+        vesselFormModel = VesselFormModel()
+        
+        if VesselID == None:
+            vesselFormModel = mstBL.InitialiseVesselFormModel(None)
+        else:
+            vesselFormModel = mstBL.InitialiseVesselFormModel(VesselID)
+            
+        return render(request, 'VesselForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : vesselFormModel })
+    
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        vesselFormModel = VesselFormModel()
+        _post = VesselFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertVessel(_Form)
+            
+            if _Form['VesselID'] != None:
+                IsUpdate = True
+
+            if UpsertResult['rtn'] == True:
+                vesselFormModel = mstBL.InitialiseVesselFormModel(UpsertResult['VesselID'])
+                
+                if IsUpdate == False:
+                    SysGoodMsg = 'Inserted Successfully'
+                else:
+                    SysGoodMsg = 'Updated Successfully'
+
+            else:
+                vesselFormModel = mstBL.InitialiseErrorVesselFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = 'Insert Fail'
+                else:
+                    SysBadMsg = 'Update Fail'
+
+        else:
+            SysBadMsg = 'Invalid Input'
+
+        return render(request, 'VesselForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : vesselFormModel })
+
+@csrf_exempt
+def DeleteVessel(request, VesselID=None):
+    rtn = False
+
+    if request.method == 'POST':
+        rtn = pwsRepo.DeleteVessel(VesselID)
     else:
         rtn = False
     return HttpResponse(rtn)
