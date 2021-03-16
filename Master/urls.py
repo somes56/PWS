@@ -37,5 +37,12 @@ urlpatterns = [
     path('VesselForm/<uuid:VesselID>/', views.VesselForm, name='VesselForm'),
     path('DeleteVessel/<uuid:VesselID>/', views.DeleteVessel, name='DeleteVessel'),
 
+    path('ItemList', views.ItemList, name='ItemList'),
+    path('PartialItemList', views.PartialItemList, name='PartialItemList'),
+    path('PartialItemList/<str:SearchBy>/', views.PartialItemList, name='PartialItemList'),
+    path('ItemForm', views.ItemForm, name='ItemForm'),
+    path('ItemForm/<uuid:ItemID>/', views.ItemForm, name='ItemForm'),
+    path('DeleteItem/<uuid:ItemID>/', views.DeleteItem, name='DeleteItem'),
+
     path('UpsertCountry', views.UpsertCountry, name='UpsertCountry')
 ]

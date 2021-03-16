@@ -1,0 +1,48 @@
+{% if Items.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+  {% if Items.has_previous %}
+    <li><a onclick="PartialItemList('{{ Items.previous_page_number }}')">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in Items.paginator.page_range %}
+    {% if Items.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a onclick="PartialItemList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if Items.has_next %}
+    <li><a onclick="PartialItemList('{{ Items.next_page_number }}')">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Item in Items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Item.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeleteItem('{{ Item.ID }}', '{{ Item.Name }}')"></span>
+            </td>
+            <td>{{ Item.Code }}</td>
+            <td>{{ Item.Name }}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>

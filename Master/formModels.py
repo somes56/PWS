@@ -1,5 +1,5 @@
 from django import forms
-from Master.models import Customer, Port, Unit, ContainerSize, Vessel
+from Master.models import Customer, Port, Unit, ContainerSize, Vessel, Item
 
 class CustomerFormModel(forms.ModelForm):
     CustomerID = forms.UUIDField(required=False)
@@ -75,3 +75,12 @@ class VesselFormModel(forms.ModelForm):
         model = Vessel
         fields = ['VesselID', 'Code', 'Name', 'PortOperatorID', 'PortOperatorName', 'PsaID', 'PsaName',
                   'ShippingAgentID', 'ShippingAgentName']
+
+class ItemFormModel(forms.ModelForm):
+    ItemID = forms.UUIDField(required=False)
+    Code = forms.CharField(max_length=10, required=False)
+    Name = forms.CharField(max_length=250, required=False)
+
+    class Meta:
+        model = Unit
+        fields = ['ItemID', 'Code', 'Name']

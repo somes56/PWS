@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
 from DataAccess.PWSRepo import pwsRepo
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel, ItemFormModel
 from Master.models import Country, Customer, State, Term
 
 def CustomerList(request):
@@ -398,6 +398,85 @@ def DeleteVessel(request, VesselID=None):
     else:
         rtn = False
     return HttpResponse(rtn)
+
+def ItemList(request):
+    return render(request, 'Item.html')
+    
+def PartialItemList(request, SearchBy=''):
+    Items = []
+    Items = pwsRepo.PartialItemList(SearchBy)
+
+    Page = request.GET.get('page', 1)
+    _Paginator = Paginator(Items, 50)
+    
+    try:
+        ItemPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        ItemPaginator = _Paginator.page(1)
+    except EmptyPage:
+        ItemPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, 'PartialItemList.html', { 'Items' : ItemPaginator })
+    
+@csrf_exempt
+def ItemForm(request, ItemID=None):
+    SysGoodMsg = ''
+    SysBadMsg = ''
+    
+    if request.method == 'GET' : 
+        itemFormModel = ItemFormModel()
+        
+        if ItemID == None:
+            itemFormModel = mstBL.InitialiseItemFormModel(None)
+        else:
+            itemFormModel = mstBL.InitialiseItemFormModel(ItemID)
+            
+        return render(request, 'ItemForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : itemFormModel })
+    
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        itemFormModel = ItemFormModel()
+        _post = ItemFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertItem(_Form)
+            
+            if _Form['ItemID'] != None:
+                IsUpdate = True
+
+            if UpsertResult['rtn'] == True:
+                itemFormModel = mstBL.InitialiseItemFormModel(UpsertResult['ItemID'])
+                
+                if IsUpdate == False:
+                    SysGoodMsg = 'Inserted Successfully'
+                else:
+                    SysGoodMsg = 'Updated Successfully'
+
+            else:
+                itemFormModel = mstBL.InitialiseErrorItemFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = 'Insert Fail'
+                else:
+                    SysBadMsg = 'Update Fail'
+
+        else:
+            SysBadMsg = 'Invalid Input'
+
+        return render(request, 'ItemForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : itemFormModel })
+
+@csrf_exempt
+def DeleteItem(request, ItemID=None):
+    rtn = False
+
+    if request.method == 'POST':
+        rtn = pwsRepo.DeleteItem(ItemID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
 
 def UpsertCountry(request):
     rtn = False

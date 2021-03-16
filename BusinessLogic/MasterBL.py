@@ -1,4 +1,4 @@
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel
+from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel, ItemFormModel
 from DataAccess.PWSRepo import pwsRepo
 
 class mstBL:
@@ -198,3 +198,30 @@ class mstBL:
         
         return form
 
+    def InitialiseItemFormModel(ItemID=None):
+        form = ItemFormModel()
+
+        try:
+            if ItemID == None:
+                form.initial['ItemID'] = None
+            else:
+                Dto = pwsRepo.LoadItem(ItemID)
+                form.initial['ItemID'] = Dto.ID
+                form.initial['Code'] = Dto.Code
+                form.initial['Name'] = Dto.Name
+        except Exception as e:
+            print(e)
+
+        return form
+        
+    def InitialiseErrorItemFormModel(_Form):
+        form = ItemFormModel()
+
+        try:
+            form.initial['ItemID'] = _Form['ItemID']
+            form.initial['Code'] = _Form['Code']
+            form.initial['Name'] = _Form['Name']
+        except Exception as e:
+            print(e)
+        
+        return form

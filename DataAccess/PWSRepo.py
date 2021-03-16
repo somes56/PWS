@@ -1,4 +1,4 @@
-from Master.models import Country, State, Term, Customer, Port, Unit, ContainerSize, Vessel
+from Master.models import Country, State, Term, Customer, Port, Unit, ContainerSize, Vessel, Item
 from datetime import datetime
 from django.db.models import Q
 from django.utils import timezone
@@ -96,6 +96,16 @@ class pwsRepo:
         
         return Vessels
 
+    def PartialItemList(SearchBy=''):
+        Items = []
+        
+        try:
+            Items = Item.objects.filter(Q(Code__icontains=SearchBy) | Q(Name__icontains=SearchBy), IsActive=True).order_by('Code','Name')[:100]
+        except Exception as e:
+            print(e)
+        
+        return Items
+
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
 
@@ -145,6 +155,16 @@ class pwsRepo:
             print(e)
         
         return VesselDto
+
+    def LoadItem(ItemID):
+        ItemDto = Item()
+        
+        try:
+            ItemDto = Item.objects.get(ID=ItemID, IsActive=True)
+        except Exception as e:
+            print(e)
+        
+        return ItemDto
 
     def UpsertCountry():
         rtn = False
@@ -376,6 +396,39 @@ class pwsRepo:
             print(e)
         
         return { 'rtn' : rtn, 'VesselID' : VesselID }
+
+    def UpsertItem(Dto):
+        rtn = False
+        ItemID = None
+        UpsertDto = None
+        
+        try:
+            
+            if Dto['ItemID'] == None:
+                
+                UpsertDto = Item.objects.create(Code=Dto['Code'], Name=Dto['Name'], IsActive=True, 
+                            CreateDate=datetime.now(tz=timezone.utc), CreateBy=None,
+                            UpdateDate=datetime.now(tz=timezone.utc), UpdateBy=None)
+                            
+                if UpsertDto.ID:
+                    rtn = True
+                    ItemID = UpsertDto.ID
+                    
+            else:
+                UpsertDto = Item.objects.get(ID=Dto['ItemID'])
+                UpsertDto.Code = Dto['Code']
+                UpsertDto.Name = Dto['Name']
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc) 
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                ItemID = Dto['ItemID']
+                        
+        except Exception as e:
+            print(e)
+        
+        return { 'rtn' : rtn, 'ItemID' : ItemID }
     
     def DeleteCustomer(CustomerID):
         rtn = False
@@ -446,6 +499,21 @@ class pwsRepo:
             VesselDto.UpdateDate = datetime.now(tz=timezone.utc) 
             VesselDto.UpdateBy = None
             VesselDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+        
+        return rtn
+
+    def DeleteItem(ItemID):
+        rtn = False
+
+        try:
+            ItemDto = Item.objects.get(ID=ItemID)
+            ItemDto.IsActive = False
+            ItemDto.UpdateDate = datetime.now(tz=timezone.utc) 
+            ItemDto.UpdateBy = None
+            ItemDto.save()
             rtn = True
         except Exception as e:
             print(e)
