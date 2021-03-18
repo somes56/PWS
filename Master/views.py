@@ -5,19 +5,29 @@ from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
 from DataAccess.PWSRepo import pwsRepo
-from Master.formModels import CustomerFormModel, PortFormModel, UnitFormModel, ContainerSizeFormModel, VesselFormModel, ItemFormModel
+from Master.formModels import (
+    CustomerFormModel,
+    PortFormModel,
+    UnitFormModel,
+    ContainerSizeFormModel,
+    VesselFormModel,
+    ItemFormModel,
+    ClassFormModel,
+)
 from Master.models import Country, Customer, State, Term
 
-def CustomerList(request):
-    return render(request, 'Customer.html')
 
-def PartialCustomerList(request, SearchBy=''):
+def CustomerList(request):
+    return render(request, "Customer.html")
+
+
+def PartialCustomerList(request, SearchBy=""):
     Customers = []
     Customers = pwsRepo.PartialCustomerList(SearchBy)
 
-    Page = request.GET.get('page', 1)
+    Page = request.GET.get("page", 1)
     _Paginator = Paginator(Customers, 50)
-    
+
     try:
         CustomerPaginator = _Paginator.page(Page)
     except PageNotAnInteger:
@@ -25,22 +35,31 @@ def PartialCustomerList(request, SearchBy=''):
     except EmptyPage:
         CustomerPaginator = _Paginator.page(paginator.num_pages)
 
-    return render(request, 'PartialCustomerList.html', { 'Customers' : CustomerPaginator })
+    return render(request, "PartialCustomerList.html", {"Customers": CustomerPaginator})
+
 
 @csrf_exempt
 def CustomerForm(request, CustomerID=None):
-    SysGoodMsg = ''
-    SysBadMsg = ''
+    SysGoodMsg = ""
+    SysBadMsg = ""
 
-    if request.method == 'GET' : 
+    if request.method == "GET":
         customerFormModel = CustomerFormModel()
-        
+
         if CustomerID == None:
             customerFormModel = mstBL.InitialiseCustomerFormModel(None)
         else:
             customerFormModel = mstBL.InitialiseCustomerFormModel(CustomerID)
-            
-        return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : customerFormModel })
+
+        return render(
+            request,
+            "CustomerForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": customerFormModel,
+            },
+        )
 
     else:
         IsUpdate = False
@@ -51,51 +70,64 @@ def CustomerForm(request, CustomerID=None):
         if _post.is_valid():
             _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertCustomer(_Form)
-            
-            if _Form['CustomerID'] != None:
+
+            if _Form["CustomerID"] != None:
                 IsUpdate = True
 
-            if UpsertResult['rtn'] == True:
-                customerFormModel = mstBL.InitialiseCustomerFormModel(UpsertResult['CustomerID'])
+            if UpsertResult["rtn"] == True:
+                customerFormModel = mstBL.InitialiseCustomerFormModel(
+                    UpsertResult["CustomerID"]
+                )
 
                 if IsUpdate == False:
-                    SysGoodMsg = 'Inserted Successfully'
+                    SysGoodMsg = "Inserted Successfully"
                 else:
-                    SysGoodMsg = 'Updated Successfully'
+                    SysGoodMsg = "Updated Successfully"
 
             else:
                 customerFormModel = mstBL.InitialiseErrorCustomerFormModel(_Form)
 
                 if IsUpdate == False:
-                    SysBadMsg = 'Insert Fail'
+                    SysBadMsg = "Insert Fail"
                 else:
-                    SysBadMsg = 'Update Fail'
+                    SysBadMsg = "Update Fail"
 
         else:
-            SysBadMsg = 'Invalid Input'
+            SysBadMsg = "Invalid Input"
 
-        return render(request, 'CustomerForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : customerFormModel })
+        return render(
+            request,
+            "CustomerForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": customerFormModel,
+            },
+        )
+
 
 @csrf_exempt
 def DeleteCustomer(request, CustomerID=None):
     rtn = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         rtn = pwsRepo.DeleteCustomer(CustomerID)
     else:
         rtn = False
     return HttpResponse(rtn)
 
+
 def PortList(request):
-    return render(request, 'Port.html')
-    
-def PartialPortList(request, SearchBy=''):
+    return render(request, "Port.html")
+
+
+def PartialPortList(request, SearchBy=""):
     Ports = []
     Ports = pwsRepo.PartialPortList(SearchBy)
 
-    Page = request.GET.get('page', 1)
+    Page = request.GET.get("page", 1)
     _Paginator = Paginator(Ports, 50)
-    
+
     try:
         PortPaginator = _Paginator.page(Page)
     except PageNotAnInteger:
@@ -103,23 +135,28 @@ def PartialPortList(request, SearchBy=''):
     except EmptyPage:
         PortPaginator = _Paginator.page(paginator.num_pages)
 
-    return render(request, 'PartialPortList.html', { 'Ports' : PortPaginator })
-    
+    return render(request, "PartialPortList.html", {"Ports": PortPaginator})
+
+
 @csrf_exempt
 def PortForm(request, PortID=None):
-    SysGoodMsg = ''
-    SysBadMsg = ''
-    
-    if request.method == 'GET' : 
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
         portFormModel = PortFormModel()
-        
+
         if PortID == None:
             portFormModel = mstBL.InitialisePortFormModel(None)
         else:
             portFormModel = mstBL.InitialisePortFormModel(PortID)
-            
-        return render(request, 'PortForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : portFormModel })
-    
+
+        return render(
+            request,
+            "PortForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": portFormModel},
+        )
+
     else:
         IsUpdate = False
         UpsertResult = {}
@@ -129,36 +166,41 @@ def PortForm(request, PortID=None):
         if _post.is_valid():
             _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertPort(_Form)
-            
-            if _Form['PortID'] != None:
+
+            if _Form["PortID"] != None:
                 IsUpdate = True
 
-            if UpsertResult['rtn'] == True:
-                portFormModel = mstBL.InitialisePortFormModel(UpsertResult['PortID'])
-                
+            if UpsertResult["rtn"] == True:
+                portFormModel = mstBL.InitialisePortFormModel(UpsertResult["PortID"])
+
                 if IsUpdate == False:
-                    SysGoodMsg = 'Inserted Successfully'
+                    SysGoodMsg = "Inserted Successfully"
                 else:
-                    SysGoodMsg = 'Updated Successfully'
+                    SysGoodMsg = "Updated Successfully"
 
             else:
                 portFormModel = mstBL.InitialiseErrorPortFormModel(_Form)
 
                 if IsUpdate == False:
-                    SysBadMsg = 'Insert Fail'
+                    SysBadMsg = "Insert Fail"
                 else:
-                    SysBadMsg = 'Update Fail'
+                    SysBadMsg = "Update Fail"
 
         else:
-            SysBadMsg = 'Invalid Input'
+            SysBadMsg = "Invalid Input"
 
-        return render(request, 'PortForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : portFormModel })
+        return render(
+            request,
+            "PortForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": portFormModel},
+        )
+
 
 @csrf_exempt
 def DeletePort(request, PortID=None):
     rtn = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         rtn = pwsRepo.DeletePort(PortID)
     else:
         rtn = False
@@ -166,15 +208,16 @@ def DeletePort(request, PortID=None):
 
 
 def UnitList(request):
-    return render(request, 'Unit.html')
-    
-def PartialUnitList(request, SearchBy=''):
+    return render(request, "Unit.html")
+
+
+def PartialUnitList(request, SearchBy=""):
     Units = []
     Units = pwsRepo.PartialUnitList(SearchBy)
 
-    Page = request.GET.get('page', 1)
+    Page = request.GET.get("page", 1)
     _Paginator = Paginator(Units, 50)
-    
+
     try:
         UnitPaginator = _Paginator.page(Page)
     except PageNotAnInteger:
@@ -182,23 +225,28 @@ def PartialUnitList(request, SearchBy=''):
     except EmptyPage:
         UnitPaginator = _Paginator.page(paginator.num_pages)
 
-    return render(request, 'PartialUnitList.html', { 'Units' : UnitPaginator })
-    
+    return render(request, "PartialUnitList.html", {"Units": UnitPaginator})
+
+
 @csrf_exempt
 def UnitForm(request, UnitID=None):
-    SysGoodMsg = ''
-    SysBadMsg = ''
-    
-    if request.method == 'GET' : 
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
         unitFormModel = UnitFormModel()
-        
+
         if UnitID == None:
             unitFormModel = mstBL.InitialiseUnitFormModel(None)
         else:
             unitFormModel = mstBL.InitialiseUnitFormModel(UnitID)
-            
-        return render(request, 'UnitForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : unitFormModel })
-    
+
+        return render(
+            request,
+            "UnitForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": unitFormModel},
+        )
+
     else:
         IsUpdate = False
         UpsertResult = {}
@@ -208,51 +256,58 @@ def UnitForm(request, UnitID=None):
         if _post.is_valid():
             _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertUnit(_Form)
-            
-            if _Form['UnitID'] != None:
+
+            if _Form["UnitID"] != None:
                 IsUpdate = True
 
-            if UpsertResult['rtn'] == True:
-                unitFormModel = mstBL.InitialiseUnitFormModel(UpsertResult['UnitID'])
-                
+            if UpsertResult["rtn"] == True:
+                unitFormModel = mstBL.InitialiseUnitFormModel(UpsertResult["UnitID"])
+
                 if IsUpdate == False:
-                    SysGoodMsg = 'Inserted Successfully'
+                    SysGoodMsg = "Inserted Successfully"
                 else:
-                    SysGoodMsg = 'Updated Successfully'
+                    SysGoodMsg = "Updated Successfully"
 
             else:
                 unitFormModel = mstBL.InitialiseErrorUnitFormModel(_Form)
 
                 if IsUpdate == False:
-                    SysBadMsg = 'Insert Fail'
+                    SysBadMsg = "Insert Fail"
                 else:
-                    SysBadMsg = 'Update Fail'
+                    SysBadMsg = "Update Fail"
 
         else:
-            SysBadMsg = 'Invalid Input'
+            SysBadMsg = "Invalid Input"
 
-        return render(request, 'UnitForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : unitFormModel })
+        return render(
+            request,
+            "UnitForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": unitFormModel},
+        )
+
 
 @csrf_exempt
 def DeleteUnit(request, UnitID=None):
     rtn = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         rtn = pwsRepo.DeleteUnit(UnitID)
     else:
         rtn = False
     return HttpResponse(rtn)
 
+
 def ContainerSizeList(request):
-    return render(request, 'ContainerSize.html')
-    
-def PartialContainerSizeList(request, SearchBy=''):
+    return render(request, "ContainerSize.html")
+
+
+def PartialContainerSizeList(request, SearchBy=""):
     ContainerSizes = []
     ContainerSizes = pwsRepo.PartialContainerSizeList(SearchBy)
 
-    Page = request.GET.get('page', 1)
+    Page = request.GET.get("page", 1)
     _Paginator = Paginator(ContainerSizes, 50)
-    
+
     try:
         ContainerSizePaginator = _Paginator.page(Page)
     except PageNotAnInteger:
@@ -260,23 +315,38 @@ def PartialContainerSizeList(request, SearchBy=''):
     except EmptyPage:
         ContainerSizePaginator = _Paginator.page(paginator.num_pages)
 
-    return render(request, 'PartialContainerSizeList.html', { 'ContainerSizes' : ContainerSizePaginator })
-    
+    return render(
+        request,
+        "PartialContainerSizeList.html",
+        {"ContainerSizes": ContainerSizePaginator},
+    )
+
+
 @csrf_exempt
 def ContainerSizeForm(request, ContainerSizeID=None):
-    SysGoodMsg = ''
-    SysBadMsg = ''
-    
-    if request.method == 'GET' : 
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
         containerSizeFormModel = ContainerSizeFormModel()
-        
+
         if ContainerSizeID == None:
             containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(None)
         else:
-            containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(ContainerSizeID)
-            
-        return render(request, 'ContainerSizeForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : containerSizeFormModel })
-    
+            containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(
+                ContainerSizeID
+            )
+
+        return render(
+            request,
+            "ContainerSizeForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": containerSizeFormModel,
+            },
+        )
+
     else:
         IsUpdate = False
         UpsertResult = {}
@@ -286,51 +356,66 @@ def ContainerSizeForm(request, ContainerSizeID=None):
         if _post.is_valid():
             _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertContainerSize(_Form)
-            
-            if _Form['ContainerSizeID'] != None:
+
+            if _Form["ContainerSizeID"] != None:
                 IsUpdate = True
 
-            if UpsertResult['rtn'] == True:
-                containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(UpsertResult['ContainerSizeID'])
-                
+            if UpsertResult["rtn"] == True:
+                containerSizeFormModel = mstBL.InitialiseContainerSizeFormModel(
+                    UpsertResult["ContainerSizeID"]
+                )
+
                 if IsUpdate == False:
-                    SysGoodMsg = 'Inserted Successfully'
+                    SysGoodMsg = "Inserted Successfully"
                 else:
-                    SysGoodMsg = 'Updated Successfully'
+                    SysGoodMsg = "Updated Successfully"
 
             else:
-                containerSizeFormModel = mstBL.InitialiseErrorContainerSizeFormModel(_Form)
+                containerSizeFormModel = mstBL.InitialiseErrorContainerSizeFormModel(
+                    _Form
+                )
 
                 if IsUpdate == False:
-                    SysBadMsg = 'Insert Fail'
+                    SysBadMsg = "Insert Fail"
                 else:
-                    SysBadMsg = 'Update Fail'
+                    SysBadMsg = "Update Fail"
 
         else:
-            SysBadMsg = 'Invalid Input'
+            SysBadMsg = "Invalid Input"
 
-        return render(request, 'ContainerSizeForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : containerSizeFormModel })
+        return render(
+            request,
+            "ContainerSizeForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": containerSizeFormModel,
+            },
+        )
+
 
 @csrf_exempt
 def DeleteContainerSize(request, ContainerSizeID=None):
     rtn = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         rtn = pwsRepo.DeleteContainerSize(ContainerSizeID)
     else:
         rtn = False
     return HttpResponse(rtn)
 
+
 def VesselList(request):
-    return render(request, 'Vessel.html')
-    
-def PartialVesselList(request, SearchBy=''):
+    return render(request, "Vessel.html")
+
+
+def PartialVesselList(request, SearchBy=""):
     Vessels = []
     Vessels = pwsRepo.PartialVesselList(SearchBy)
 
-    Page = request.GET.get('page', 1)
+    Page = request.GET.get("page", 1)
     _Paginator = Paginator(Vessels, 50)
-    
+
     try:
         VesselPaginator = _Paginator.page(Page)
     except PageNotAnInteger:
@@ -338,23 +423,28 @@ def PartialVesselList(request, SearchBy=''):
     except EmptyPage:
         VesselPaginator = _Paginator.page(paginator.num_pages)
 
-    return render(request, 'PartialVesselList.html', { 'Vessels' : VesselPaginator })
-    
+    return render(request, "PartialVesselList.html", {"Vessels": VesselPaginator})
+
+
 @csrf_exempt
 def VesselForm(request, VesselID=None):
-    SysGoodMsg = ''
-    SysBadMsg = ''
-    
-    if request.method == 'GET' : 
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
         vesselFormModel = VesselFormModel()
-        
+
         if VesselID == None:
             vesselFormModel = mstBL.InitialiseVesselFormModel(None)
         else:
             vesselFormModel = mstBL.InitialiseVesselFormModel(VesselID)
-            
-        return render(request, 'VesselForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : vesselFormModel })
-    
+
+        return render(
+            request,
+            "VesselForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": vesselFormModel},
+        )
+
     else:
         IsUpdate = False
         UpsertResult = {}
@@ -364,51 +454,60 @@ def VesselForm(request, VesselID=None):
         if _post.is_valid():
             _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertVessel(_Form)
-            
-            if _Form['VesselID'] != None:
+
+            if _Form["VesselID"] != None:
                 IsUpdate = True
 
-            if UpsertResult['rtn'] == True:
-                vesselFormModel = mstBL.InitialiseVesselFormModel(UpsertResult['VesselID'])
-                
+            if UpsertResult["rtn"] == True:
+                vesselFormModel = mstBL.InitialiseVesselFormModel(
+                    UpsertResult["VesselID"]
+                )
+
                 if IsUpdate == False:
-                    SysGoodMsg = 'Inserted Successfully'
+                    SysGoodMsg = "Inserted Successfully"
                 else:
-                    SysGoodMsg = 'Updated Successfully'
+                    SysGoodMsg = "Updated Successfully"
 
             else:
                 vesselFormModel = mstBL.InitialiseErrorVesselFormModel(_Form)
 
                 if IsUpdate == False:
-                    SysBadMsg = 'Insert Fail'
+                    SysBadMsg = "Insert Fail"
                 else:
-                    SysBadMsg = 'Update Fail'
+                    SysBadMsg = "Update Fail"
 
         else:
-            SysBadMsg = 'Invalid Input'
+            SysBadMsg = "Invalid Input"
 
-        return render(request, 'VesselForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : vesselFormModel })
+        return render(
+            request,
+            "VesselForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": vesselFormModel},
+        )
+
 
 @csrf_exempt
 def DeleteVessel(request, VesselID=None):
     rtn = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         rtn = pwsRepo.DeleteVessel(VesselID)
     else:
         rtn = False
     return HttpResponse(rtn)
 
+
 def ItemList(request):
-    return render(request, 'Item.html')
-    
-def PartialItemList(request, SearchBy=''):
+    return render(request, "Item.html")
+
+
+def PartialItemList(request, SearchBy=""):
     Items = []
     Items = pwsRepo.PartialItemList(SearchBy)
 
-    Page = request.GET.get('page', 1)
+    Page = request.GET.get("page", 1)
     _Paginator = Paginator(Items, 50)
-    
+
     try:
         ItemPaginator = _Paginator.page(Page)
     except PageNotAnInteger:
@@ -416,23 +515,28 @@ def PartialItemList(request, SearchBy=''):
     except EmptyPage:
         ItemPaginator = _Paginator.page(paginator.num_pages)
 
-    return render(request, 'PartialItemList.html', { 'Items' : ItemPaginator })
-    
+    return render(request, "PartialItemList.html", {"Items": ItemPaginator})
+
+
 @csrf_exempt
 def ItemForm(request, ItemID=None):
-    SysGoodMsg = ''
-    SysBadMsg = ''
-    
-    if request.method == 'GET' : 
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
         itemFormModel = ItemFormModel()
-        
+
         if ItemID == None:
             itemFormModel = mstBL.InitialiseItemFormModel(None)
         else:
             itemFormModel = mstBL.InitialiseItemFormModel(ItemID)
-            
-        return render(request, 'ItemForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : itemFormModel })
-    
+
+        return render(
+            request,
+            "ItemForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": itemFormModel},
+        )
+
     else:
         IsUpdate = False
         UpsertResult = {}
@@ -442,37 +546,132 @@ def ItemForm(request, ItemID=None):
         if _post.is_valid():
             _Form = _post.cleaned_data
             UpsertResult = pwsRepo.UpsertItem(_Form)
-            
-            if _Form['ItemID'] != None:
+
+            if _Form["ItemID"] != None:
                 IsUpdate = True
 
-            if UpsertResult['rtn'] == True:
-                itemFormModel = mstBL.InitialiseItemFormModel(UpsertResult['ItemID'])
-                
+            if UpsertResult["rtn"] == True:
+                itemFormModel = mstBL.InitialiseItemFormModel(UpsertResult["ItemID"])
+
                 if IsUpdate == False:
-                    SysGoodMsg = 'Inserted Successfully'
+                    SysGoodMsg = "Inserted Successfully"
                 else:
-                    SysGoodMsg = 'Updated Successfully'
+                    SysGoodMsg = "Updated Successfully"
 
             else:
                 itemFormModel = mstBL.InitialiseErrorItemFormModel(_Form)
 
                 if IsUpdate == False:
-                    SysBadMsg = 'Insert Fail'
+                    SysBadMsg = "Insert Fail"
                 else:
-                    SysBadMsg = 'Update Fail'
+                    SysBadMsg = "Update Fail"
 
         else:
-            SysBadMsg = 'Invalid Input'
+            SysBadMsg = "Invalid Input"
 
-        return render(request, 'ItemForm.html', { 'SysGoodMsg' : SysGoodMsg, 'SysBadMsg' : SysBadMsg,  'Form' : itemFormModel })
+        return render(
+            request,
+            "ItemForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": itemFormModel},
+        )
+
 
 @csrf_exempt
 def DeleteItem(request, ItemID=None):
     rtn = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         rtn = pwsRepo.DeleteItem(ItemID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+def ClassList(request):
+    return render(request, "Class.html")
+
+
+def PartialClassList(request, SearchBy=""):
+    Classes = []
+    Classes = pwsRepo.PartialClassList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Classes, 50)
+
+    try:
+        ClassPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        ClassPaginator = _Paginator.page(1)
+    except EmptyPage:
+        ClassPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, "PartialClassList.html", {"Classes": ClassPaginator})
+
+
+@csrf_exempt
+def ClassForm(request, ClassID=None):
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
+        classFormModel = ClassFormModel()
+
+        if ClassID == None:
+            classFormModel = mstBL.InitialiseClassFormModel(None)
+        else:
+            classFormModel = mstBL.InitialiseClassFormModel(ClassID)
+
+        return render(
+            request,
+            "ClassForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": classFormModel},
+        )
+
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        classFormModel = ClassFormModel()
+        _post = ClassFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertClass(_Form)
+
+            if _Form["ClassID"] != None:
+                IsUpdate = True
+
+            if UpsertResult["rtn"] == True:
+                classFormModel = mstBL.InitialiseClassFormModel(UpsertResult["ClassID"])
+
+                if IsUpdate == False:
+                    SysGoodMsg = "Inserted Successfully"
+                else:
+                    SysGoodMsg = "Updated Successfully"
+
+            else:
+                classFormModel = mstBL.InitialiseErrorClassFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = "Insert Fail"
+                else:
+                    SysBadMsg = "Update Fail"
+
+        else:
+            SysBadMsg = "Invalid Input"
+
+        return render(
+            request,
+            "ClassForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": classFormModel},
+        )
+
+
+@csrf_exempt
+def DeleteClass(request, ClassID=None):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = pwsRepo.DeleteClass(ClassID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -482,4 +681,3 @@ def UpsertCountry(request):
     rtn = False
     rtn = pwsRepo.UpsertCountry()
     return HttpResponse(rtn)
-
