@@ -301,7 +301,7 @@ class pwsRepo:
 
                 for country in Countries:
                     c = Country.objects.create(
-                        Name=country["name"],
+                        Name=str(country["name"]).upper(),
                         IsoCode=str(country["code"]).upper(),
                         IsActive=True,
                         CreateDate=datetime.now(tz=timezone.utc),
