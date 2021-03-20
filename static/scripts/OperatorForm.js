@@ -16,21 +16,8 @@ $(function () {
     });
 })
 
-function ConvertUpperCase(ID) {
+function ConvertUpperCase(ID){
     $(`#${ID}`).val($(`#${ID}`).val().toUpperCase())
-}
-
-function SearchCountry() {
-    var crit = {
-        "mt": "Search Country",
-        "fn": "Country",
-        "p": {},
-        "md": {
-            "md1": "CountryID",
-            "md2": "CountryName"
-        }
-    };
-    OpenAdvSearch(JSON.stringify(crit));
 }
 
 function SubmitValidation() {
@@ -47,11 +34,6 @@ function SubmitValidation() {
         i = i + 1;
     }
 
-    if ($('#CountryID').val() === "" || $('#CountryName').val() === "") {
-        msg[i] = "Country is required.";
-        i = i + 1;
-    }
-
     if (msg.length > 0) {
         $("#ClientVerifyMsg").html(msg.join("<br/>"));
 
@@ -64,5 +46,5 @@ function SubmitValidation() {
 }
 
 function ResetForm() {
-    window.location.href = `/Master/PortForm`
+    window.location.href = `/Master/OperatorForm`
 }

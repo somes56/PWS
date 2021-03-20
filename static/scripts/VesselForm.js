@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
     $("#ClientVerifyBlock").hide();
 
     $(document).keypress(function (e) {
@@ -9,14 +9,18 @@ $(function(){
     });
 
     $(document).keydown(function (e) {
-        if (e.keyCode === 8 && !$(e.target).is("input, textarea")){
+        if (e.keyCode === 8 && !$(e.target).is("input, textarea")) {
             e.preventDefault();
             return false;
         }
     });
 })
 
-function SearchPortOperator(){
+function ConvertUpperCase(ID) {
+    $(`#${ID}`).val($(`#${ID}`).val().toUpperCase())
+}
+
+function SearchPortOperator() {
     var crit = {
         "mt": "Search Port Operator",
         "fn": "Customer",
@@ -29,7 +33,7 @@ function SearchPortOperator(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SearchPsa(){
+function SearchPsa() {
     var crit = {
         "mt": "Search Psa",
         "fn": "Customer",
@@ -42,7 +46,7 @@ function SearchPsa(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SearchShippingAgent(){
+function SearchShippingAgent() {
     var crit = {
         "mt": "Search ShippingAgent",
         "fn": "Customer",
@@ -55,7 +59,7 @@ function SearchShippingAgent(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SubmitValidation(){
+function SubmitValidation() {
     var msg = [];
     var i = 0;
 
@@ -95,6 +99,6 @@ function SubmitValidation(){
     }
 }
 
-function ResetForm(){
+function ResetForm() {
     window.location.href = `/Master/VesselForm`
 }

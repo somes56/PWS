@@ -1,17 +1,15 @@
 {% extends 'Layout.html' %}
 {% load static %}
-{% block title %} Container Size Form {% endblock title %}
+{% block title %} Operator Form {% endblock title %}
 
 {% block script %}
-<script type="text/javascript" src="{% static 'scripts/ContainerSizeForm.js' %}"></script>
-<script type="text/javascript">
-</script>
+<script type="text/javascript" src="{% static 'scripts/OperatorForm.js' %}"></script>
 {% endblock script %}
 
 {% load widget_tweaks %}
 
 {% block content %}
-<h2>Container Size Registration</h2>
+<h2>Operator Registration</h2>
 <hr />
 
 <form method="POST">
@@ -33,27 +31,16 @@
                 <label class="col-md-2 control-label">Code :</label>
                 <div class="col-md-3">
                     {% render_field Form.Code|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Code" class="form-control input-sm" %}
-                    {% render_field Form.ContainerSizeID|attr:"hidden:true" id="ContainerSizeID" %}
+                    {% render_field Form.OperatorID|attr:"hidden:true" id="OperatorID" %}
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="form-group">
-                <label class="col-md-2 control-label">Name :</label>
+                <label class="col-md-2 control-label">Liner Name :</label>
                 <div class="col-md-3">
                     {% render_field Form.Name|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Name" class="form-control input-sm" %}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label class="col-md-2 control-label">Teus :</label>
-                <div class="col-md-3">
-                    {% for radio in Form.Teus %}
-                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
-                    {% endfor %}
                 </div>
             </div>
         </div>

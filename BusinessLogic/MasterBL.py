@@ -7,6 +7,7 @@ from Master.formModels import (
     ItemFormModel,
     ClassFormModel,
     VoyageFormModel,
+    OperatorFormModel,
 )
 from datetime import datetime
 from django.utils import timezone
@@ -298,6 +299,34 @@ class mstBL:
             form.initial["Eta"] = _Form["Eta"]
             form.initial["VesselID"] = _Form["VesselID"]
             form.initial["VesselName"] = _Form["VesselName"]
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseOperatorFormModel(OperatorID=None):
+        form = OperatorFormModel()
+
+        try:
+            if OperatorID == None:
+                form.initial["OperatorID"] = None
+            else:
+                Dto = pwsRepo.LoadOperator(OperatorID)
+                form.initial["OperatorID"] = Dto.ID
+                form.initial["Code"] = Dto.Code
+                form.initial["Name"] = Dto.Name
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseErrorOperatorFormModel(_Form):
+        form = OperatorFormModel()
+
+        try:
+            form.initial["OperatorID"] = _Form["OperatorID"]
+            form.initial["Code"] = _Form["Code"]
+            form.initial["Name"] = _Form["Name"]
         except Exception as e:
             print(e)
 

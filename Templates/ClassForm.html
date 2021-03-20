@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Code :</label>
                 <div class="col-md-3">
-                    {% render_field Form.Code id="Code" class="form-control input-sm" %}
+                    {% render_field Form.Code|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Code" class="form-control input-sm" %}
                     {% render_field Form.ClassID|attr:"hidden:true" id="ClassID" %}
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Short Name :</label>
                 <div class="col-md-3">
-                    {% render_field Form.ShortName id="ShortName" class="form-control input-sm" %}
+                    {% render_field Form.ShortName|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="ShortName" class="form-control input-sm" %}
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Full Name :</label>
                 <div class="col-md-3">
-                    {% render_field Form.FullName id="FullName" class="form-control input-sm" %}
+                    {% render_field Form.FullName|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="FullName" class="form-control input-sm" %}
                 </div>
             </div>
         </div>

@@ -90,5 +90,17 @@ urlpatterns = [
     path("VoyageForm", views.VoyageForm, name="VoyageForm"),
     path("VoyageForm/<uuid:VoyageID>/", views.VoyageForm, name="VoyageForm"),
     path("DeleteVoyage/<uuid:VoyageID>/", views.DeleteVoyage, name="DeleteVoyage"),
+    path("OperatorList", views.OperatorList, name="OperatorList"),
+    path("PartialOperatorList", views.PartialOperatorList, name="PartialOperatorList"),
+    path(
+        "PartialOperatorList/<str:SearchBy>/",
+        views.PartialOperatorList,
+        name="PartialOperatorList",
+    ),
+    path("OperatorForm", views.OperatorForm, name="OperatorForm"),
+    path("OperatorForm/<uuid:OperatorID>/", views.OperatorForm, name="OperatorForm"),
+    path(
+        "DeleteOperator/<uuid:OperatorID>/", views.DeleteOperator, name="DeleteOperator"
+    ),
     path("UpsertCountry", views.UpsertCountry, name="UpsertCountry"),
 ]

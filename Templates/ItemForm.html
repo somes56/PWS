@@ -13,7 +13,7 @@
 <hr />
 
 <form method="POST">
-    
+
     {% if SysGoodMsg %}
     <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
     {% endif %}
@@ -21,7 +21,7 @@
     {% if SysBadMsg %}
     <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
     {% endif %}
-    
+
     <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
 
     <div class="form-horizontal">
@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Code :</label>
                 <div class="col-md-3">
-                    {% render_field Form.Code id="Code" class="form-control input-sm" %}
+                    {% render_field Form.Code|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Code" class="form-control input-sm" %}
                     {% render_field Form.ItemID|attr:"hidden:true" id="ItemID" %}
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Name :</label>
                 <div class="col-md-3">
-                    {% render_field Form.Name id="Name" class="form-control input-sm" %}
+                    {% render_field Form.Name|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Name" class="form-control input-sm" %}
                 </div>
             </div>
         </div>
@@ -51,7 +51,8 @@
         <div class="row">
             <div class="form-group">
                 <div class="col-md-5 col-md-offset-5">
-                    <button type="submit" id="Save" class="btn btn-success" onclick="return SubmitValidation();">Save</button>
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
                     <span>&nbsp;</span>
                     <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
                 </div>
