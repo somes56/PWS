@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
     $("#ClientVerifyBlock").hide();
 
     $(document).keypress(function (e) {
@@ -9,14 +9,18 @@ $(function(){
     });
 
     $(document).keydown(function (e) {
-        if (e.keyCode === 8 && !$(e.target).is("input, textarea")){
+        if (e.keyCode === 8 && !$(e.target).is("input, textarea")) {
             e.preventDefault();
             return false;
         }
     });
 })
 
-function SearchCountry(){
+function ConvertUpperCase(ID) {
+    $(`#${ID}`).val($(`#${ID}`).val().toUpperCase())
+}
+
+function SearchCountry() {
     var crit = {
         "mt": "Search Country",
         "fn": "Country",
@@ -29,7 +33,7 @@ function SearchCountry(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SubmitValidation(){
+function SubmitValidation() {
     var msg = [];
     var i = 0;
 
@@ -59,6 +63,6 @@ function SubmitValidation(){
     }
 }
 
-function ResetForm(){
+function ResetForm() {
     window.location.href = `/Master/PortForm`
 }

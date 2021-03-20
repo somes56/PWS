@@ -14,7 +14,7 @@
 <hr />
 
 <form method="POST">
-    
+
     {% if SysGoodMsg %}
     <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
     {% endif %}
@@ -22,7 +22,7 @@
     {% if SysBadMsg %}
     <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
     {% endif %}
-    
+
     <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
 
     <div class="form-horizontal">
@@ -31,7 +31,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Company :</label>
                 <div class="col-md-8">
-                    {% render_field Form.Name id="Name" class="form-control input-sm" %}
+                    {% render_field Form.Name|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Name" class="form-control input-sm" %}
                     {% render_field Form.CustomerID|attr:"hidden:true" id="CustomerID" %}
                 </div>
             </div>
@@ -41,11 +41,11 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Contact Person :</label>
                 <div class="col-md-3">
-                    {% render_field Form.Pic id="Pic" class="form-control input-sm" %}
+                    {% render_field Form.Pic|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="Pic" class="form-control input-sm" %}
                 </div>
                 <label class="col-md-2 control-label">Address :</label>
                 <div class="col-md-3">
-                    {% render_field Form.Address style="resize:none" id="Address" rows="5" class="form-control input-sm" %}
+                    {% render_field Form.Address|attr:"onkeyup:ConvertUpperCase(event.target.name)" style="resize:none" id="Address" rows="5" class="form-control input-sm" %}
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                 </div>
                 <label class="col-md-2 control-label">City :</label>
                 <div class="col-md-3">
-                    {% render_field Form.City id="City" class="form-control input-sm" %}
+                    {% render_field Form.City|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="City" class="form-control input-sm" %}
                 </div>
             </div>
         </div>
@@ -85,10 +85,11 @@
                 <label class="col-md-2 control-label">State :</label>
                 <div class="col-md-3">
                     <div class="input-group">
-                        {% render_field Form.StateName|attr:"readonly:readonly" id="StateName" class="form-control input-sm"  %}
+                        {% render_field Form.StateName|attr:"readonly:readonly" id="StateName" class="form-control input-sm" %}
                         {% render_field Form.StateID|attr:"hidden:true" id="StateID" %}
                         <span class="input-group-addon input-sm">
-                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchState();"></span>
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass"
+                                onclick="SearchState();"></span>
                         </span>
                     </div>
                 </div>
@@ -104,10 +105,11 @@
                 <label class="col-md-2 control-label">Country :</label>
                 <div class="col-md-3">
                     <div class="input-group">
-                        {% render_field Form.CountryName|attr:"readonly:readonly" id="CountryName" class="form-control input-sm"  %}
+                        {% render_field Form.CountryName|attr:"readonly:readonly" id="CountryName" class="form-control input-sm" %}
                         {% render_field Form.CountryID|attr:"hidden:true" id="CountryID" %}
                         <span class="input-group-addon input-sm">
-                            <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchCountry();"></span>
+                            <span class="glyphicon glyphicon-search" id="btnSearchClass"
+                                onclick="SearchCountry();"></span>
                         </span>
                     </div>
                 </div>
@@ -119,7 +121,7 @@
                 <label class="col-md-2 control-label">Term :</label>
                 <div class="col-md-3">
                     <div class="input-group">
-                        {% render_field Form.TermName|attr:"readonly:readonly" id="TermName" class="form-control input-sm"  %}
+                        {% render_field Form.TermName|attr:"readonly:readonly" id="TermName" class="form-control input-sm" %}
                         {% render_field Form.TermID|attr:"hidden:true" id="TermID" %}
                         <span class="input-group-addon input-sm">
                             <span class="glyphicon glyphicon-search" id="btnSearchClass" onclick="SearchTerm();"></span>
@@ -133,7 +135,7 @@
                         {% render_field Form.IsAllowInvoice id="IsAllowInvoice" class="checkbox" %}&nbsp;Allow Invoice
                     </div>
                 </div>
- 
+
             </div>
         </div>
 
@@ -141,7 +143,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Limit Amount :</label>
                 <div class="col-md-3">
-                    {% render_field Form.LimitAmount|attr:"onkeypress : return NumberDecimals();" id="LimitAmount" class="form-control input-sm"  %}
+                    {% render_field Form.LimitAmount|attr:"onkeypress : return NumberDecimals();" id="LimitAmount" class="form-control input-sm" %}
                 </div>
                 <div class="col-md-2">
                 </div>
@@ -159,7 +161,8 @@
         <div class="row">
             <div class="form-group">
                 <div class="col-md-5 col-md-offset-5">
-                    <button type="submit" id="Save" class="btn btn-success" onclick="return SubmitValidation();">Save</button>
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
                     <span>&nbsp;</span>
                     <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
                 </div>

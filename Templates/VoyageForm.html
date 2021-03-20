@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %} Voyage Form {% endblock title %}
 
-{% block script %} 
+{% block script %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'scripts/VoyageForm.js' %}"></script>
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Voyage No :</label>
                 <div class="col-md-3">
-                    {% render_field Form.No id="No" class="form-control input-sm" %}
+                    {% render_field Form.No|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="No" class="form-control input-sm" %}
                     {% render_field Form.VoyageID|attr:"hidden:true" id="VoyageID" %}
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Ship Call No :</label>
                 <div class="col-md-3">
-                    {% render_field Form.ShipCallNo id="ShipCallNo" class="form-control input-sm" %}
+                    {% render_field Form.ShipCallNo|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="ShipCallNo" class="form-control input-sm" %}
                 </div>
             </div>
         </div>

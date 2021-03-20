@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
     $("#ClientVerifyBlock").hide();
 
     $(document).keypress(function (e) {
@@ -9,12 +9,17 @@ $(function(){
     });
 
     $(document).keydown(function (e) {
-        if (e.keyCode === 8 && !$(e.target).is("input, textarea")){
+        if (e.keyCode === 8 && !$(e.target).is("input, textarea")) {
             e.preventDefault();
             return false;
         }
     });
 })
+
+function ConvertUpperCase(ID) {
+    $(`#${ID}`).val($(`#${ID}`).val().toUpperCase())
+}
+
 
 function Numbers(evt) {
 
@@ -26,13 +31,13 @@ function Numbers(evt) {
     return true;
 }
 
-function NumberDecimals(evt){
+function NumberDecimals(evt) {
     if ((evt.which != 46 || $(this).val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57))
         return false;
-    return true; 
+    return true;
 }
 
-function SearchState(){
+function SearchState() {
     var crit = {
         "mt": "Search State",
         "fn": "State",
@@ -45,7 +50,7 @@ function SearchState(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SearchCountry(){
+function SearchCountry() {
     var crit = {
         "mt": "Search Country",
         "fn": "Country",
@@ -58,7 +63,7 @@ function SearchCountry(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SearchTerm(){
+function SearchTerm() {
     var crit = {
         "mt": "Search Term",
         "fn": "Term",
@@ -71,7 +76,7 @@ function SearchTerm(){
     OpenAdvSearch(JSON.stringify(crit));
 }
 
-function SubmitValidation(){
+function SubmitValidation() {
     var msg = [];
     var i = 0;
 
@@ -141,6 +146,6 @@ function SubmitValidation(){
     }
 }
 
-function ResetForm(){
+function ResetForm() {
     window.location.href = `/Master/CustomerForm`
 }

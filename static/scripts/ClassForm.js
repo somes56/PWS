@@ -16,6 +16,10 @@ $(function () {
     });
 })
 
+function ConvertUpperCase(ID) {
+    $(`#${ID}`).val($(`#${ID}`).val().toUpperCase())
+}
+
 function SubmitValidation() {
     var msg = [];
     var i = 0;

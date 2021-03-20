@@ -22,13 +22,17 @@ $(function () {
         yearRange: '2018:2050',
     });
 
-//     $('#btnPickDate').click(function() {
-//         $('#Eta').datepicker('show');
-//   });
+    //     $('#btnPickDate').click(function() {
+    //         $('#Eta').datepicker('show');
+    //   });
 
 })
 
-function PickEta(){
+function ConvertUpperCase(ID) {
+    $(`#${ID}`).val($(`#${ID}`).val().toUpperCase())
+}
+
+function PickEta() {
     $('#Eta').datepicker('show');
 }
 
