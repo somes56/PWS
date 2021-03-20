@@ -1,0 +1,49 @@
+{% if Operators.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Operators.has_previous %}
+    <li><a onclick="PartialOperatorList('{{ Operators.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Operators.paginator.page_range %}
+    {% if Operators.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialOperatorList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Operators.has_next %}
+    <li><a onclick="PartialOperatorList('{{ Operators.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Operator in Operators %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Operator.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash"
+                    onclick="DeleteOperator('{{ Operator.ID }}', '{{ Operator.Name }}')"></span>
+            </td>
+            <td>{{ Operator.Code }}</td>
+            <td>{{ Operator.Name }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

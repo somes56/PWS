@@ -8,7 +8,9 @@ from Master.models import (
     Item,
     Class,
     Voyage,
+    Operator,
 )
+
 
 class CustomerFormModel(forms.ModelForm):
     CustomerID = forms.UUIDField(required=False)
@@ -151,3 +153,13 @@ class VoyageFormModel(forms.ModelForm):
     class Meta:
         model = Voyage
         fields = ["VoyageID", "No", "ShipCallNo", "VesselID", "VesselName", "Eta"]
+
+
+class OperatorFormModel(forms.ModelForm):
+    OperatorID = forms.UUIDField(required=False)
+    Code = forms.CharField(max_length=15, required=False)
+    Name = forms.CharField(max_length=100, required=False)
+
+    class Meta:
+        model = Unit
+        fields = ["OperatorID", "Code", "Name"]

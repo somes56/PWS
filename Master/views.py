@@ -14,6 +14,7 @@ from Master.formModels import (
     ItemFormModel,
     ClassFormModel,
     VoyageFormModel,
+    OperatorFormModel,
 )
 from Master.models import Country, Customer, State, Term
 
@@ -765,6 +766,106 @@ def DeleteVoyage(request, VoyageID=None):
 
     if request.method == "POST":
         rtn = pwsRepo.DeleteVoyage(VoyageID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+def OperatorList(request):
+    return render(request, "Operator.html")
+
+
+def PartialOperatorList(request, SearchBy=""):
+    Operators = []
+    Operators = pwsRepo.PartialOperatorList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Operators, 50)
+
+    try:
+        OperatorPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        OperatorPaginator = _Paginator.page(1)
+    except EmptyPage:
+        OperatorPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, "PartialOperatorList.html", {"Operators": OperatorPaginator})
+
+
+@csrf_exempt
+def OperatorForm(request, OperatorID=None):
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
+        operatorFormModel = OperatorFormModel()
+
+        if OperatorID == None:
+            operatorFormModel = mstBL.InitialiseOperatorFormModel(None)
+        else:
+            operatorFormModel = mstBL.InitialiseOperatorFormModel(OperatorID)
+
+        return render(
+            request,
+            "OperatorForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": operatorFormModel,
+            },
+        )
+
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        operatorFormModel = OperatorFormModel()
+        _post = OperatorFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertOperator(_Form)
+
+            if _Form["OperatorID"] != None:
+                IsUpdate = True
+
+            if UpsertResult["rtn"] == True:
+                operatorFormModel = mstBL.InitialiseOperatorFormModel(
+                    UpsertResult["OperatorID"]
+                )
+
+                if IsUpdate == False:
+                    SysGoodMsg = "Inserted Successfully"
+                else:
+                    SysGoodMsg = "Updated Successfully"
+
+            else:
+                operatorFormModel = mstBL.InitialiseErrorOperatorFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = "Insert Fail"
+                else:
+                    SysBadMsg = "Update Fail"
+
+        else:
+            SysBadMsg = "Invalid Input"
+
+        return render(
+            request,
+            "OperatorForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": operatorFormModel,
+            },
+        )
+
+
+@csrf_exempt
+def DeleteOperator(request, OperatorID=None):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = pwsRepo.DeleteOperator(OperatorID)
     else:
         rtn = False
     return HttpResponse(rtn)

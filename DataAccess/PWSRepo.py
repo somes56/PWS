@@ -10,6 +10,7 @@ from Master.models import (
     Item,
     Class,
     Voyage,
+    Operator,
 )
 from datetime import datetime
 from django.db.models import Q
@@ -181,6 +182,18 @@ class pwsRepo:
 
         return Voyages
 
+    def PartialOperatorList(SearchBy=""):
+        Operators = []
+
+        try:
+            Operators = Operator.objects.filter(
+                Q(Code__icontains=SearchBy) | Q(Name__icontains=SearchBy), IsActive=True
+            ).order_by("Code", "Name")[:100]
+        except Exception as e:
+            print(e)
+
+        return Operators
+
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
 
@@ -262,6 +275,16 @@ class pwsRepo:
             print(e)
 
         return VoyageDto
+
+    def LoadOperator(OperatorID):
+        OperatorDto = Operator()
+
+        try:
+            OperatorDto = Operator.objects.get(ID=OperatorID, IsActive=True)
+        except Exception as e:
+            print(e)
+
+        return OperatorDto
 
     def UpsertCountry():
         rtn = False
@@ -676,6 +699,45 @@ class pwsRepo:
 
         return {"rtn": rtn, "VoyageID": VoyageID}
 
+    def UpsertOperator(Dto):
+        rtn = False
+        OperatorID = None
+        UpsertDto = None
+
+        try:
+
+            if Dto["OperatorID"] == None:
+
+                UpsertDto = Operator.objects.create(
+                    Code=Dto["Code"],
+                    Name=Dto["Name"],
+                    IsActive=True,
+                    CreateDate=datetime.now(tz=timezone.utc),
+                    CreateBy=None,
+                    UpdateDate=datetime.now(tz=timezone.utc),
+                    UpdateBy=None,
+                )
+
+                if UpsertDto.ID:
+                    rtn = True
+                    OperatorID = UpsertDto.ID
+
+            else:
+                UpsertDto = Operator.objects.get(ID=Dto["OperatorID"])
+                UpsertDto.Code = Dto["Code"]
+                UpsertDto.Name = Dto["Name"]
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc)
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                OperatorID = Dto["OperatorID"]
+
+        except Exception as e:
+            print(e)
+
+        return {"rtn": rtn, "OperatorID": OperatorID}
+
     def DeleteCustomer(CustomerID):
         rtn = False
 
@@ -790,6 +852,21 @@ class pwsRepo:
             VoyageDto.UpdateDate = datetime.now(tz=timezone.utc)
             VoyageDto.UpdateBy = None
             VoyageDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+
+        return rtn
+
+    def DeleteOperator(OperatorID):
+        rtn = False
+
+        try:
+            OperatorDto = Operator.objects.get(ID=OperatorID)
+            OperatorDto.IsActive = False
+            OperatorDto.UpdateDate = datetime.now(tz=timezone.utc)
+            OperatorDto.UpdateBy = None
+            OperatorDto.save()
             rtn = True
         except Exception as e:
             print(e)
