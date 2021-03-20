@@ -9,6 +9,7 @@ from Master.models import (
     Vessel,
     Item,
     Class,
+    Voyage,
 )
 from datetime import datetime
 from django.db.models import Q
@@ -65,6 +66,19 @@ class pwsRepo:
             print(e)
 
         return Customers
+
+    def AdvSearchVessel(SearchBy=""):
+        Vessels = []
+
+        try:
+            Vessels = Vessel.objects.filter(
+                Q(Code__icontains=SearchBy) | Q(Name__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("Name")
+        except Exception as e:
+            print(e)
+
+        return Vessels
 
     def PartialCustomerList(SearchBy=""):
         Customers = []
@@ -154,6 +168,19 @@ class pwsRepo:
 
         return Classes
 
+    def PartialVoyageList(SearchBy=""):
+        Voyages = []
+
+        try:
+            Voyages = Voyage.objects.filter(
+                Q(No__icontains=SearchBy) | Q(ShipCallNo__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("No", "ShipCallNo")[:100]
+        except Exception as e:
+            print(e)
+
+        return Voyages
+
     def LoadCustomer(CustomerID):
         CustomerDto = Customer()
 
@@ -225,6 +252,16 @@ class pwsRepo:
             print(e)
 
         return ClassDto
+
+    def LoadVoyage(VoyageID):
+        VoyageDto = Voyage()
+
+        try:
+            VoyageDto = Voyage.objects.get(ID=VoyageID, IsActive=True)
+        except Exception as e:
+            print(e)
+
+        return VoyageDto
 
     def UpsertCountry():
         rtn = False
@@ -594,6 +631,51 @@ class pwsRepo:
 
         return {"rtn": rtn, "ClassID": ClassID}
 
+    def UpsertVoyage(Dto):
+        rtn = False
+        VoyageID = None
+        VesselDto = None
+        UpsertDto = None
+
+        try:
+            VesselDto = Vessel.objects.get(ID=Dto["VesselID"])
+
+            if Dto["VoyageID"] == None:
+
+                UpsertDto = Voyage.objects.create(
+                    No=Dto["No"],
+                    ShipCallNo=Dto["ShipCallNo"],
+                    Eta=Dto["Eta"],
+                    Vessel=VesselDto,
+                    IsActive=True,
+                    CreateDate=datetime.now(tz=timezone.utc),
+                    CreateBy=None,
+                    UpdateDate=datetime.now(tz=timezone.utc),
+                    UpdateBy=None,
+                )
+
+                if UpsertDto.ID:
+                    rtn = True
+                    VoyageID = UpsertDto.ID
+
+            else:
+                UpsertDto = Voyage.objects.get(ID=Dto["VoyageID"])
+                UpsertDto.No = Dto["No"]
+                UpsertDto.ShipCallNo = Dto["ShipCallNo"]
+                UpsertDto.Eta = Dto["Eta"]
+                UpsertDto.Vessel = VesselDto
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc)
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                VoyageID = Dto["VoyageID"]
+
+        except Exception as e:
+            print(e)
+
+        return {"rtn": rtn, "VoyageID": VoyageID}
+
     def DeleteCustomer(CustomerID):
         rtn = False
 
@@ -693,6 +775,21 @@ class pwsRepo:
             ClassDto.UpdateDate = datetime.now(tz=timezone.utc)
             ClassDto.UpdateBy = None
             ClassDto.save()
+            rtn = True
+        except Exception as e:
+            print(e)
+
+        return rtn
+
+    def DeleteVoyage(VoyageID):
+        rtn = False
+
+        try:
+            VoyageDto = Voyage.objects.get(ID=VoyageID)
+            VoyageDto.IsActive = False
+            VoyageDto.UpdateDate = datetime.now(tz=timezone.utc)
+            VoyageDto.UpdateBy = None
+            VoyageDto.save()
             rtn = True
         except Exception as e:
             print(e)

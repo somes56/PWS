@@ -13,6 +13,7 @@ from Master.formModels import (
     VesselFormModel,
     ItemFormModel,
     ClassFormModel,
+    VoyageFormModel,
 )
 from Master.models import Country, Customer, State, Term
 
@@ -672,6 +673,98 @@ def DeleteClass(request, ClassID=None):
 
     if request.method == "POST":
         rtn = pwsRepo.DeleteClass(ClassID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+def VoyageList(request):
+    return render(request, "Voyage.html")
+
+
+def PartialVoyageList(request, SearchBy=""):
+    Voyages = []
+    Voyages = pwsRepo.PartialVoyageList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Voyages, 50)
+
+    try:
+        VoyagePaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        VoyagePaginator = _Paginator.page(1)
+    except EmptyPage:
+        VoyagePaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, "PartialVoyageList.html", {"Voyages": VoyagePaginator})
+
+
+@csrf_exempt
+def VoyageForm(request, VoyageID=None):
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
+        voyageFormModel = VoyageFormModel()
+
+        if VoyageID == None:
+            voyageFormModel = mstBL.InitialiseVoyageFormModel(None)
+        else:
+            voyageFormModel = mstBL.InitialiseVoyageFormModel(VoyageID)
+
+        return render(
+            request,
+            "VoyageForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": voyageFormModel},
+        )
+
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        voyageFormModel = VoyageFormModel()
+        _post = VoyageFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = pwsRepo.UpsertVoyage(_Form)
+
+            if _Form["VoyageID"] != None:
+                IsUpdate = True
+
+            if UpsertResult["rtn"] == True:
+                voyageFormModel = mstBL.InitialiseVoyageFormModel(
+                    UpsertResult["VoyageID"]
+                )
+
+                if IsUpdate == False:
+                    SysGoodMsg = "Inserted Successfully"
+                else:
+                    SysGoodMsg = "Updated Successfully"
+
+            else:
+                voyageFormModel = mstBL.InitialiseErrorVoyageFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = "Insert Fail"
+                else:
+                    SysBadMsg = "Update Fail"
+
+        else:
+            SysBadMsg = "Invalid Input"
+
+        return render(
+            request,
+            "VoyageForm.html",
+            {"SysGoodMsg": SysGoodMsg, "SysBadMsg": SysBadMsg, "Form": voyageFormModel},
+        )
+
+
+@csrf_exempt
+def DeleteVoyage(request, VoyageID=None):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = pwsRepo.DeleteVoyage(VoyageID)
     else:
         rtn = False
     return HttpResponse(rtn)

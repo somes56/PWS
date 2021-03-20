@@ -80,5 +80,15 @@ urlpatterns = [
     path("ClassForm", views.ClassForm, name="ClassForm"),
     path("ClassForm/<uuid:ClassID>/", views.ClassForm, name="ClassForm"),
     path("DeleteClass/<uuid:ClassID>/", views.DeleteClass, name="DeleteClass"),
+    path("VoyageList", views.VoyageList, name="VoyageList"),
+    path("PartialVoyageList", views.PartialVoyageList, name="PartialVoyageList"),
+    path(
+        "PartialVoyageList/<str:SearchBy>/",
+        views.PartialVoyageList,
+        name="PartialVoyageList",
+    ),
+    path("VoyageForm", views.VoyageForm, name="VoyageForm"),
+    path("VoyageForm/<uuid:VoyageID>/", views.VoyageForm, name="VoyageForm"),
+    path("DeleteVoyage/<uuid:VoyageID>/", views.DeleteVoyage, name="DeleteVoyage"),
     path("UpsertCountry", views.UpsertCountry, name="UpsertCountry"),
 ]

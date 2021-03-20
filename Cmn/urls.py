@@ -9,5 +9,7 @@ urlpatterns = [
     path('AdvSearchTerm', views.AdvSearchTerm, name='AdvSearchTerm'),
     path('AdvSearchTerm/<str:SearchBy>/', views.AdvSearchTerm, name='AdvSearchTerm'),
     path('AdvSearchCustomer', views.AdvSearchCustomer, name='AdvSearchCustomer'),
-    path('AdvSearchCustomer/<str:SearchBy>/', views.AdvSearchCustomer, name='AdvSearchCustomer')
+    path('AdvSearchCustomer/<str:SearchBy>/', views.AdvSearchCustomer, name='AdvSearchCustomer'),
+    path('AdvSearchVessel', views.AdvSearchVessel, name='AdvSearchVessel'),
+    path('AdvSearchVessel/<str:SearchBy>/', views.AdvSearchVessel, name='AdvSearchVessel')
 ]

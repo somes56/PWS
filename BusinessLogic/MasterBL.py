@@ -6,7 +6,10 @@ from Master.formModels import (
     VesselFormModel,
     ItemFormModel,
     ClassFormModel,
+    VoyageFormModel,
 )
+from datetime import datetime
+from django.utils import timezone
 from DataAccess.PWSRepo import pwsRepo
 
 
@@ -259,6 +262,42 @@ class mstBL:
             form.initial["Code"] = _Form["Code"]
             form.initial["ShortName"] = _Form["ShortName"]
             form.initial["FullName"] = _Form["FullName"]
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseVoyageFormModel(VoyageID=None):
+        form = VoyageFormModel()
+
+        try:
+            if VoyageID == None:
+                form.initial["VoyageID"] = None
+                form.initial["Eta"] = datetime.now(tz=timezone.utc)
+            else:
+                Dto = pwsRepo.LoadVoyage(VoyageID)
+                form.initial["VoyageID"] = Dto.ID
+                form.initial["No"] = Dto.No
+                form.initial["ShipCallNo"] = Dto.ShipCallNo
+                form.initial["Eta"] = Dto.Eta
+                form.initial["VesselID"] = Dto.Vessel.ID
+                form.initial["VesselName"] = Dto.Vessel.Name
+
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseErrorVoyageFormModel(_Form):
+        form = VoyageFormModel()
+
+        try:
+            form.initial["VoyageID"] = _Form["VoyageID"]
+            form.initial["No"] = _Form["No"]
+            form.initial["ShipCallNo"] = _Form["ShipCallNo"]
+            form.initial["Eta"] = _Form["Eta"]
+            form.initial["VesselID"] = _Form["VesselID"]
+            form.initial["VesselName"] = _Form["VesselName"]
         except Exception as e:
             print(e)
 
