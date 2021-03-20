@@ -1,0 +1,41 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Class {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/Class.js' %}"></script>
+{% endblock script %}
+
+
+{% block content %}
+
+<h2>Class</h2>
+<hr />
+
+<div class="row">
+    <div class="form-group">
+        <div class="col-md-9">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" id="SearchString" name="SearchString" value=""
+                    placeholder="Search Class">
+                <span class="input-group-addon   input-sm">
+                    <span class="glyphicon glyphicon-search" onclick="PartialClassList()"></span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-success" onclick="GoToAddPage();">Add</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="PartialClassListLoading" style="display:none">
+    <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div id="PartialClassList"></div>
+
+{% endblock content %}

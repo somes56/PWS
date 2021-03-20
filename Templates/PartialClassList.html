@@ -1,0 +1,51 @@
+{% if Classes.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Classes.has_previous %}
+    <li><a onclick="PartialClassList('{{ Classes.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Classes.paginator.page_range %}
+    {% if Classes.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialClassList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Classes.has_next %}
+    <li><a onclick="PartialClassList('{{ Classes.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Code</th>
+            <th>Short Name</th>
+            <th>Full Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Class in Classes %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Class.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash"
+                    onclick="DeleteClass('{{ Class.ID }}', '{{ Class.ShortName }}')"></span>
+            </td>
+            <td>{{ Class.Code }}</td>
+            <td>{{ Class.ShortName }}</td>
+            <td>{{ Class.FullName }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

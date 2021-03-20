@@ -1,0 +1,49 @@
+{% if Voyages.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Voyages.has_previous %}
+    <li><a onclick="PartialVoyageList('{{ Voyages.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Voyages.paginator.page_range %}
+    {% if Voyages.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialVoyageList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Voyages.has_next %}
+    <li><a onclick="PartialVoyageList('{{ Voyages.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Voyage No</th>
+            <th>Ship Call No</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Voyage in Voyages %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Voyage.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash"
+                    onclick="DeleteVoyage('{{ Voyage.ID }}', '{{ Voyage.No }}')"></span>
+            </td>
+            <td>{{ Voyage.No }}</td>
+            <td>{{ Voyage.ShipCallNo }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
