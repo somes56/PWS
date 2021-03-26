@@ -1,28 +1,32 @@
 from django.shortcuts import render
-from DataAccess.PWSRepo import pwsRepo
+from DataAccess.MasterRepo import masterRepo
 
-def AdvSearchState(request, SearchBy=''):
+
+def AdvSearchState(request, SearchBy=""):
     States = []
-    States = pwsRepo.AdvSearchState(SearchBy)
-    return render(request, 'PartialAdvSearchState.html', { 'States' : States })
+    States = masterRepo.AdvSearchState(SearchBy)
+    return render(request, "PartialAdvSearchState.html", {"States": States})
 
-def AdvSearchCountry(request, SearchBy=''):
+
+def AdvSearchCountry(request, SearchBy=""):
     Countries = []
-    Countries = pwsRepo.AdvSearchCountry(SearchBy)
-    return render(request, 'PartialAdvSearchCountry.html', { 'Countries' : Countries })
+    Countries = masterRepo.AdvSearchCountry(SearchBy)
+    return render(request, "PartialAdvSearchCountry.html", {"Countries": Countries})
 
-def AdvSearchTerm(request, SearchBy=''):
+
+def AdvSearchTerm(request, SearchBy=""):
     Terms = []
-    Terms = pwsRepo.AdvSearchTerm(SearchBy)
-    return render(request, 'PartialAdvSearchTerm.html', { 'Terms' : Terms })
+    Terms = masterRepo.AdvSearchTerm(SearchBy)
+    return render(request, "PartialAdvSearchTerm.html", {"Terms": Terms})
 
-def AdvSearchCustomer(request, SearchBy=''):
+
+def AdvSearchCustomer(request, SearchBy=""):
     Customers = []
-    Customers = pwsRepo.AdvSearchCustomer(SearchBy)
-    return render(request, 'PartialAdvSearchCustomer.html', { 'Customers' : Customers })
+    Customers = masterRepo.AdvSearchCustomer(SearchBy)
+    return render(request, "PartialAdvSearchCustomer.html", {"Customers": Customers})
 
-def AdvSearchVessel(request, SearchBy=''):
+
+def AdvSearchVessel(request, SearchBy=""):
     Vessels = []
-    Vessels = pwsRepo.AdvSearchVessel(SearchBy)
-    return render(request, 'PartialAdvSearchVessel.html', { 'Vessels' : Vessels })
-
+    Vessels = masterRepo.AdvSearchVessel(SearchBy)
+    return render(request, "PartialAdvSearchVessel.html", {"Vessels": Vessels})

@@ -11,7 +11,7 @@ from Master.formModels import (
 )
 from datetime import datetime
 from django.utils import timezone
-from DataAccess.PWSRepo import pwsRepo
+from DataAccess.MasterRepo import masterRepo
 
 
 class mstBL:
@@ -22,7 +22,7 @@ class mstBL:
             if CustomerID == None:
                 form.initial["CustomerID"] = None
             else:
-                Dto = pwsRepo.LoadCustomer(CustomerID)
+                Dto = masterRepo.LoadCustomer(CustomerID)
                 form.initial["CustomerID"] = Dto.ID
                 form.initial["Name"] = Dto.Name
                 form.initial["Pic"] = Dto.Pic
@@ -82,7 +82,7 @@ class mstBL:
             if PortID == None:
                 form.initial["PortID"] = None
             else:
-                Dto = pwsRepo.LoadPort(PortID)
+                Dto = masterRepo.LoadPort(PortID)
                 form.initial["PortID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
@@ -116,7 +116,7 @@ class mstBL:
             if UnitID == None:
                 form.initial["UnitID"] = None
             else:
-                Dto = pwsRepo.LoadUnit(UnitID)
+                Dto = masterRepo.LoadUnit(UnitID)
                 form.initial["UnitID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["ShortName"] = Dto.ShortName
@@ -147,7 +147,7 @@ class mstBL:
                 form.initial["ContainerSizeID"] = None
                 form.initial["Teus"] = 1
             else:
-                Dto = pwsRepo.LoadContainerSize(ContainerSizeID)
+                Dto = masterRepo.LoadContainerSize(ContainerSizeID)
                 form.initial["ContainerSizeID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
@@ -177,7 +177,7 @@ class mstBL:
             if VesselID == None:
                 form.initial["VesselID"] = None
             else:
-                Dto = pwsRepo.LoadVessel(VesselID)
+                Dto = masterRepo.LoadVessel(VesselID)
                 form.initial["VesselID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
@@ -217,7 +217,7 @@ class mstBL:
             if ItemID == None:
                 form.initial["ItemID"] = None
             else:
-                Dto = pwsRepo.LoadItem(ItemID)
+                Dto = masterRepo.LoadItem(ItemID)
                 form.initial["ItemID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
@@ -245,7 +245,7 @@ class mstBL:
             if ClassID == None:
                 form.initial["ClassID"] = None
             else:
-                Dto = pwsRepo.LoadClass(ClassID)
+                Dto = masterRepo.LoadClass(ClassID)
                 form.initial["ClassID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["ShortName"] = Dto.ShortName
@@ -276,7 +276,7 @@ class mstBL:
                 form.initial["VoyageID"] = None
                 form.initial["Eta"] = datetime.now(tz=timezone.utc)
             else:
-                Dto = pwsRepo.LoadVoyage(VoyageID)
+                Dto = masterRepo.LoadVoyage(VoyageID)
                 form.initial["VoyageID"] = Dto.ID
                 form.initial["No"] = Dto.No
                 form.initial["ShipCallNo"] = Dto.ShipCallNo
@@ -311,7 +311,7 @@ class mstBL:
             if OperatorID == None:
                 form.initial["OperatorID"] = None
             else:
-                Dto = pwsRepo.LoadOperator(OperatorID)
+                Dto = masterRepo.LoadOperator(OperatorID)
                 form.initial["OperatorID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
