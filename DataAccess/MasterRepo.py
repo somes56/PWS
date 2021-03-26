@@ -18,7 +18,7 @@ from django.utils import timezone
 import requests
 
 
-class pwsRepo:
+class masterRepo:
     def AdvSearchState(SearchBy=""):
         States = []
 

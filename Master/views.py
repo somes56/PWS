@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import datetime
 from django.utils import timezone
 from BusinessLogic.MasterBL import mstBL
-from DataAccess.PWSRepo import pwsRepo
+from DataAccess.MasterRepo import masterRepo
 from Master.formModels import (
     CustomerFormModel,
     PortFormModel,
@@ -25,7 +25,7 @@ def CustomerList(request):
 
 def PartialCustomerList(request, SearchBy=""):
     Customers = []
-    Customers = pwsRepo.PartialCustomerList(SearchBy)
+    Customers = masterRepo.PartialCustomerList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Customers, 50)
@@ -71,7 +71,7 @@ def CustomerForm(request, CustomerID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertCustomer(_Form)
+            UpsertResult = masterRepo.UpsertCustomer(_Form)
 
             if _Form["CustomerID"] != None:
                 IsUpdate = True
@@ -113,7 +113,7 @@ def DeleteCustomer(request, CustomerID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteCustomer(CustomerID)
+        rtn = masterRepo.DeleteCustomer(CustomerID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -125,7 +125,7 @@ def PortList(request):
 
 def PartialPortList(request, SearchBy=""):
     Ports = []
-    Ports = pwsRepo.PartialPortList(SearchBy)
+    Ports = masterRepo.PartialPortList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Ports, 50)
@@ -167,7 +167,7 @@ def PortForm(request, PortID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertPort(_Form)
+            UpsertResult = masterRepo.UpsertPort(_Form)
 
             if _Form["PortID"] != None:
                 IsUpdate = True
@@ -203,7 +203,7 @@ def DeletePort(request, PortID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeletePort(PortID)
+        rtn = masterRepo.DeletePort(PortID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -215,7 +215,7 @@ def UnitList(request):
 
 def PartialUnitList(request, SearchBy=""):
     Units = []
-    Units = pwsRepo.PartialUnitList(SearchBy)
+    Units = masterRepo.PartialUnitList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Units, 50)
@@ -257,7 +257,7 @@ def UnitForm(request, UnitID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertUnit(_Form)
+            UpsertResult = masterRepo.UpsertUnit(_Form)
 
             if _Form["UnitID"] != None:
                 IsUpdate = True
@@ -293,7 +293,7 @@ def DeleteUnit(request, UnitID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteUnit(UnitID)
+        rtn = masterRepo.DeleteUnit(UnitID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -305,7 +305,7 @@ def ContainerSizeList(request):
 
 def PartialContainerSizeList(request, SearchBy=""):
     ContainerSizes = []
-    ContainerSizes = pwsRepo.PartialContainerSizeList(SearchBy)
+    ContainerSizes = masterRepo.PartialContainerSizeList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(ContainerSizes, 50)
@@ -357,7 +357,7 @@ def ContainerSizeForm(request, ContainerSizeID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertContainerSize(_Form)
+            UpsertResult = masterRepo.UpsertContainerSize(_Form)
 
             if _Form["ContainerSizeID"] != None:
                 IsUpdate = True
@@ -401,7 +401,7 @@ def DeleteContainerSize(request, ContainerSizeID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteContainerSize(ContainerSizeID)
+        rtn = masterRepo.DeleteContainerSize(ContainerSizeID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -413,7 +413,7 @@ def VesselList(request):
 
 def PartialVesselList(request, SearchBy=""):
     Vessels = []
-    Vessels = pwsRepo.PartialVesselList(SearchBy)
+    Vessels = masterRepo.PartialVesselList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Vessels, 50)
@@ -455,7 +455,7 @@ def VesselForm(request, VesselID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertVessel(_Form)
+            UpsertResult = masterRepo.UpsertVessel(_Form)
 
             if _Form["VesselID"] != None:
                 IsUpdate = True
@@ -493,7 +493,7 @@ def DeleteVessel(request, VesselID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteVessel(VesselID)
+        rtn = masterRepo.DeleteVessel(VesselID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -505,7 +505,7 @@ def ItemList(request):
 
 def PartialItemList(request, SearchBy=""):
     Items = []
-    Items = pwsRepo.PartialItemList(SearchBy)
+    Items = masterRepo.PartialItemList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Items, 50)
@@ -547,7 +547,7 @@ def ItemForm(request, ItemID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertItem(_Form)
+            UpsertResult = masterRepo.UpsertItem(_Form)
 
             if _Form["ItemID"] != None:
                 IsUpdate = True
@@ -583,7 +583,7 @@ def DeleteItem(request, ItemID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteItem(ItemID)
+        rtn = masterRepo.DeleteItem(ItemID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -595,7 +595,7 @@ def ClassList(request):
 
 def PartialClassList(request, SearchBy=""):
     Classes = []
-    Classes = pwsRepo.PartialClassList(SearchBy)
+    Classes = masterRepo.PartialClassList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Classes, 50)
@@ -637,7 +637,7 @@ def ClassForm(request, ClassID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertClass(_Form)
+            UpsertResult = masterRepo.UpsertClass(_Form)
 
             if _Form["ClassID"] != None:
                 IsUpdate = True
@@ -673,7 +673,7 @@ def DeleteClass(request, ClassID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteClass(ClassID)
+        rtn = masterRepo.DeleteClass(ClassID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -685,7 +685,7 @@ def VoyageList(request):
 
 def PartialVoyageList(request, SearchBy=""):
     Voyages = []
-    Voyages = pwsRepo.PartialVoyageList(SearchBy)
+    Voyages = masterRepo.PartialVoyageList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Voyages, 50)
@@ -727,7 +727,7 @@ def VoyageForm(request, VoyageID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertVoyage(_Form)
+            UpsertResult = masterRepo.UpsertVoyage(_Form)
 
             if _Form["VoyageID"] != None:
                 IsUpdate = True
@@ -765,7 +765,7 @@ def DeleteVoyage(request, VoyageID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteVoyage(VoyageID)
+        rtn = masterRepo.DeleteVoyage(VoyageID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -777,7 +777,7 @@ def OperatorList(request):
 
 def PartialOperatorList(request, SearchBy=""):
     Operators = []
-    Operators = pwsRepo.PartialOperatorList(SearchBy)
+    Operators = masterRepo.PartialOperatorList(SearchBy)
 
     Page = request.GET.get("page", 1)
     _Paginator = Paginator(Operators, 50)
@@ -823,7 +823,7 @@ def OperatorForm(request, OperatorID=None):
 
         if _post.is_valid():
             _Form = _post.cleaned_data
-            UpsertResult = pwsRepo.UpsertOperator(_Form)
+            UpsertResult = masterRepo.UpsertOperator(_Form)
 
             if _Form["OperatorID"] != None:
                 IsUpdate = True
@@ -865,7 +865,7 @@ def DeleteOperator(request, OperatorID=None):
     rtn = False
 
     if request.method == "POST":
-        rtn = pwsRepo.DeleteOperator(OperatorID)
+        rtn = masterRepo.DeleteOperator(OperatorID)
     else:
         rtn = False
     return HttpResponse(rtn)
@@ -873,5 +873,5 @@ def DeleteOperator(request, OperatorID=None):
 
 def UpsertCountry(request):
     rtn = False
-    rtn = pwsRepo.UpsertCountry()
+    rtn = masterRepo.UpsertCountry()
     return HttpResponse(rtn)
