@@ -1,0 +1,52 @@
+{% if Obls.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Obls.has_previous %}
+    <li><a onclick="PartialOblList('{{ Obls.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Obls.paginator.page_range %}
+    {% if Obls.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialOblList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Obls.has_next %}
+    <li><a onclick="PartialOblList('{{ Obls.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>No</th>
+            <th>Voyage</th>
+            <th>Ship Call No</th>
+            <th>Vessel</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Obl in Obls %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Obl.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeleteObl('{{ Obl.ID }}', '{{ Obl.No }}')"></span>
+            </td>
+            <td>{{ Obl.No }}</td>
+            <td>{{ Obl.Voyage.No }}</td>
+            <td>{{ Obl.Voyage.ShipCallNo }}</td>
+            <td>{{ Obl.Voyage.Vessel.Code }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

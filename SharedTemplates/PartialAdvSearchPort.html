@@ -1,0 +1,17 @@
+<table class="table">
+    <tr>
+        <th style="width:15%">Code</th>
+        <th style="width:30%">Name</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for Port in Ports %}
+    <tr>
+        <td>{{ Port.Code }}</td>
+        <td>{{ Port.Name }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Port.ID }}', '{{ Port.Name }}');">select</button></td>
+    </tr>
+    {% endfor %}
+
+</table>

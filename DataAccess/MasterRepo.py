@@ -81,6 +81,32 @@ class masterRepo:
 
         return Vessels
 
+    def AdvSearchVoyage(SearchBy=""):
+        Voyages = []
+
+        try:
+            Voyages = Voyage.objects.filter(
+                Q(No__icontains=SearchBy) | Q(ShipCallNo__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("No")
+        except Exception as e:
+            print(e)
+
+        return Voyages
+
+    def AdvSearchPort(SearchBy=""):
+        Ports = []
+
+        try:
+            Ports = Port.objects.filter(
+                Q(Code__icontains=SearchBy) | Q(Name__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("Name")
+        except Exception as e:
+            print(e)
+
+        return Ports
+
     def PartialCustomerList(SearchBy=""):
         Customers = []
 

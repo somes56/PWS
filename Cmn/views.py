@@ -30,3 +30,15 @@ def AdvSearchVessel(request, SearchBy=""):
     Vessels = []
     Vessels = masterRepo.AdvSearchVessel(SearchBy)
     return render(request, "PartialAdvSearchVessel.html", {"Vessels": Vessels})
+
+
+def AdvSearchVoyage(request, SearchBy=""):
+    Voyages = []
+    Voyages = masterRepo.AdvSearchVoyage(SearchBy)
+    return render(request, "PartialAdvSearchVoyage.html", {"Voyages": Voyages})
+
+
+def AdvSearchPort(request, SearchBy=""):
+    Ports = []
+    Ports = masterRepo.AdvSearchPort(SearchBy)
+    return render(request, "PartialAdvSearchPort.html", {"Ports": Ports})
