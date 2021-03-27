@@ -1,0 +1,154 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Obl Form {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/OblForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Obl Registration</h2>
+<hr />
+
+<form method="POST">
+
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.No|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="No" class="form-control input-sm" %}
+                    {% render_field Form.OblID|attr:"hidden:true" id="OblID" %}
+                </div>
+                <label class="col-md-2 control-label">Unload Port :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.UnLoadPortName|attr:"readonly:readonly" id="UnLoadPortName" class="form-control input-sm" %}
+                        {% render_field Form.UnLoadPortID|attr:"hidden:true" id="UnLoadPortID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchUnloadPort"
+                                onclick="SearchUnLoadPort();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Call No :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.ShipCallNo|attr:"readonly:readonly" id="ShipCallNo" class="form-control input-sm" %}
+                        {% render_field Form.VoyageID|attr:"hidden:true" id="VoyageID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchVoyage"
+                                onclick="SearchVoyage();"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Destination Port :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.DestionationPortName|attr:"readonly:readonly" id="DestionationPortName" class="form-control input-sm" %}
+                        {% render_field Form.DestinationPortID|attr:"hidden:true" id="DestinationPortID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchDestionationPort"
+                                onclick="SearchDestinationPort();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Voyage :</label>
+                <div class="col-md-3">
+                    {% render_field Form.VoyageNo|attr:"readonly:readonly" id="VoyageNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Shipping Agent :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.ShippingAgentName|attr:"readonly:readonly" id="ShippingAgentName" class="form-control input-sm" %}
+                        {% render_field Form.ShippingAgentID|attr:"hidden:true" id="ShippingAgentID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchShippingAgent"
+                                onclick="SearchShippingAgent();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Vessel :</label>
+                <div class="col-md-3">
+                    {% render_field Form.VesselCode|attr:"readonly:readonly" id="VesselCode" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Consignee :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.ConsigneeName|attr:"readonly:readonly" id="ConsigneeName" class="form-control input-sm" %}
+                        {% render_field Form.ConsigneeID|attr:"hidden:true" id="ConsigneeID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchConsignee"
+                                onclick="SearchConsignee();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Load Port :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.LoadPortName|attr:"readonly:readonly" id="LoadPortName" class="form-control input-sm" %}
+                        {% render_field Form.LoadPortID|attr:"hidden:true" id="LoadPortID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchLoadPort"
+                                onclick="SearchLoadPort();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}
