@@ -1,0 +1,15 @@
+<table class="table">
+    <tr>
+        <th style="width:30%">No</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for Obl in Obls %}
+    <tr>
+        <td>{{ Obl.No }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Obl.ID }}', '{{ Obl.No }}');">select</button></td>
+    </tr>
+    {% endfor %}
+
+</table>

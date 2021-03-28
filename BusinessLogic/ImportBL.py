@@ -1,4 +1,4 @@
-from Import.formModels import OblFormModel
+from Import.formModels import OblFormModel, ContainerFormModel
 from DataAccess.ImportRepo import importRepo
 
 
@@ -52,6 +52,60 @@ class importBL:
             form.initial["ShippingAgentName"] = _Form["ShippingAgentName"]
             form.initial["ConsigneeID"] = _Form["ConsigneeID"]
             form.initial["ConsigneeName"] = _Form["ConsigneeName"]
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseContainerFormModel(ContainerID=None):
+        form = ContainerFormModel()
+
+        try:
+            if ContainerID == None:
+                form.initial["ContainerID"] = None
+                form.initial["Type"] = 0
+                form.initial["Status"] = 1
+                form.initial["ShipType"] = 0
+                form.initial["Movement"] = 1
+                form.initial["SealParty"] = 1
+                form.initial["Supplier"] = 1
+            else:
+                Dto = importRepo.LoadContainer(ContainerID)
+                form.initial["ContainerID"] = Dto.ID
+                form.initial["No"] = Dto.No
+                form.initial["OblID"] = Dto.Obl.ID
+                form.initial["OblNo"] = Dto.Obl.No
+                form.initial["SealNo"] = Dto.SealNo
+                form.initial["ContainerSizeID"] = Dto.ContainerSize.ID
+                form.initial["ContainerSizeName"] = Dto.ContainerSize.Name
+                form.initial["Type"] = Dto.Type
+                form.initial["Status"] = Dto.Status
+                form.initial["ShipType"] = Dto.ShipType
+                form.initial["Movement"] = Dto.Movement
+                form.initial["SealParty"] = Dto.SealParty
+                form.initial["Supplier"] = Dto.Supplier
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseErrorContainerFormModel(_Form):
+        form = ContainerFormModel()
+
+        try:
+            form.initial["ContainerID"] = _Form["ContainerID"]
+            form.initial["No"] = _Form["No"]
+            form.initial["OblID"] = _Form["OblID"]
+            form.initial["OblNo"] = _Form["OblNo"]
+            form.initial["SealNo"] = _Form["SealNo"]
+            form.initial["ContainerSizeID"] = _Form["ContainerSizeID"]
+            form.initial["ContainerSizeName"] = _Form["ContainerSizeName"]
+            form.initial["Type"] = _Form["Type"]
+            form.initial["Status"] = _Form["Status"]
+            form.initial["ShipType"] = _Form["ShipType"]
+            form.initial["Movement"] = _Form["Movement"]
+            form.initial["SealParty"] = _Form["SealParty"]
+            form.initial["Supplier"] = _Form["Supplier"]
         except Exception as e:
             print(e)
 

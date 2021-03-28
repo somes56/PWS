@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from DataAccess.MasterRepo import masterRepo
+from DataAccess.ImportRepo import importRepo
 
 
 def AdvSearchState(request, SearchBy=""):
@@ -42,3 +43,19 @@ def AdvSearchPort(request, SearchBy=""):
     Ports = []
     Ports = masterRepo.AdvSearchPort(SearchBy)
     return render(request, "PartialAdvSearchPort.html", {"Ports": Ports})
+
+
+def AdvSearchContainerSize(request, SearchBy=""):
+    ContainerSizes = []
+    ContainerSizes = masterRepo.AdvSearchContainerSize(SearchBy)
+    return render(
+        request,
+        "PartialAdvSearchContainerSize.html",
+        {"ContainerSizes": ContainerSizes},
+    )
+
+
+def AdvSearchObl(request, SearchBy=""):
+    Obls = []
+    Obls = importRepo.AdvSearchObl(SearchBy)
+    return render(request, "PartialAdvSearchObl.html", {"Obls": Obls})

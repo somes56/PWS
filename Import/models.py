@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-from Master.models import Voyage, Port, Customer
+from Master.models import Voyage, Port, Customer, ContainerSize
 import uuid
 
 
@@ -68,3 +68,41 @@ class Obl(models.Model):
 
     class Meta:
         db_table = "imp_Obl"
+
+
+class Container(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    No = models.CharField(max_length=50)
+    Obl = models.ForeignKey(
+        Obl,
+        db_column="OblID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    SealNo = models.CharField(max_length=50, null=True, default=None)
+    ContainerSize = models.ForeignKey(
+        ContainerSize,
+        db_column="ContainerSizeID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    Type = models.IntegerField(default=0)
+    Status = models.IntegerField(default=0)
+    ShipType = models.IntegerField(default=0)
+    Movement = models.IntegerField(default=0)
+    SealParty = models.IntegerField(default=0)
+    Supplier = models.IntegerField(default=0)
+    IsUnStuff = models.BooleanField(default=False)
+    UnstuffDate = models.DateField(null=True)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = "imp_Container"
