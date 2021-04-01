@@ -1,0 +1,20 @@
+<table class="table">
+    <tr>
+        <th style="width:15%">Code</th>
+        <th style="width:30%">Short Name</th>
+        <th style="width:30%">Full Name</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for Unit in Units %}
+    <tr>
+        <td>{{ Unit.Code }}</td>
+        <td>{{ Unit.ShortName }}</td>
+        <td>{{ Unit.FullName }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Unit.ID }}', '{{ Unit.ShortName }}');">select</button>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>

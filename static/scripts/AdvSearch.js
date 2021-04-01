@@ -1,5 +1,5 @@
 ﻿//begin .js
-$(function(){
+$(function () {
     $('#AdvSearchModal').on('shown.bs.modal', Search);
 })
 
@@ -25,14 +25,15 @@ function Search() {
     for (var a in objcrit.p) {
         if (objcrit.p.hasOwnProperty(a)) {
             if ($('#' + objcrit.p[a]).val() === undefined) {
-                px += a + "=" + objcrit.p[a] + "&";
+                px += '/' + objcrit.p[a];
             } else {
-                px += a + "=" + $('#' + objcrit.p[a]).val() + "&";
+                px += '/' + $('#' + objcrit.p[a]).val();
             }
         }
     }
 
     var url = `/Cmn/AdvSearch${objcrit.fn}`;
+    url = px === '' ? url : url + `${px}`
     url = SearchStr === '' ? url : url + `/${SearchStr}`
 
     $('#AdvSearchLoadingBar').show();

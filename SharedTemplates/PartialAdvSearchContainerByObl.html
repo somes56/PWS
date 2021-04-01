@@ -1,0 +1,16 @@
+<table class="table">
+    <tr>
+        <th style="width:30%">No</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for Container in Containers %}
+    <tr>
+        <td>{{ Container.No }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Container.ID }}', '{{ Container.No }}');">select</button>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>

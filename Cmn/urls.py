@@ -38,6 +38,25 @@ urlpatterns = [
         views.AdvSearchContainerSize,
         name="AdvSearchContainerSize",
     ),
+    path("AdvSearchClass", views.AdvSearchClass, name="AdvSearchClass"),
+    path("AdvSearchClass/<str:SearchBy>/", views.AdvSearchClass, name="AdvSearchClass"),
+    path("AdvSearchUnit", views.AdvSearchUnit, name="AdvSearchUnit"),
+    path("AdvSearchUnit/<str:SearchBy>/", views.AdvSearchUnit, name="AdvSearchUnit"),
     path("AdvSearchObl", views.AdvSearchObl, name="AdvSearchObl"),
     path("AdvSearchObl/<str:SearchBy>/", views.AdvSearchObl, name="AdvSearchObl"),
+    path(
+        "AdvSearchContainerByObl",
+        views.AdvSearchContainerByObl,
+        name="AdvSearchContainerByObl",
+    ),
+    path(
+        "AdvSearchContainerByObl/<uuid:OblID>/",
+        views.AdvSearchContainerByObl,
+        name="AdvSearchContainerByObl",
+    ),
+    path(
+        "AdvSearchContainerByObl/<uuid:OblID>/<str:SearchBy>/",
+        views.AdvSearchContainerByObl,
+        name="AdvSearchContainerByObl",
+    ),
 ]

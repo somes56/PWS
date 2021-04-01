@@ -1,5 +1,5 @@
 from django import forms
-from Import.models import Obl, Container
+from Import.models import Obl, Container, Hbl
 
 
 class OblFormModel(forms.ModelForm):
@@ -99,4 +99,64 @@ class ContainerFormModel(forms.ModelForm):
             "Movement",
             "SealParty",
             "Supplier",
+        ]
+
+
+class HblFormModel(forms.ModelForm):
+    HblID = forms.UUIDField(required=False)
+    No = forms.CharField(max_length=50, required=False)
+    OblID = forms.UUIDField(required=False)
+    OblNo = forms.CharField(max_length=250, required=False)
+    ContainerID = forms.UUIDField(required=False)
+    ContainerNo = forms.CharField(max_length=50, required=False)
+    ConsigneeID = forms.UUIDField(required=False)
+    ConsigneeName = forms.CharField(max_length=250, required=False)
+    ClassID = forms.UUIDField(required=False)
+    ClassFullName = forms.CharField(max_length=250, required=False)
+    UnitID = forms.UUIDField(required=False)
+    UnitShortName = forms.CharField(max_length=50, required=False)
+    PortID = forms.UUIDField(required=False)
+    PortName = forms.CharField(max_length=250, required=False)
+    Quantity = forms.IntegerField(required=False)
+    Weight = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
+    Volume = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
+    Transhipment = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    # InwardSurvey = forms.ChoiceField(
+    #     choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    # )
+    MarkDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    # PackageDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    # LocationDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    CargoDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    # Remarks = forms.CharField(widget=forms.Textarea(), required=False)
+
+    class Meta:
+        model = Hbl
+        fields = [
+            "HblID",
+            "No",
+            "OblID",
+            "OblNo",
+            "ContainerID",
+            "ContainerNo",
+            "ConsigneeID",
+            "ConsigneeName",
+            "ClassID",
+            "ClassFullName",
+            "UnitID",
+            "UnitShortName",
+            "PortID",
+            "PortName",
+            "Quantity",
+            "Weight",
+            "Volume",
+            "Transhipment",
+            # "InwardSurvey",
+            "MarkDesc",
+            # "PackageDesc",
+            # "LocationDesc",
+            "CargoDesc",
+            # "Remarks",
         ]

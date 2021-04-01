@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from BusinessLogic.ImportBL import importBL
 from DataAccess.ImportRepo import importRepo
-from Import.formModels import OblFormModel, ContainerFormModel
+from Import.formModels import OblFormModel, ContainerFormModel, HblFormModel
 
 
 def OblList(request):
@@ -201,6 +201,104 @@ def DeleteContainer(request, ContainerID=None):
 
     if request.method == "POST":
         rtn = importRepo.DeleteContainer(ContainerID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+def HblList(request):
+    return render(request, "Hbl.html")
+
+
+def PartialHblList(request, SearchBy=""):
+    Hbls = []
+    Hbls = importRepo.PartialHblList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Hbls, 50)
+
+    try:
+        HblPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        HblPaginator = _Paginator.page(1)
+    except EmptyPage:
+        HblPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(request, "PartialHblList.html", {"Hbls": HblPaginator})
+
+
+@csrf_exempt
+def HblForm(request, HblID=None):
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
+        hblFormModel = HblFormModel()
+
+        if HblID == None:
+            hblFormModel = importBL.InitialiseHblFormModel(None)
+        else:
+            hblFormModel = importBL.InitialiseHblFormModel(HblID)
+
+        return render(
+            request,
+            "HblForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": hblFormModel,
+            },
+        )
+
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        hblFormModel = HblFormModel()
+        _post = HblFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = importRepo.UpsertHbl(_Form)
+
+            if _Form["HblID"] != None:
+                IsUpdate = True
+
+            if UpsertResult["rtn"] == True:
+                hblFormModel = importBL.InitialiseHblFormModel(UpsertResult["HblID"])
+
+                if IsUpdate == False:
+                    SysGoodMsg = "Inserted Successfully"
+                else:
+                    SysGoodMsg = "Updated Successfully"
+
+            else:
+                hblFormModel = importBL.InitialiseErrorHblFormModel(_Form)
+
+                if IsUpdate == False:
+                    SysBadMsg = "Insert Fail"
+                else:
+                    SysBadMsg = "Update Fail"
+
+        else:
+            SysBadMsg = "Invalid Input"
+
+        return render(
+            request,
+            "HblForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": hblFormModel,
+            },
+        )
+
+
+@csrf_exempt
+def DeleteHbl(request, HblID=None):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = importRepo.DeleteHbl(HblID)
     else:
         rtn = False
     return HttpResponse(rtn)

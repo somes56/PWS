@@ -30,4 +30,18 @@ urlpatterns = [
         views.DeleteContainer,
         name="DeleteContainer",
     ),
+    path("HblList", views.HblList, name="HblList"),
+    path("PartialHblList", views.PartialHblList, name="PartialHblList"),
+    path(
+        "PartialHblList/<str:SearchBy>/",
+        views.PartialHblList,
+        name="PartialHblList",
+    ),
+    path("HblForm", views.HblForm, name="HblForm"),
+    path("HblForm/<uuid:HblID>/", views.HblForm, name="HblForm"),
+    path(
+        "DeleteHbl/<uuid:HblID>/",
+        views.DeleteHbl,
+        name="DeleteHbl",
+    ),
 ]
