@@ -107,6 +107,47 @@ class masterRepo:
 
         return Ports
 
+    def AdvSearchContainerSize(SearchBy=""):
+        ContainerSizes = []
+
+        try:
+            ContainerSizes = ContainerSize.objects.filter(
+                Q(Code__icontains=SearchBy) | Q(Name__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("Name")
+        except Exception as e:
+            print(e)
+
+        return ContainerSizes
+
+    def AdvSearchClass(SearchBy=""):
+        Classes = []
+
+        try:
+            Classes = Class.objects.filter(
+                Q(Code__icontains=SearchBy)
+                | Q(ShortName__icontains=SearchBy)
+                | Q(FullName__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("Code", "ShortName", "FullName")
+        except Exception as e:
+            print(e)
+
+        return Classes
+
+    def AdvSearchUnit(SearchBy=""):
+        Units = []
+
+        try:
+            Units = Unit.objects.filter(
+                Q(ShortName__icontains=SearchBy) | Q(FullName__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("ShortName", "FullName")
+        except Exception as e:
+            print(e)
+
+        return Units
+
     def PartialCustomerList(SearchBy=""):
         Customers = []
 

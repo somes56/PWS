@@ -1,0 +1,22 @@
+<table class="table">
+    <tr>
+        <th style="width:30%">No</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for Hbl in Hbls %}
+    <tr>
+        <td>{{ Hbl.No }}</td>
+        <td><button type="button"
+                onclick="AdvSearchCustomSel('{{ Hbl.ID }}', '{{ Hbl.No }}', '{{ Hbl.Consignee.Name }}', '{{ Hbl.Class.FullName }}', '{{ Hbl.Unit.ShortName }}',
+                '{{ Hbl.Port.ID }}', '{{ Hbl.Port.Name }}', '{{ Hbl.Quantity }}', '{{ Hbl.Weight }}', '{{ Hbl.Volume }}',
+                '{{ Hbl.Transhipment }}', '{{ Hbl.MarkDesc }}', '{{ Hbl.CargoDesc }}', '{{ Hbl.InwardSurvey }}', '{{ Hbl.PackageDesc }}',
+                '{{ Hbl.LocationDesc }}', '{{ Hbl.Remarks }}', '{{ Hbl.HeavyLiftCargo }}', '{{ Hbl.LongLengthCargo }}', '{{ Hbl.PortPolice }}',
+                '{{ Hbl.CargoSurvey }}', '{{ Hbl.MaqisHold }}', '{{ Hbl.HealthHold }}', '{{ Hbl.PreventiveHold }}', '{{ Hbl.CustomsHold }}')">select</button>
+        </td>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>

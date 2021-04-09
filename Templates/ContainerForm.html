@@ -1,0 +1,142 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Container Form {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/ContainerForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Container Registration</h2>
+<hr />
+
+<form method="POST">
+
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.No|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="No" class="form-control input-sm" %}
+                    {% render_field Form.ContainerID|attr:"hidden:true" id="ContainerID" %}
+                </div>
+                <label class="col-md-2 control-label">Status :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.Status %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Obl :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.OblNo|attr:"readonly:readonly" id="OblNo" class="form-control input-sm" %}
+                        {% render_field Form.OblID|attr:"hidden:true" id="OblID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchObl"
+                                onclick="SearchObl();"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Ship Type :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.ShipType %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Seal No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.SealNo|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="SealNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Movement :</label>
+                <div class="col-md-4">
+                    {% for radio in Form.Movement %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Container Size :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.ContainerSizeName|attr:"readonly:readonly" id="ContainerSizeName" class="form-control input-sm" %}
+                        {% render_field Form.ContainerSizeID|attr:"hidden:true" id="ContainerSizeID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchContainerSize"
+                                onclick="SearchContainerSize();"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Seal Party :</label>
+                <div class="col-md-4">
+                    {% for radio in Form.SealParty %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Type :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.Type %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+                <label class="col-md-2 control-label">Supplier :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.Supplier %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}

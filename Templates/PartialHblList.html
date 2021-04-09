@@ -1,0 +1,56 @@
+{% if Hbls.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Hbls.has_previous %}
+    <li><a onclick="PartialHblList('{{ Hbls.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Hbls.paginator.page_range %}
+    {% if Hbls.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialHblList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Hbls.has_next %}
+    <li><a onclick="PartialHblList('{{ Hbls.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>No</th>
+            <th>Obl</th>
+            <th>Container</th>
+            <th>Quantity</th>
+            <th>Weight</th>
+            <th>Volume</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Hbl in Hbls %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Hbl.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash" onclick="DeleteHbl('{{ Hbl.ID }}', '{{ Hbl.No }}')"></span>
+            </td>
+            <td>{{ Hbl.No }}</td>
+            <td>{{ Hbl.Obl.No }}</td>
+            <td>{{ Hbl.Container.No }}</td>
+            <td>{{ Hbl.Quantity }}</td>
+            <td>{{ Hbl.Weight }}</td>
+            <td>{{ Hbl.Volume }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

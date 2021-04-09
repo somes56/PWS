@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from DataAccess.MasterRepo import masterRepo
+from DataAccess.ImportRepo import importRepo
 
 
 def AdvSearchState(request, SearchBy=""):
@@ -42,3 +43,45 @@ def AdvSearchPort(request, SearchBy=""):
     Ports = []
     Ports = masterRepo.AdvSearchPort(SearchBy)
     return render(request, "PartialAdvSearchPort.html", {"Ports": Ports})
+
+
+def AdvSearchContainerSize(request, SearchBy=""):
+    ContainerSizes = []
+    ContainerSizes = masterRepo.AdvSearchContainerSize(SearchBy)
+    return render(
+        request,
+        "PartialAdvSearchContainerSize.html",
+        {"ContainerSizes": ContainerSizes},
+    )
+
+
+def AdvSearchClass(request, SearchBy=""):
+    Classes = []
+    Classes = masterRepo.AdvSearchClass(SearchBy)
+    return render(request, "PartialAdvSearchClass.html", {"Classes": Classes})
+
+
+def AdvSearchUnit(request, SearchBy=""):
+    Units = []
+    Units = masterRepo.AdvSearchUnit(SearchBy)
+    return render(request, "PartialAdvSearchUnit.html", {"Units": Units})
+
+
+def AdvSearchObl(request, SearchBy=""):
+    Obls = []
+    Obls = importRepo.AdvSearchObl(SearchBy)
+    return render(request, "PartialAdvSearchObl.html", {"Obls": Obls})
+
+
+def AdvSearchContainerByObl(request, OblID=None, SearchBy=""):
+    Containers = []
+    Containers = importRepo.AdvSearchContainerByObl(OblID, SearchBy)
+    return render(
+        request, "PartialAdvSearchContainerByObl.html", {"Containers": Containers}
+    )
+
+
+def AdvSearchHblByContainer(request, ContainerID=None, SearchBy=""):
+    Hbls = []
+    Hbls = importRepo.AdvSearchHblByContainer(ContainerID, SearchBy)
+    return render(request, "PartialAdvSearchHblByContainer.html", {"Hbls": Hbls})

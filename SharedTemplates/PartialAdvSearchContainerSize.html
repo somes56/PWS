@@ -1,0 +1,18 @@
+<table class="table">
+    <tr>
+        <th style="width:15%">Code</th>
+        <th style="width:30%">Name</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for ContainerSize in ContainerSizes %}
+    <tr>
+        <td>{{ ContainerSize.Code }}</td>
+        <td>{{ ContainerSize.Name }}</td>
+        <td><button type="button"
+                onclick="AdvSearchSelTwo('{{ ContainerSize.ID }}', '{{ ContainerSize.Name }}');">select</button></td>
+    </tr>
+    {% endfor %}
+
+</table>
