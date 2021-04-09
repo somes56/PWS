@@ -1,0 +1,81 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Unstuff Container {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/UnstuffContainer.js' %}"></script>
+{% endblock script %}
+
+{% block content %}
+
+<h2>Unstuff Container</h2>
+<hr />
+
+<ul class="nav nav-tabs">
+    <li id="tabpending" class="active"><a href="#pending" data-toggle="tab" aria-expanded="true">Pending</a></li>
+    <li id="tabcompleted" class=""><a href="#completed" data-toggle="tab" aria-expanded="false">Completed</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+
+    <div div class="tab-pane fade active in" id="pending">
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" id="SearchPendingString"
+                            name="SearchPendingString" value="" placeholder="Search Pending Container">
+                        <span class="input-group-addon   input-sm">
+                            <span class="glyphicon glyphicon-search"
+                                onclick="PartialUnstuffContainerPendingList()"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="PartialUnstuffContainerPendingListLoading" style="display:none">
+            <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div id="PartialUnstuffContainerPendingList"></div>
+
+    </div>
+
+    <div class="tab-pane fade" id="completed">
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" id="SearchCompletedString"
+                            name="SearchCompletedString" value="" placeholder="Search Completed Container">
+                        <span class="input-group-addon   input-sm">
+                            <span class="glyphicon glyphicon-search"
+                                onclick="PartialUnstuffContainerCompletedList()"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="PartialUnstuffContainerCompletedListLoading" style="display:none">
+            <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div id="PartialUnstuffContainerCompletedList"></div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

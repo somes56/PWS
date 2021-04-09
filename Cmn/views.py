@@ -79,3 +79,9 @@ def AdvSearchContainerByObl(request, OblID=None, SearchBy=""):
     return render(
         request, "PartialAdvSearchContainerByObl.html", {"Containers": Containers}
     )
+
+
+def AdvSearchHblByContainer(request, ContainerID=None, SearchBy=""):
+    Hbls = []
+    Hbls = importRepo.AdvSearchHblByContainer(ContainerID, SearchBy)
+    return render(request, "PartialAdvSearchHblByContainer.html", {"Hbls": Hbls})

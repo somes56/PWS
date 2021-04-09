@@ -44,4 +44,28 @@ urlpatterns = [
         views.DeleteHbl,
         name="DeleteHbl",
     ),
+    path(
+        "UnstuffContainerList", views.UnstuffContainerList, name="UnstuffContainerList"
+    ),
+    path(
+        "PartialUnstuffContainerPendingList",
+        views.PartialUnstuffContainerPendingList,
+        name="PartialUnstuffContainerPendingList",
+    ),
+    path(
+        "PartialUnstuffContainerPendingList/<str:SearchBy>/",
+        views.PartialUnstuffContainerPendingList,
+        name="PartialUnstuffContainerPendingList",
+    ),
+    path(
+        "PartialUnstuffContainerCompletedList",
+        views.PartialUnstuffContainerCompletedList,
+        name="PartialUnstuffContainerCompletedList",
+    ),
+    path(
+        "PartialUnstuffContainerCompletedList/<str:SearchBy>/",
+        views.PartialUnstuffContainerCompletedList,
+        name="PartialUnstuffContainerCompletedList",
+    ),
+    path("UnstuffContainerForm/<uuid:ContainerID>/", views.UnstuffContainerForm, name="UnstuffContainerForm"),
 ]

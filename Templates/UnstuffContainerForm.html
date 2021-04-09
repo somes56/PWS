@@ -1,0 +1,275 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Unstuff Container Form {% endblock title %}
+
+{% block script %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'scripts/UnstuffContainerForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Unstuff Container Registration</h2>
+<hr />
+
+<form method="POST">
+
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ContainerNo|attr:"readonly:readonly" id="ContainerNo" class="form-control input-sm" %}
+                    {% render_field Form.ContainerID|attr:"hidden:true" id="ContainerID" %}
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-3">
+                    <div class="form-inline">
+                        {% render_field Form.IsUnStuff id="IsUnStuff" class="checkbox" onclick="OnCheckUnstuff(event.target.checked)" %}&nbsp;Unstuff
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Unstuff Date :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.UnstuffDate|attr:"readonly:readonly" id="UnstuffDate" class="form-control input-sm" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-calendar" id="btnPickUnstuffDate" onclick="PickUnstuffDate()"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Hbl</h2>
+            </div>
+        </div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Hbl :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.No|attr:"readonly:readonly" id="No" class="form-control input-sm" %}
+                        {% render_field Form.HblID|attr:"hidden:true" id="HblID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchHbl" onclick="SearchHbl();"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Location Description :</label>
+                <div class="col-md-3">
+                    {% render_field Form.LocationDesc|attr:"onkeyup:ConvertUpperCase(event.target.name)" style="resize:none" id="LocationDesc" rows="5" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Consignee :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ConsigneeName|attr:"readonly:readonly" id="ConsigneeName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Remarks :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Remarks|attr:"onkeyup:ConvertUpperCase(event.target.name)" style="resize:none" id="Remarks" rows="5" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Class :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ClassFullName|attr:"readonly:readonly" id="ClassFullName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Inward Survey :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.InwardSurvey %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Quantity :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Quantity|attr:"readonly:readonly" id="Quantity" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Heavy Lifting Cargo :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.HeavyLiftCargo %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Package :</label>
+                <div class="col-md-3">
+                    {% render_field Form.UnitShortName|attr:"readonly:readonly" id="UnitShortName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Long Length Cargo :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.LongLengthCargo %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Weight (Kgs) :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Weight|attr:"readonly:readonly" id="Weight" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Port Police :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.PortPolice %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Volume (m3) :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Volume|attr:"readonly:readonly" id="Volume" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Cargo Survey :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.CargoSurvey %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Marking :</label>
+                <div class="col-md-3">
+                    {% render_field Form.MarkDesc|attr:"onkeyup:ConvertUpperCase(event.target.name)" style="resize:none" id="MarkDesc" rows="5" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Maqis Hold :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.MaqisHold %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Transhipment :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.Transhipment %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+                <label class="col-md-2 control-label">Health Hold :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.HealthHold%}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Port :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.PortName|attr:"readonly:readonly" id="PortName" class="form-control input-sm" %}
+                        {% render_field Form.PortID|attr:"hidden:true" id="PortID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchPort" onclick="SearchPort();"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Preventive Hold :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.PreventiveHold %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Cargo Description :</label>
+                <div class="col-md-3">
+                    {% render_field Form.CargoDesc|attr:"onkeyup:ConvertUpperCase(event.target.name)"|attr:"readonly:readonly" style="resize:none" id="CargoDesc" rows="5" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Customs Hold :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.CustomsHold %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Package Description :</label>
+                <div class="col-md-3">
+                    {% render_field Form.PackageDesc|attr:"onkeyup:ConvertUpperCase(event.target.name)" style="resize:none" id="PackageDesc" rows="5" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}

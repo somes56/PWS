@@ -123,14 +123,8 @@ class HblFormModel(forms.ModelForm):
     Transhipment = forms.ChoiceField(
         choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
     )
-    # InwardSurvey = forms.ChoiceField(
-    #     choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
-    # )
     MarkDesc = forms.CharField(widget=forms.Textarea(), required=False)
-    # PackageDesc = forms.CharField(widget=forms.Textarea(), required=False)
-    # LocationDesc = forms.CharField(widget=forms.Textarea(), required=False)
     CargoDesc = forms.CharField(widget=forms.Textarea(), required=False)
-    # Remarks = forms.CharField(widget=forms.Textarea(), required=False)
 
     class Meta:
         model = Hbl
@@ -153,10 +147,93 @@ class HblFormModel(forms.ModelForm):
             "Weight",
             "Volume",
             "Transhipment",
-            # "InwardSurvey",
             "MarkDesc",
-            # "PackageDesc",
-            # "LocationDesc",
             "CargoDesc",
-            # "Remarks",
+        ]
+
+
+class UnstuffContainerFormModel(forms.ModelForm):
+    ContainerID = forms.UUIDField(required=False)
+    ContainerNo = forms.CharField(max_length=50, required=False)
+    UnstuffDate = forms.DateField(required=False)
+    IsUnStuff = forms.BooleanField(required=False)
+    HblID = forms.UUIDField(required=False)
+    No = forms.CharField(max_length=50, required=False)
+    ConsigneeName = forms.CharField(max_length=250, required=False)
+    ClassFullName = forms.CharField(max_length=250, required=False)
+    UnitShortName = forms.CharField(max_length=50, required=False)
+    PortID = forms.UUIDField(required=False)
+    PortName = forms.CharField(max_length=250, required=False)
+    Quantity = forms.IntegerField(required=False)
+    Weight = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
+    Volume = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
+    Transhipment = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    MarkDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    CargoDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    PackageDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    LocationDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    InwardSurvey = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")],
+        widget=forms.RadioSelect(),
+    )
+    Remarks = forms.CharField(widget=forms.Textarea(), required=False)
+    HeavyLiftCargo = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    LongLengthCargo = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    PortPolice = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    CargoSurvey = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    MaqisHold = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    HealthHold = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    PreventiveHold = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+    CustomsHold = forms.ChoiceField(
+        choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
+    )
+
+    class Meta:
+        model = Hbl
+        fields = [
+            "ContainerID",
+            "ContainerNo",
+            "UnstuffDate",
+            "IsUnStuff",
+            "HblID",
+            "No",
+            "ConsigneeName",
+            "ClassFullName",
+            "UnitShortName",
+            "PortID",
+            "PortName",
+            "Quantity",
+            "Weight",
+            "Volume",
+            "Transhipment",
+            "MarkDesc",
+            "CargoDesc",
+            "InwardSurvey",
+            "PackageDesc",
+            "LocationDesc",
+            "Remarks",
+            "HeavyLiftCargo",
+            "LongLengthCargo",
+            "PortPolice",
+            "CargoSurvey",
+            "MaqisHold",
+            "HealthHold",
+            "PreventiveHold",
+            "CustomsHold",
         ]

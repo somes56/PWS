@@ -30,6 +30,18 @@ class importRepo:
 
         return Containers
 
+    def AdvSearchHblByContainer(ContainerID=None, SearchBy=""):
+        Hbls = []
+
+        try:
+            Hbls = Hbl.objects.filter(
+                IsActive=True, Container__ID=ContainerID, No__icontains=SearchBy
+            ).order_by("No")
+        except Exception as e:
+            print(e)
+
+        return Hbls
+
     def PartialOblList(SearchBy=""):
         Obls = []
 
@@ -69,6 +81,30 @@ class importRepo:
             print(e)
 
         return Hbls
+
+    def PartialUnstuffContainerPendingList(SearchBy=""):
+        Containers = []
+
+        try:
+            Containers = Container.objects.filter(
+                IsActive=True, IsUnStuff=False, No__icontains=SearchBy
+            ).order_by("Obl__No", "No")[:100]
+        except Exception as e:
+            print(e)
+
+        return Containers
+
+    def PartialUnstuffContainerCompletedList(SearchBy=""):
+        Containers = []
+
+        try:
+            Containers = Container.objects.filter(
+                IsActive=True, IsUnStuff=True, No__icontains=SearchBy
+            ).order_by("Obl__No", "No")[:100]
+        except Exception as e:
+            print(e)
+
+        return Containers
 
     def LoadObl(OblID):
         OblDto = Obl()
@@ -294,6 +330,62 @@ class importRepo:
             print(e)
 
         return {"rtn": rtn, "HblID": HblID}
+
+    def UpsertUnstuffContainer(Dto):
+        rtn = False
+        ContainerID = None
+        HblID = None
+        UnstuffDate = None
+        PortDto = None
+        UpsertContainerDto = None
+        UpsertHblDto = None
+
+        try:
+            if Dto["PortID"] != None:
+                PortDto = Port.objects.get(ID=Dto["PortID"])
+
+            if Dto["IsUnStuff"] == True:
+                UnstuffDate = Dto["UnstuffDate"]
+
+            UpsertContainerDto = Container.objects.get(ID=Dto["ContainerID"])
+            UpsertContainerDto.UnstuffDate = UnstuffDate
+            UpsertContainerDto.IsUnStuff = Dto["IsUnStuff"]
+            UpsertContainerDto.IsActive = True
+            UpsertContainerDto.UpdateDate = datetime.now(tz=timezone.utc)
+            UpsertContainerDto.UpdateBy = None
+            UpsertContainerDto.save()
+            ContainerID = Dto["ContainerID"]
+
+            if Dto["HblID"] != None:
+                UpsertHblDto = Hbl.objects.get(ID=Dto["HblID"])
+                UpsertHblDto.MarkDesc = Dto["MarkDesc"]
+                UpsertHblDto.Transhipment = Dto["Transhipment"]
+                UpsertHblDto.Port = PortDto
+                UpsertHblDto.PackageDesc = Dto["PackageDesc"]
+                UpsertHblDto.LocationDesc = Dto["LocationDesc"]
+                UpsertHblDto.Remarks = Dto["Remarks"]
+                UpsertHblDto.InwardSurvey = Dto["InwardSurvey"]
+                UpsertHblDto.HeavyLiftCargo = Dto["HeavyLiftCargo"]
+                UpsertHblDto.LongLengthCargo = Dto["LongLengthCargo"]
+                UpsertHblDto.PortPolice = Dto["PortPolice"]
+                UpsertHblDto.CargoSurvey = Dto["CargoSurvey"]
+                UpsertHblDto.MaqisHold = Dto["MaqisHold"]
+                UpsertHblDto.HealthHold = Dto["HealthHold"]
+                UpsertHblDto.PreventiveHold = Dto["PreventiveHold"]
+                UpsertHblDto.CustomsHold = Dto["CustomsHold"]
+                UpsertHblDto.IsActive = True
+                UpsertHblDto.UpdateDate = datetime.now(tz=timezone.utc)
+                UpsertHblDto.UpdateBy = None
+                UpsertHblDto.save()
+                rtn = True
+                HblID = Dto["HblID"]
+            else:
+                rtn = True
+
+        except Exception as e:
+            print(e)
+
+        return {"rtn": rtn, "ContainerID": ContainerID, "HblID": HblID}
 
     def DeleteObl(OblID):
         rtn = False

@@ -59,4 +59,14 @@ urlpatterns = [
         views.AdvSearchContainerByObl,
         name="AdvSearchContainerByObl",
     ),
+    path(
+        "AdvSearchHblByContainer/<uuid:ContainerID>/",
+        views.AdvSearchHblByContainer,
+        name="AdvSearchHblByContainer",
+    ),
+    path(
+        "AdvSearchHblByContainer/<uuid:ContainerID>/<str:SearchBy>/",
+        views.AdvSearchHblByContainer,
+        name="AdvSearchHblByContainer",
+    ),
 ]

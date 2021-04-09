@@ -1,4 +1,9 @@
-from Import.formModels import OblFormModel, ContainerFormModel, HblFormModel
+from Import.formModels import (
+    OblFormModel,
+    ContainerFormModel,
+    HblFormModel,
+    UnstuffContainerFormModel,
+)
 from DataAccess.ImportRepo import importRepo
 
 
@@ -119,7 +124,6 @@ class importBL:
                 form.initial["HblID"] = None
                 form.initial["OblID"] = None
                 form.initial["Transhipment"] = 0
-                form.initial["InwardSurvey"] = 0
             else:
                 Dto = importRepo.LoadHbl(HblID)
                 form.initial["HblID"] = Dto.ID
@@ -172,6 +176,102 @@ class importBL:
             form.initial["Transhipment"] = _Form["Transhipment"]
             form.initial["MarkDesc"] = _Form["MarkDesc"]
             form.initial["CargoDesc"] = _Form["CargoDesc"]
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseUnstuffContainerFormModel(ContainerID=None, HblID=None):
+        form = UnstuffContainerFormModel()
+
+        try:
+            if HblID == None:
+                Dto = importRepo.LoadContainer(ContainerID)
+                form.initial["ContainerID"] = Dto.ID
+                form.initial["ContainerNo"] = Dto.No
+                form.initial["UnstuffDate"] = Dto.UnstuffDate
+                form.initial["IsUnStuff"] = Dto.IsUnStuff
+                form.initial["HblID"] = None
+                form.initial["Transhipment"] = 0
+                form.initial["InwardSurvey"] = 0
+                form.initial["HeavyLiftCargo"] = 0
+                form.initial["LongLengthCargo"] = 0
+                form.initial["PortPolice"] = 0
+                form.initial["CargoSurvey"] = 0
+                form.initial["MaqisHold"] = 0
+                form.initial["HealthHold"] = 0
+                form.initial["PreventiveHold"] = 0
+                form.initial["CustomsHold"] = 0
+            else:
+                Dto = importRepo.LoadHbl(HblID)
+                form.initial["ContainerID"] = Dto.Container.ID
+                form.initial["ContainerNo"] = Dto.Container.No
+                form.initial["UnstuffDate"] = Dto.Container.UnstuffDate
+                form.initial["IsUnStuff"] = Dto.Container.IsUnStuff
+                form.initial["HblID"] = Dto.ID
+                form.initial["No"] = Dto.No
+                form.initial["ConsigneeName"] = Dto.Consignee.Name
+                form.initial["ClassFullName"] = Dto.Class.FullName
+                form.initial["UnitShortName"] = Dto.Unit.ShortName
+                form.initial["PortID"] = None if Dto.Port == None else Dto.Port.ID
+                form.initial["PortName"] = None if Dto.Port == None else Dto.Port.Name
+                form.initial["Quantity"] = Dto.Quantity
+                form.initial["Weight"] = Dto.Weight
+                form.initial["Volume"] = Dto.Volume
+                form.initial["Transhipment"] = Dto.Transhipment
+                form.initial["MarkDesc"] = Dto.MarkDesc
+                form.initial["CargoDesc"] = Dto.CargoDesc
+                form.initial["PackageDesc"] = Dto.PackageDesc
+                form.initial["LocationDesc"] = Dto.LocationDesc
+                form.initial["InwardSurvey"] = Dto.InwardSurvey
+                form.initial["Remarks"] = Dto.Remarks
+                form.initial["HeavyLiftCargo"] = Dto.HeavyLiftCargo
+                form.initial["LongLengthCargo"] = Dto.LongLengthCargo
+                form.initial["PortPolice"] = Dto.PortPolice
+                form.initial["CargoSurvey"] = Dto.CargoSurvey
+                form.initial["MaqisHold"] = Dto.MaqisHold
+                form.initial["HealthHold"] = Dto.HealthHold
+                form.initial["PreventiveHold"] = Dto.PreventiveHold
+                form.initial["CustomsHold"] = Dto.CustomsHold
+
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseErrorUnstuffContainerFormModel(_Form):
+        form = UnstuffContainerFormModel()
+
+        try:
+            form.initial["ContainerID"] = _Form["ContainerID"]
+            form.initial["ContainerNo"] = _Form["ContainerNo"]
+            form.initial["UnstuffDate"] = _Form["UnstuffDate"]
+            form.initial["IsUnStuff"] = _Form["IsUnstuff"]
+            form.initial["HblID"] = _Form["HblID"]
+            form.initial["No"] = _Form["No"]
+            form.initial["ConsigneeName"] = _Form["ConsigneeName"]
+            form.initial["ClassFullName"] = _Form["ClassFullName"]
+            form.initial["UnitShortName"] = _Form["UnitShortName"]
+            form.initial["PortID"] = _Form["PortID"]
+            form.initial["PortName"] = _Form["PortName"]
+            form.initial["Quantity"] = _Form["Quantity"]
+            form.initial["Weight"] = _Form["Weight"]
+            form.initial["Volume"] = _Form["Volume"]
+            form.initial["Transhipment"] = _Form["Transhipment"]
+            form.initial["MarkDesc"] = _Form["MarkDesc"]
+            form.initial["CargoDesc"] = _Form["CargoDesc"]
+            form.initial["PackageDesc"] = _Form["PackageDesc"]
+            form.initial["LocationDesc"] = _Form["LocationDesc"]
+            form.initial["InwardSurvey"] = _Form["InwardSurvey"]
+            form.initial["Remarks"] = _Form["Remarks"]
+            form.initial["HeavyLiftCargo"] = _Form["HeavyLiftCargo"]
+            form.initial["LongLengthCargo"] = _Form["LongLengthCargo"]
+            form.initial["PortPolice"] = _Form["PortPolice"]
+            form.initial["CargoSurvey"] = _Form["CargoSurvey"]
+            form.initial["MaqisHold"] = _Form["MaqisHold"]
+            form.initial["HealthHold"] = _Form["HealthHold"]
+            form.initial["PreventiveHold"] = _Form["PreventiveHold"]
+            form.initial["CustomsHold"] = _Form["CustomsHold"]
         except Exception as e:
             print(e)
 

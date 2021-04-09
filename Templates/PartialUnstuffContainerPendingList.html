@@ -1,0 +1,48 @@
+{% if Containers.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Containers.has_previous %}
+    <li><a onclick="PartialUnstuffContainerPendingList('{{ Containers.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Containers.paginator.page_range %}
+    {% if Containers.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialUnstuffContainerPendingList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Containers.has_next %}
+    <li><a onclick="PartialUnstuffContainerPendingList('{{ Containers.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>No</th>
+            <th>Obl</th>
+            <th>Unstuff Date</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Container in Containers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Container.ID }}')"></span>
+            </td>
+            <td>{{ Container.No }}</td>
+            <td>{{ Container.Obl.No }}</td>
+            <td>{{ Container.UnstuffDate }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

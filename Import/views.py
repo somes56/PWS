@@ -3,7 +3,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from BusinessLogic.ImportBL import importBL
 from DataAccess.ImportRepo import importRepo
-from Import.formModels import OblFormModel, ContainerFormModel, HblFormModel
+from Import.formModels import (
+    OblFormModel,
+    ContainerFormModel,
+    HblFormModel,
+    UnstuffContainerFormModel,
+)
 
 
 def OblList(request):
@@ -302,3 +307,110 @@ def DeleteHbl(request, HblID=None):
     else:
         rtn = False
     return HttpResponse(rtn)
+
+
+def UnstuffContainerList(request):
+    return render(request, "UnstuffContainer.html")
+
+
+def PartialUnstuffContainerPendingList(request, SearchBy=""):
+    Containers = []
+    Containers = importRepo.PartialUnstuffContainerPendingList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Containers, 50)
+
+    try:
+        ContainerPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        ContainerPaginator = _Paginator.page(1)
+    except EmptyPage:
+        ContainerPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        "PartialUnstuffContainerPendingList.html",
+        {"Containers": ContainerPaginator},
+    )
+
+
+def PartialUnstuffContainerCompletedList(request, SearchBy=""):
+    Containers = []
+    Containers = importRepo.PartialUnstuffContainerCompletedList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Containers, 50)
+
+    try:
+        ContainerPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        ContainerPaginator = _Paginator.page(1)
+    except EmptyPage:
+        ContainerPaginator = _Paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        "PartialUnstuffContainerCompletedList.html",
+        {"Containers": ContainerPaginator},
+    )
+
+
+@csrf_exempt
+def UnstuffContainerForm(request, ContainerID=None):
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
+        unstuffContainerFormModel = UnstuffContainerFormModel()
+        unstuffContainerFormModel = importBL.InitialiseUnstuffContainerFormModel(
+            ContainerID, None
+        )
+
+        return render(
+            request,
+            "UnstuffContainerForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": unstuffContainerFormModel,
+            },
+        )
+
+    else:
+        IsUpdate = False
+        UpsertResult = {}
+        unstuffContainerFormModel = UnstuffContainerFormModel()
+        _post = UnstuffContainerFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+            UpsertResult = importRepo.UpsertUnstuffContainer(_Form)
+
+            if UpsertResult["rtn"] == True:
+                unstuffContainerFormModel = (
+                    importBL.InitialiseUnstuffContainerFormModel(
+                        UpsertResult["ContainerID"], UpsertResult["HblID"]
+                    )
+                )
+
+                SysGoodMsg = "Updated Successfully"
+
+            else:
+                unstuffContainerFormModel = (
+                    importBL.InitialiseErrorUnstuffContainerFormModel(_Form)
+                )
+
+                SysBadMsg = "Update Fail"
+
+        else:
+            SysBadMsg = "Invalid Input"
+
+        return render(
+            request,
+            "UnstuffContainerForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": unstuffContainerFormModel,
+            },
+        )
