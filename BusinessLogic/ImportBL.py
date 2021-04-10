@@ -18,20 +18,48 @@ class importBL:
                 Dto = importRepo.LoadObl(OblID)
                 form.initial["OblID"] = Dto.ID
                 form.initial["No"] = Dto.No
-                form.initial["VoyageID"] = Dto.Voyage.ID
-                form.initial["VoyageNo"] = Dto.Voyage.No
-                form.initial["ShipCallNo"] = Dto.Voyage.ShipCallNo
-                form.initial["VesselCode"] = Dto.Voyage.Vessel.Code
-                form.initial["LoadPortID"] = Dto.LoadPort.ID
-                form.initial["LoadPortName"] = Dto.LoadPort.Name
-                form.initial["UnLoadPortID"] = Dto.UnloadPort.ID
-                form.initial["UnLoadPortName"] = Dto.UnloadPort.Name
-                form.initial["DestinationPortID"] = Dto.DestinationPort.ID
-                form.initial["DestionationPortName"] = Dto.DestinationPort.Name
-                form.initial["ShippingAgentID"] = Dto.ShippingAgent.ID
-                form.initial["ShippingAgentName"] = Dto.ShippingAgent.Name
-                form.initial["ConsigneeID"] = Dto.Consignee.ID
-                form.initial["ConsigneeName"] = Dto.Consignee.Name
+                form.initial["VoyageID"] = None if Dto.Voyage == None else Dto.Voyage.ID
+                form.initial["VoyageNo"] = "" if Dto.Voyage == None else Dto.Voyage.No
+                form.initial["ShipCallNo"] = (
+                    "" if Dto.Voyage == None else Dto.Voyage.ShipCallNo
+                )
+                form.initial["VesselCode"] = (
+                    ""
+                    if Dto.Voyage == None
+                    else None
+                    if Dto.Voyage.Vessel == None
+                    else Dto.Voyage.Vessel.Code
+                )
+                form.initial["LoadPortID"] = (
+                    None if Dto.LoadPort == None else Dto.LoadPort.ID
+                )
+                form.initial["LoadPortName"] = (
+                    "" if Dto.LoadPort == None else Dto.LoadPort.Name
+                )
+                form.initial["UnLoadPortID"] = (
+                    None if Dto.UnloadPort == None else Dto.UnloadPort.ID
+                )
+                form.initial["UnLoadPortName"] = (
+                    "" if Dto.UnloadPort == None else Dto.UnloadPort.Name
+                )
+                form.initial["DestinationPortID"] = (
+                    None if Dto.DestinationPort == None else Dto.DestinationPort.ID
+                )
+                form.initial["DestionationPortName"] = (
+                    "" if Dto.DestinationPort == None else Dto.DestinationPort.Name
+                )
+                form.initial["ShippingAgentID"] = (
+                    None if Dto.ShippingAgent == None else Dto.ShippingAgent.ID
+                )
+                form.initial["ShippingAgentName"] = (
+                    "" if Dto.ShippingAgent == None else Dto.ShippingAgent.Name
+                )
+                form.initial["ConsigneeID"] = (
+                    None if Dto.Consignee == None else Dto.Consignee.ID
+                )
+                form.initial["ConsigneeName"] = (
+                    "" if Dto.Consignee == None else Dto.Consignee.Name
+                )
         except Exception as e:
             print(e)
 
@@ -78,11 +106,15 @@ class importBL:
                 Dto = importRepo.LoadContainer(ContainerID)
                 form.initial["ContainerID"] = Dto.ID
                 form.initial["No"] = Dto.No
-                form.initial["OblID"] = Dto.Obl.ID
-                form.initial["OblNo"] = Dto.Obl.No
+                form.initial["OblID"] = None if Dto.Obl == None else Dto.Obl.ID
+                form.initial["OblNo"] = "" if Dto.Obl == None else Dto.Obl.No
                 form.initial["SealNo"] = Dto.SealNo
-                form.initial["ContainerSizeID"] = Dto.ContainerSize.ID
-                form.initial["ContainerSizeName"] = Dto.ContainerSize.Name
+                form.initial["ContainerSizeID"] = (
+                    None if Dto.ContainerSize == None else Dto.ContainerSize.ID
+                )
+                form.initial["ContainerSizeName"] = (
+                    "" if Dto.ContainerSize == None else Dto.ContainerSize.Name
+                )
                 form.initial["Type"] = Dto.Type
                 form.initial["Status"] = Dto.Status
                 form.initial["ShipType"] = Dto.ShipType
@@ -128,18 +160,30 @@ class importBL:
                 Dto = importRepo.LoadHbl(HblID)
                 form.initial["HblID"] = Dto.ID
                 form.initial["No"] = Dto.No
-                form.initial["OblID"] = Dto.Obl.ID
-                form.initial["OblNo"] = Dto.Obl.No
-                form.initial["ContainerID"] = Dto.Container.ID
-                form.initial["ContainerNo"] = Dto.Container.No
-                form.initial["ConsigneeID"] = Dto.Consignee.ID
-                form.initial["ConsigneeName"] = Dto.Consignee.Name
-                form.initial["ClassID"] = Dto.Class.ID
-                form.initial["ClassFullName"] = Dto.Class.FullName
-                form.initial["UnitID"] = Dto.Unit.ID
-                form.initial["UnitShortName"] = Dto.Unit.ShortName
+                form.initial["OblID"] = None if Dto.Obl == None else Dto.Obl.ID
+                form.initial["OblNo"] = "" if Dto.Obl == None else Dto.Obl.No
+                form.initial["ContainerID"] = (
+                    None if Dto.Container == None else Dto.Container.ID
+                )
+                form.initial["ContainerNo"] = (
+                    "" if Dto.Container == None else Dto.Container.No
+                )
+                form.initial["ConsigneeID"] = (
+                    None if Dto.Consignee == None else Dto.Consignee.ID
+                )
+                form.initial["ConsigneeName"] = (
+                    "" if Dto.Consignee == None else Dto.Consignee.Name
+                )
+                form.initial["ClassID"] = None if Dto.Class == None else Dto.Class.ID
+                form.initial["ClassFullName"] = (
+                    "" if Dto.Class == None else Dto.Class.FullName
+                )
+                form.initial["UnitID"] = None if Dto.Unit == None else Dto.Unit.ID
+                form.initial["UnitShortName"] = (
+                    "" if Dto.Unit == None else Dto.Unit.ShortName
+                )
                 form.initial["PortID"] = None if Dto.Port == None else Dto.Port.ID
-                form.initial["PortName"] = None if Dto.Port == None else Dto.Port.Name
+                form.initial["PortName"] = "" if Dto.Port == None else Dto.Port.Name
                 form.initial["Quantity"] = Dto.Quantity
                 form.initial["Weight"] = Dto.Weight
                 form.initial["Volume"] = Dto.Volume
@@ -204,17 +248,31 @@ class importBL:
                 form.initial["CustomsHold"] = 0
             else:
                 Dto = importRepo.LoadHbl(HblID)
-                form.initial["ContainerID"] = Dto.Container.ID
-                form.initial["ContainerNo"] = Dto.Container.No
-                form.initial["UnstuffDate"] = Dto.Container.UnstuffDate
-                form.initial["IsUnStuff"] = Dto.Container.IsUnStuff
+                form.initial["ContainerID"] = (
+                    None if Dto.Container == None else Dto.Container.ID
+                )
+                form.initial["ContainerNo"] = (
+                    "" if Dto.Container == None else Dto.Container.No
+                )
+                form.initial["UnstuffDate"] = (
+                    None if Dto.Container == None else Dto.Container.UnstuffDate
+                )
+                form.initial["IsUnStuff"] = (
+                    False if Dto.Container == None else Dto.Container.IsUnStuff
+                )
                 form.initial["HblID"] = Dto.ID
                 form.initial["No"] = Dto.No
-                form.initial["ConsigneeName"] = Dto.Consignee.Name
-                form.initial["ClassFullName"] = Dto.Class.FullName
-                form.initial["UnitShortName"] = Dto.Unit.ShortName
+                form.initial["ConsigneeName"] = (
+                    "" if Dto.Consignee == None else Dto.Consignee.Name
+                )
+                form.initial["ClassFullName"] = (
+                    "" if Dto.Class == None else Dto.Class.FullName
+                )
+                form.initial["UnitShortName"] = (
+                    "" if Dto.Unit == None else Dto.Unit.ShortName
+                )
                 form.initial["PortID"] = None if Dto.Port == None else Dto.Port.ID
-                form.initial["PortName"] = None if Dto.Port == None else Dto.Port.Name
+                form.initial["PortName"] = "" if Dto.Port == None else Dto.Port.Name
                 form.initial["Quantity"] = Dto.Quantity
                 form.initial["Weight"] = Dto.Weight
                 form.initial["Volume"] = Dto.Volume
