@@ -5,8 +5,8 @@ import uuid
 
 class Country(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    Name = models.CharField(max_length=150, null=True)
-    IsoCode = models.CharField(max_length=2, null=True)
+    Name = models.CharField(max_length=150, null=True, default="")
+    IsoCode = models.CharField(max_length=2, null=True, default="")
     IsActive = models.BooleanField(default=False)
     CreateDate = models.DateTimeField(null=True, default=datetime.today())
     CreateBy = models.UUIDField(null=True)
@@ -19,7 +19,7 @@ class Country(models.Model):
 
 class Term(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    Name = models.CharField(max_length=50, null=True)
+    Name = models.CharField(max_length=50, null=True, default="")
     Type = models.IntegerField()
     IsActive = models.BooleanField(default=False)
     CreateDate = models.DateTimeField(null=True, default=datetime.today())
@@ -33,7 +33,7 @@ class Term(models.Model):
 
 class State(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    Name = models.CharField(max_length=50, null=True)
+    Name = models.CharField(max_length=50, null=True, default="")
     IsActive = models.BooleanField(default=False)
     CreateDate = models.DateTimeField(null=True, default=datetime.today())
     CreateBy = models.UUIDField(null=True)
@@ -47,14 +47,14 @@ class State(models.Model):
 class Customer(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     Name = models.CharField(max_length=250)
-    Pic = models.CharField(max_length=100, null=True, default=None)
-    MobileNo = models.CharField(max_length=25, null=True, default=None)
-    TelNo = models.CharField(max_length=25, null=True, default=None)
-    FaxNo = models.CharField(max_length=25, null=True, default=None)
-    Email = models.CharField(max_length=50, null=True, default=None)
+    Pic = models.CharField(max_length=100, null=True, default="")
+    MobileNo = models.CharField(max_length=25, null=True, default="")
+    TelNo = models.CharField(max_length=25, null=True, default="")
+    FaxNo = models.CharField(max_length=25, null=True, default="")
+    Email = models.CharField(max_length=50, null=True, default="")
     Address = models.TextField()
-    City = models.CharField(max_length=100, null=True, default=None)
-    PostCode = models.IntegerField(default=0)
+    City = models.CharField(max_length=100, null=True, default="")
+    PostCode = models.CharField(max_length=10, null=True, default="")
     State = models.ForeignKey(
         State,
         db_column="StateID",
@@ -80,7 +80,7 @@ class Customer(models.Model):
         default=None,
     )
     LimitAmount = models.DecimalField(
-        max_digits=6, decimal_places=2, null=True, default=0
+        max_digits=18, decimal_places=2, null=True, default=0
     )
     IsAllowInvoice = models.BooleanField(default=False)
     IsAllowDo = models.BooleanField(default=False)

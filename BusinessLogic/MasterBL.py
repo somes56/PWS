@@ -33,12 +33,16 @@ class mstBL:
                 form.initial["Address"] = Dto.Address
                 form.initial["City"] = Dto.City
                 form.initial["PostCode"] = Dto.PostCode
-                form.initial["StateID"] = Dto.State.ID
-                form.initial["StateName"] = Dto.State.Name
-                form.initial["CountryID"] = Dto.Country.ID
-                form.initial["CountryName"] = Dto.Country.Name
-                form.initial["TermID"] = Dto.Term.ID
-                form.initial["TermName"] = Dto.Term.Name
+                form.initial["StateID"] = None if Dto.State == None else Dto.State.ID
+                form.initial["StateName"] = "" if Dto.State == None else Dto.State.Name
+                form.initial["CountryID"] = (
+                    None if Dto.Country == None else Dto.Country.ID
+                )
+                form.initial["CountryName"] = (
+                    "" if Dto.Country == None else Dto.Country.Name
+                )
+                form.initial["TermID"] = None if Dto.Term == None else Dto.Term.ID
+                form.initial["TermName"] = "" if Dto.Term == None else Dto.Term.Name
                 form.initial["LimitAmount"] = Dto.LimitAmount
                 form.initial["IsAllowInvoice"] = Dto.IsAllowInvoice
                 form.initial["IsAllowDo"] = Dto.IsAllowDo
@@ -86,8 +90,12 @@ class mstBL:
                 form.initial["PortID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
-                form.initial["CountryID"] = Dto.Country.ID
-                form.initial["CountryName"] = Dto.Country.Name
+                form.initial["CountryID"] = (
+                    None if Dto.Country == None else Dto.Country.ID
+                )
+                form.initial["CountryName"] = (
+                    "" if Dto.Country == None else Dto.Country.Name
+                )
                 form.initial["IsSpecial"] = Dto.IsSpecial
         except Exception as e:
             print(e)
@@ -181,12 +189,20 @@ class mstBL:
                 form.initial["VesselID"] = Dto.ID
                 form.initial["Code"] = Dto.Code
                 form.initial["Name"] = Dto.Name
-                form.initial["PortOperatorID"] = Dto.PortOperator.ID
-                form.initial["PortOperatorName"] = Dto.PortOperator.Name
-                form.initial["PsaID"] = Dto.Psa.ID
-                form.initial["PsaName"] = Dto.Psa.Name
-                form.initial["ShippingAgentID"] = Dto.ShippingAgent.ID
-                form.initial["ShippingAgentName"] = Dto.ShippingAgent.Name
+                form.initial["PortOperatorID"] = (
+                    None if Dto.PortOperator == None else Dto.PortOperator.ID
+                )
+                form.initial["PortOperatorName"] = (
+                    "" if Dto.PortOperator == None else Dto.PortOperator.Name
+                )
+                form.initial["PsaID"] = None if Dto.Psa == None else Dto.Psa.ID
+                form.initial["PsaName"] = "" if Dto.Psa == None else Dto.Psa.Name
+                form.initial["ShippingAgentID"] = (
+                    None if Dto.ShippingAgent == None else Dto.ShippingAgent.ID
+                )
+                form.initial["ShippingAgentName"] = (
+                    "" if Dto.ShippingAgent == None else Dto.ShippingAgent.Name
+                )
         except Exception as e:
             print(e)
 
@@ -255,7 +271,7 @@ class mstBL:
 
         return form
 
-    def InitialiseErrorItemFormModel(_Form):
+    def InitialiseErrorClassFormModel(_Form):
         form = ClassFormModel()
 
         try:
@@ -281,8 +297,10 @@ class mstBL:
                 form.initial["No"] = Dto.No
                 form.initial["ShipCallNo"] = Dto.ShipCallNo
                 form.initial["Eta"] = Dto.Eta
-                form.initial["VesselID"] = Dto.Vessel.ID
-                form.initial["VesselName"] = Dto.Vessel.Name
+                form.initial["VesselID"] = None if Dto.Vessel == None else Dto.Vessel.ID
+                form.initial["VesselName"] = (
+                    "" if Dto.Vessel == None else Dto.Vessel.Name
+                )
 
         except Exception as e:
             print(e)

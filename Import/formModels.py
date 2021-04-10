@@ -118,8 +118,8 @@ class HblFormModel(forms.ModelForm):
     PortID = forms.UUIDField(required=False)
     PortName = forms.CharField(max_length=250, required=False)
     Quantity = forms.IntegerField(required=False)
-    Weight = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
-    Volume = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
+    Weight = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    Volume = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
     Transhipment = forms.ChoiceField(
         choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
     )
@@ -165,8 +165,8 @@ class UnstuffContainerFormModel(forms.ModelForm):
     PortID = forms.UUIDField(required=False)
     PortName = forms.CharField(max_length=250, required=False)
     Quantity = forms.IntegerField(required=False)
-    Weight = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
-    Volume = forms.DecimalField(max_digits=6, decimal_places=3, required=False)
+    Weight = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    Volume = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
     Transhipment = forms.ChoiceField(
         choices=[(0, "No"), (1, "Yes")], widget=forms.RadioSelect()
     )
