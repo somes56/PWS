@@ -160,8 +160,8 @@ class Hbl(models.Model):
         default=None,
     )
     Quantity = models.IntegerField(default=0)
-    Weight = models.DecimalField(max_digits=6, decimal_places=3, null=True, default=0)
-    Volume = models.DecimalField(max_digits=6, decimal_places=3, null=True, default=0)
+    Weight = models.DecimalField(max_digits=18, decimal_places=3, null=True, default=0)
+    Volume = models.DecimalField(max_digits=18, decimal_places=3, null=True, default=0)
     Transhipment = models.IntegerField(default=0)
     InwardSurvey = models.IntegerField(default=0)
     MarkDesc = models.CharField(max_length=250, null=True, default="")

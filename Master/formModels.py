@@ -29,7 +29,7 @@ class CustomerFormModel(forms.ModelForm):
     CountryName = forms.CharField(max_length=50, required=False)
     TermID = forms.UUIDField(required=False)
     TermName = forms.CharField(max_length=50, required=False)
-    LimitAmount = forms.DecimalField(max_digits=6, decimal_places=2, required=False)
+    LimitAmount = forms.DecimalField(max_digits=18, decimal_places=2, required=False)
     IsAllowInvoice = forms.BooleanField(required=False)
     IsAllowDo = forms.BooleanField(required=False)
 
