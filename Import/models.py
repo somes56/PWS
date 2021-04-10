@@ -81,7 +81,7 @@ class Container(models.Model):
         null=True,
         default=None,
     )
-    SealNo = models.CharField(max_length=50, null=True, default=None)
+    SealNo = models.CharField(max_length=50, null=True, default="")
     ContainerSize = models.ForeignKey(
         ContainerSize,
         db_column="ContainerSizeID",

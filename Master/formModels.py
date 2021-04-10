@@ -22,7 +22,7 @@ class CustomerFormModel(forms.ModelForm):
     Email = forms.CharField(max_length=50, required=False)
     Address = forms.CharField(widget=forms.Textarea(), required=False)
     City = forms.CharField(max_length=100, required=False)
-    PostCode = forms.IntegerField(required=False)
+    PostCode = forms.CharField(max_length=10, required=False)
     StateID = forms.UUIDField(required=False)
     StateName = forms.CharField(max_length=50, required=False)
     CountryID = forms.UUIDField(required=False)
