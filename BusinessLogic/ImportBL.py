@@ -3,8 +3,14 @@ from Import.formModels import (
     ContainerFormModel,
     HblFormModel,
     UnstuffContainerFormModel,
+    InvoiceFormModel,
 )
+from Import.dtos import DefaultInvoiceItemUpsertDto
+from datetime import datetime
+from django.utils import timezone
 from DataAccess.ImportRepo import importRepo
+from DataAccess.MasterRepo import masterRepo
+import math
 
 
 class importBL:
@@ -334,3 +340,276 @@ class importBL:
             print(e)
 
         return form
+
+    def InitialiseInvoiceFormModel(InvoiceID=None):
+        form = InvoiceFormModel()
+
+        try:
+            if InvoiceID == None:
+                form.initial["InvoiceID"] = None
+                form.initial["IssueDate"] = datetime.now(tz=timezone.utc)
+                form.initial["PaymentType"] = 0
+            else:
+                Dto = importRepo.LoadInvoice(InvoiceID)
+                form.initial["InvoiceID"] = Dto.ID
+                form.initial["No"] = Dto.No
+                form.initial["IssueDate"] = Dto.IssueDate
+                form.initial["HblID"] = None if Dto.Hbl == None else Dto.Hbl.ID
+                form.initial["HblNo"] = "" if Dto.Hbl == None else Dto.Hbl.No
+                form.initial["OblNo"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else Dto.Hbl.Obl.No
+                )
+                form.initial["VoyageNo"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else ""
+                    if Dto.Hbl.Obl.Voyage == None
+                    else Dto.Hbl.Obl.Voyage.No
+                )
+                form.initial["ShipCallNo"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else ""
+                    if Dto.Hbl.Obl.Voyage == None
+                    else Dto.Hbl.Obl.Voyage.ShipCallNo
+                )
+                form.initial["Eta"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else ""
+                    if Dto.Hbl.Obl.Voyage == None
+                    else Dto.Hbl.Obl.Voyage.Eta
+                )
+                form.initial["VesselName"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else ""
+                    if Dto.Hbl.Obl.Voyage == None
+                    else ""
+                    if Dto.Hbl.Obl.Voyage.Vessel == None
+                    else Dto.Hbl.Obl.Voyage.Vessel.Name
+                )
+                form.initial["LoadPortName"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else ""
+                    if Dto.Hbl.Obl.LoadPort == None
+                    else Dto.Hbl.Obl.LoadPort.Name
+                )
+                form.initial["UnLoadPortName"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Obl == None
+                    else ""
+                    if Dto.Hbl.Obl.UnloadPort == None
+                    else Dto.Hbl.Obl.UnloadPort.Name
+                )
+                form.initial["StorageDay"] = Dto.StorageDay
+                form.initial["UnstuffDate"] = (
+                    ""
+                    if Dto.Hbl == None
+                    else ""
+                    if Dto.Hbl.Container == None
+                    else Dto.Hbl.Container.UnstuffDate
+                )
+                form.initial["IsPartial"] = Dto.IsPartial
+                form.initial["IssuedQuantity"] = Dto.IssuedQuantity
+                form.initial["IssuedWeight"] = Dto.IssuedWeight
+                form.initial["IssuedVolume"] = Dto.IssuedVolume
+                form.initial["InitialQuantity"] = (
+                    0 if Dto.Hbl == None else Dto.Hbl.Quantity
+                )
+                form.initial["InitialWeight"] = 0 if Dto.Hbl == None else Dto.Hbl.Weight
+                form.initial["InitialVolume"] = 0 if Dto.Hbl == None else Dto.Hbl.Volume
+                form.initial["BalanceQuantity"] = Dto.BalanceQuantity
+                form.initial["BalanceWeight"] = Dto.BalanceWeight
+                form.initial["BalanceVolume"] = Dto.BalanceVolume
+                form.initial["LocationDesc"] = (
+                    "" if Dto.Hbl == None else Dto.Hbl.LocationDesc
+                )
+                form.initial["PackageDesc"] = (
+                    "" if Dto.Hbl == None else Dto.Hbl.PackageDesc
+                )
+                form.initial["ConsigneeID"] = (
+                    None if Dto.Consignee == None else Dto.Consignee.ID
+                )
+                form.initial["ConsigneeName"] = (
+                    "" if Dto.Consignee == None else Dto.Consignee.Name
+                )
+                form.initial["PaymentType"] = Dto.PaymentType
+                form.initial["RefNo"] = Dto.RefNo
+                form.initial["IidNo"] = Dto.IidNo
+
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseErrorInvoiceFormModel(_Form):
+        form = InvoiceFormModel()
+
+        try:
+            form.initial["InvoiceID"] = _Form["InvoiceID"]
+            form.initial["No"] = _Form["No"]
+            form.initial["IssueDate"] = _Form["IssueDate"]
+            form.initial["HblID"] = _Form["HblID"]
+            form.initial["HblNo"] = _Form["HblNo"]
+            form.initial["OblNo"] = _Form["OblNo"]
+            form.initial["VoyageNo"] = _Form["VoyageNo"]
+            form.initial["ShipCallNo"] = _Form["ShipCallNo"]
+            form.initial["Eta"] = _Form["Eta"]
+            form.initial["VesselName"] = _Form["VesselName"]
+            form.initial["LoadPortName"] = _Form["LoadPortName"]
+            form.initial["UnLoadPortName"] = _Form["UnLoadPortName"]
+            form.initial["StorageDay"] = _Form["StorageDay"]
+            form.initial["UnstuffDate"] = _Form["UnstuffDate"]
+            form.initial["IsPartial"] = _Form["IsPartial"]
+            form.initial["IssuedQuantity"] = _Form["IssuedQuantity"]
+            form.initial["IssuedWeight"] = _Form["IssuedWeight"]
+            form.initial["IssuedVolume"] = _Form["IssuedVolume"]
+            form.initial["InitialQuantity"] = _Form["InitialQuantity"]
+            form.initial["InitialWeight"] = _Form["InitialWeight"]
+            form.initial["InitialVolume"] = _Form["InitialVolume"]
+            form.initial["BalanceQuantity"] = _Form["BalanceQuantity"]
+            form.initial["BalanceWeight"] = _Form["BalanceWeight"]
+            form.initial["BalanceVolume"] = _Form["BalanceVolume"]
+            form.initial["LocationDesc"] = _Form["LocationDesc"]
+            form.initial["PackageDesc"] = _Form["PackageDesc"]
+            form.initial["ConsigneeID"] = _Form["ConsigneeID"]
+            form.initial["ConsigneeName"] = _Form["ConsigneeName"]
+            form.initial["PaymentType"] = _Form["PaymentType"]
+            form.initial["RefNo"] = _Form["RefNo"]
+            form.initial["IidNo"] = _Form["IidNo"]
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def UpsertDefaultInvoiceItem(InvoiceID=None):
+        rtn = False
+        SysBadMsg = None
+
+        InvoiceDto = None
+        FloorWeight = 0
+        FloorVolume = 0
+        FractionWeight = 0
+        FractionVolume = 0
+        ItemQuantity = 0
+        ClassType = None
+        DefaultItemCode = None
+        DefaultItemDto = None
+        TotalInvoiceAmount = 0
+        UpsertResult = 0
+
+        try:
+            InvoiceDto = importRepo.LoadInvoice(InvoiceID)
+
+            FloorWeight = math.floor(InvoiceDto.IssuedWeight / 1000)
+            FractionWeight = (InvoiceDto.IssuedWeight / 1000) - FloorWeight
+            FloorWeight += 1 if FractionWeight != 0 else 0
+
+            FloorVolume = math.floor(InvoiceDto.IssuedVolume)
+            FractionVolume = InvoiceDto.IssuedVolume - FloorVolume
+            FloorVolume += 1 if FractionVolume != 0 else 0
+
+            ItemQuantity = FloorWeight if FloorWeight >= FloorVolume else FloorVolume
+
+            ClassType = (
+                "NORMAL"
+                if InvoiceDto.Hbl.Class.ShortName == "GENERAL"
+                else "DANGEROUS"
+                if InvoiceDto.Hbl.Class.ShortName == "DG CLS I"
+                else "DANGEROUS"
+                if InvoiceDto.Hbl.Class.ShortName == "DG CLS II"
+                else "DANGEROUS"
+                if InvoiceDto.Hbl.Class.ShortName == "DG CLS III"
+                else None
+            )
+
+            if ClassType == "NORMAL" or ClassType == "DANGEROUS":
+                DefaultItemCode = "%s%s%s" % (
+                    "N" if ClassType == "NORMAL" else "D",
+                    "D3" if InvoiceDto.StorageDay <= 3 else "D4",
+                    "Q1" if ItemQuantity <= 1 else "Q2",
+                )
+
+                DefaultItemDto = masterRepo.AdvSearchDefaultItemByAccountTypeCode(
+                    "IN", DefaultItemCode
+                )
+
+                importRepo.DeleteDefaultInvoiceItem(InvoiceID)
+
+                importRepo.UpdateInvoiceAmount(InvoiceID)
+
+                for dto in DefaultItemDto:
+                    UpsertDto = DefaultInvoiceItemUpsertDto()
+                    UpsertDto.InvoiceID = str(InvoiceID)
+                    UpsertDto.ItemID = str(dto.Item.ID)
+                    UpsertDto.ItemQuantity = ItemQuantity
+                    UpsertDto.ItemUnitAmount = dto.Amount
+                    UpsertDto.ItemAmount = (
+                        dto.Amount * ItemQuantity * InvoiceDto.StorageDay
+                        if dto.Item.Name == "STORAGE CHARGES"
+                        else dto.Amount * ItemQuantity * 1
+                    )
+                    TotalInvoiceAmount += UpsertDto.ItemAmount
+                    UpsertResult += (
+                        1
+                        if importRepo.UpsertDefaultInvoiceItem(UpsertDto) == True
+                        else 0
+                    )
+
+                if UpsertResult == len(DefaultItemDto):
+                    importRepo.UpdateInvoiceAmount(InvoiceID)
+                    rtn = True
+                else:
+                    SysBadMsg = "One or more than one default item(s) failed to add"
+
+            else:
+                SysBadMsg = "%s is not a General or Dangerous class" % InvoiceDto.Hbl.No
+
+        except Exception as e:
+            print(e)
+            SysBadMsg = e
+
+        return {"rtn": rtn, "SysBadMsg": SysBadMsg}
+
+    def UpsertInvoiceItem(
+        InvoiceID, InvoiceItemID, ItemID, ItemQuantity, ItemUnitAmount
+    ):
+        rtn = False
+
+        rtn = importRepo.UpsertInvoiceItem(
+            InvoiceID, InvoiceItemID, ItemID, ItemQuantity, ItemUnitAmount
+        )
+
+        importRepo.UpdateInvoiceAmount(InvoiceID)
+
+        return rtn
+
+    def DeleteInvoiceItem(InvoiceItemID):
+        rtn = False
+        InvoiceItemDto = None
+
+        InvoiceItemDto = importRepo.LoadInvoiceItem(InvoiceItemID)
+
+        rtn = importRepo.DeleteInvoiceItem(InvoiceItemID)
+
+        importRepo.UpdateInvoiceAmount(InvoiceItemDto.Invoice.ID)
+
+        return rtn

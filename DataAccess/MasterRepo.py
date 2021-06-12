@@ -11,11 +11,15 @@ from Master.models import (
     Class,
     Voyage,
     Operator,
+    SysCompany,
+    SysRunningNoHist,
+    DefaultItem,
 )
 from datetime import datetime
 from django.db.models import Q
 from django.utils import timezone
 import requests
+import uuid
 
 
 class masterRepo:
@@ -147,6 +151,33 @@ class masterRepo:
             print(e)
 
         return Units
+
+    def AdvSearchItem(SearchBy=""):
+        Items = []
+
+        try:
+            Items = Item.objects.filter(
+                Q(Code__icontains=SearchBy) | Q(Name__icontains=SearchBy),
+                IsActive=True,
+            ).order_by("Name")
+        except Exception as e:
+            print(e)
+
+        return Items
+
+    def AdvSearchDefaultItemByAccountTypeCode(AccountType="", Code=""):
+        DefaultItems = []
+
+        try:
+            DefaultItems = DefaultItem.objects.filter(
+                AccountType=AccountType,
+                Code=Code,
+                IsActive=True,
+            )
+        except Exception as e:
+            print(e)
+
+        return DefaultItems
 
     def PartialCustomerList(SearchBy=""):
         Customers = []
@@ -352,6 +383,32 @@ class masterRepo:
             print(e)
 
         return OperatorDto
+
+    def LoadSysCompany(SysCompanyID):
+        SysCompanyDto = SysCompany()
+
+        try:
+            SysCompanyDto = SysCompany.objects.get(ID=SysCompanyID, IsActive=True)
+        except Exception as e:
+            print(e)
+        return SysCompanyDto
+
+    def LoadSysRunningNoHist(SysCompanyID, AccountType, Year, Month, Day):
+        SysRunningNoHistDto = None
+
+        try:
+            SysRunningNoHistDto = SysRunningNoHist.objects.get(
+                Company__ID=SysCompanyID,
+                AccountType=AccountType,
+                LastYear=Year,
+                LastMonth=Month,
+                LastDay=Day,
+                IsActive=True,
+            )
+        except Exception as e:
+            print(e)
+
+        return SysRunningNoHistDto
 
     def UpsertCountry():
         rtn = False
@@ -804,6 +861,52 @@ class masterRepo:
             print(e)
 
         return {"rtn": rtn, "OperatorID": OperatorID}
+
+    def UpsertSysRunningNoHist(Dto):
+        rtn = False
+        SysRunningNoHistID = None
+        SysCompanyDto = None
+        UpsertDto = None
+
+        try:
+            SysCompanyDto = SysCompany.objects.get(ID=uuid.UUID(Dto.CompanyID))
+
+            if Dto.SysRunningNoHistID == None:
+
+                UpsertDto = SysRunningNoHist.objects.create(
+                    Company=SysCompanyDto,
+                    AccountType=Dto.AccountType,
+                    RollNo=Dto.RollNo,
+                    LastYear=Dto.LastYear,
+                    LastMonth=Dto.LastMonth,
+                    LastDay=Dto.LastDay,
+                    IsActive=True,
+                    CreateDate=datetime.now(tz=timezone.utc),
+                    CreateBy=None,
+                    UpdateDate=datetime.now(tz=timezone.utc),
+                    UpdateBy=None,
+                )
+
+                if UpsertDto.ID:
+                    rtn = True
+                    SysRunningNoHistID = UpsertDto.ID
+
+            else:
+                UpsertDto = SysRunningNoHist.objects.get(
+                    ID=uuid.UUID(Dto.SysRunningNoHistID)
+                )
+                UpsertDto.RollNo = Dto.RollNo
+                UpsertDto.IsActive = True
+                UpsertDto.UpdateDate = datetime.now(tz=timezone.utc)
+                UpsertDto.UpdateBy = None
+                UpsertDto.save()
+                rtn = True
+                SysRunningNoHistID = Dto.SysRunningNoHistID
+
+        except Exception as e:
+            print(e)
+
+        return {"rtn": rtn, "SysRunningNoHistID": SysRunningNoHistID}
 
     def DeleteCustomer(CustomerID):
         rtn = False

@@ -35,7 +35,7 @@ def PartialCustomerList(request, SearchBy=""):
     except PageNotAnInteger:
         CustomerPaginator = _Paginator.page(1)
     except EmptyPage:
-        CustomerPaginator = _Paginator.page(paginator.num_pages)
+        CustomerPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialCustomerList.html", {"Customers": CustomerPaginator})
 
@@ -135,7 +135,7 @@ def PartialPortList(request, SearchBy=""):
     except PageNotAnInteger:
         PortPaginator = _Paginator.page(1)
     except EmptyPage:
-        PortPaginator = _Paginator.page(paginator.num_pages)
+        PortPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialPortList.html", {"Ports": PortPaginator})
 
@@ -225,7 +225,7 @@ def PartialUnitList(request, SearchBy=""):
     except PageNotAnInteger:
         UnitPaginator = _Paginator.page(1)
     except EmptyPage:
-        UnitPaginator = _Paginator.page(paginator.num_pages)
+        UnitPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialUnitList.html", {"Units": UnitPaginator})
 
@@ -315,7 +315,7 @@ def PartialContainerSizeList(request, SearchBy=""):
     except PageNotAnInteger:
         ContainerSizePaginator = _Paginator.page(1)
     except EmptyPage:
-        ContainerSizePaginator = _Paginator.page(paginator.num_pages)
+        ContainerSizePaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(
         request,
@@ -423,7 +423,7 @@ def PartialVesselList(request, SearchBy=""):
     except PageNotAnInteger:
         VesselPaginator = _Paginator.page(1)
     except EmptyPage:
-        VesselPaginator = _Paginator.page(paginator.num_pages)
+        VesselPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialVesselList.html", {"Vessels": VesselPaginator})
 
@@ -515,7 +515,7 @@ def PartialItemList(request, SearchBy=""):
     except PageNotAnInteger:
         ItemPaginator = _Paginator.page(1)
     except EmptyPage:
-        ItemPaginator = _Paginator.page(paginator.num_pages)
+        ItemPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialItemList.html", {"Items": ItemPaginator})
 
@@ -605,7 +605,7 @@ def PartialClassList(request, SearchBy=""):
     except PageNotAnInteger:
         ClassPaginator = _Paginator.page(1)
     except EmptyPage:
-        ClassPaginator = _Paginator.page(paginator.num_pages)
+        ClassPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialClassList.html", {"Classes": ClassPaginator})
 
@@ -695,7 +695,7 @@ def PartialVoyageList(request, SearchBy=""):
     except PageNotAnInteger:
         VoyagePaginator = _Paginator.page(1)
     except EmptyPage:
-        VoyagePaginator = _Paginator.page(paginator.num_pages)
+        VoyagePaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialVoyageList.html", {"Voyages": VoyagePaginator})
 
@@ -787,7 +787,7 @@ def PartialOperatorList(request, SearchBy=""):
     except PageNotAnInteger:
         OperatorPaginator = _Paginator.page(1)
     except EmptyPage:
-        OperatorPaginator = _Paginator.page(paginator.num_pages)
+        OperatorPaginator = _Paginator.page(_Paginator.num_pages)
 
     return render(request, "PartialOperatorList.html", {"Operators": OperatorPaginator})
 

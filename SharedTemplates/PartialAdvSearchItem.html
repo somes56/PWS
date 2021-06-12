@@ -1,0 +1,18 @@
+<table class="table">
+    <tr>
+        <th style="width:10%">Code</th>
+        <th style="width:30%">Name</th>
+        <th style="width:15%"></th>
+    </tr>
+
+
+    {% for Item in Items %}
+    <tr>
+        <td>{{ Item.Code }}</td>
+        <td>{{ Item.Name }}</td>
+        <td><button type="button" onclick="AdvSearchSelTwo('{{ Item.ID }}', '{{ Item.Name }}');">select</button>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>

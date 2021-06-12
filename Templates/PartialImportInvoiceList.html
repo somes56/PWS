@@ -1,0 +1,51 @@
+{% if Invoices.has_other_pages %}
+<ul class="pagination pagination-sm" style="float:right;">
+    {% if Invoices.has_previous %}
+    <li><a onclick="PartialInvoiceList('{{ Invoices.previous_page_number }}')">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in Invoices.paginator.page_range %}
+    {% if Invoices.number == i %}
+    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li><a onclick="PartialInvoiceList('{{ i }}')">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if Invoices.has_next %}
+    <li><a onclick="PartialInvoiceList('{{ Invoices.next_page_number }}')">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>No</th>
+            <th>Hbl</th>
+            <th>Issued Date</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for Invoice in Invoices %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Invoice.ID }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash"
+                    onclick="DeleteInvoice('{{ Invoice.ID }}', '{{ Invoice.No }}')"></span>
+            </td>
+            <td>{{ Invoice.No }}</td>
+            <td>{{ Invoice.Hbl.No }}</td>
+            <td>{{ Invoice.IssueDate|date:"d/m/Y" }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

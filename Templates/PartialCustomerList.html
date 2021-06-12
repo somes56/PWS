@@ -1,52 +1,53 @@
 {% if Customers.has_other_pages %}
 <ul class="pagination pagination-sm" style="float:right;">
   {% if Customers.has_previous %}
-    <li><a onclick="PartialCustomerList('{{ Customers.previous_page_number }}')">&laquo;</a></li>
+  <li><a onclick="PartialCustomerList('{{ Customers.previous_page_number }}')">&laquo;</a></li>
   {% else %}
-    <li class="disabled"><span>&laquo;</span></li>
+  <li class="disabled"><span>&laquo;</span></li>
   {% endif %}
   {% for i in Customers.paginator.page_range %}
-    {% if Customers.number == i %}
-      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-    {% else %}
-      <li><a onclick="PartialCustomerList('{{ i }}')">{{ i }}</a></li>
-    {% endif %}
+  {% if Customers.number == i %}
+  <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+  {% else %}
+  <li><a onclick="PartialCustomerList('{{ i }}')">{{ i }}</a></li>
+  {% endif %}
   {% endfor %}
   {% if Customers.has_next %}
-    <li><a onclick="PartialCustomerList('{{ Customers.next_page_number }}')">&raquo;</a></li>
+  <li><a onclick="PartialCustomerList('{{ Customers.next_page_number }}')">&raquo;</a></li>
   {% else %}
-    <li class="disabled"><span>&raquo;</span></li>
+  <li class="disabled"><span>&raquo;</span></li>
   {% endif %}
 </ul>
 {% endif %}
 
 <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Action</th>
-            <th>Name</th>
-            <th>Contact Person</th>
-            <th>Tel No</th>
-            <th>Mobile No</th>
-        </tr>
-    </thead>
-    <tbody>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Name</th>
+      <th>Contact Person</th>
+      <th>Tel No</th>
+      <th>Mobile No</th>
+    </tr>
+  </thead>
+  <tbody>
 
-        {% for Customer in Customers %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>
-                <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Customer.ID }}')"></span>
-                <span>&nbsp;</span>
-                <span class="glyphicon glyphicon-trash" onclick="DeleteCustomer('{{ Customer.ID }}', '{{ Customer.Name }}')"></span>
-            </td>
-            <td>{{ Customer.Name }}</td>
-            <td>{{ Customer.Pic }}</td>
-            <td>{{ Customer.TelNo }}</td>
-            <td>{{ Customer.MobileNo }}</td>
-        </tr>
-        {% endfor %}
-            
-    </tbody>
+    {% for Customer in Customers %}
+    <tr>
+      <td>{{ forloop.counter0|add:Customers.start_index }}</td>
+      <td>
+        <span class="glyphicon glyphicon-edit" onclick="GoToEditPage('{{ Customer.ID }}')"></span>
+        <span>&nbsp;</span>
+        <span class="glyphicon glyphicon-trash"
+          onclick="DeleteCustomer('{{ Customer.ID }}', '{{ Customer.Name }}')"></span>
+      </td>
+      <td>{{ Customer.Name }}</td>
+      <td>{{ Customer.Pic }}</td>
+      <td>{{ Customer.TelNo }}</td>
+      <td>{{ Customer.MobileNo }}</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
 </table>

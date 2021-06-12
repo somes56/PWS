@@ -67,5 +67,53 @@ urlpatterns = [
         views.PartialUnstuffContainerCompletedList,
         name="PartialUnstuffContainerCompletedList",
     ),
-    path("UnstuffContainerForm/<uuid:ContainerID>/", views.UnstuffContainerForm, name="UnstuffContainerForm"),
+    path(
+        "UnstuffContainerForm/<uuid:ContainerID>/",
+        views.UnstuffContainerForm,
+        name="UnstuffContainerForm",
+    ),
+    path("InvoiceList", views.InvoiceList, name="InvoiceList"),
+    path("PartialInvoiceList", views.PartialInvoiceList, name="PartialInvoiceList"),
+    path(
+        "PartialInvoiceList/<str:SearchBy>/",
+        views.PartialInvoiceList,
+        name="PartialInvoiceList",
+    ),
+    path(
+        "PartialInvoiceItemList",
+        views.PartialInvoiceItemList,
+        name="PartialInvoiceItemList",
+    ),
+    path(
+        "PartialInvoiceItemList/<uuid:InvoiceID>/",
+        views.PartialInvoiceItemList,
+        name="PartialInvoiceItemList",
+    ),
+    path("InvoiceForm", views.InvoiceForm, name="InvoiceForm"),
+    path("InvoiceForm/<uuid:InvoiceID>/", views.InvoiceForm, name="InvoiceForm"),
+    path(
+        "DeleteInvoice/<uuid:InvoiceID>/<str:DeleteRemark>",
+        views.DeleteInvoice,
+        name="DeleteInvoice",
+    ),
+    path(
+        "UpsertInvoiceItem/<uuid:InvoiceID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/",
+        views.UpsertInvoiceItem,
+        name="UpsertInvoiceItem",
+    ),
+    path(
+        "UpsertInvoiceItem/<uuid:InvoiceID>/<uuid:InvoiceItemID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/",
+        views.UpsertInvoiceItem,
+        name="UpsertInvoiceItem",
+    ),
+    path(
+        "DeleteInvoiceItem/<uuid:InvoiceItemID>/",
+        views.DeleteInvoiceItem,
+        name="DeleteInvoiceItem",
+    ),
+    path(
+        "UpsertDefaultInvoiceItem/<uuid:InvoiceID>/",
+        views.UpsertDefaultInvoiceItem,
+        name="UpsertDefaultInvoiceItem",
+    ),
 ]

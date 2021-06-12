@@ -139,7 +139,7 @@ function SubmitValidation() {
         i = i + 1;
     }
 
-    if ($('#PortID').val() === "" || $('#PortName').val() === "") {
+    if (parseInt($('input[name="Transhipment"]:checked').val()) === 1 && ($('#PortID').val() === "" || $('#PortName').val() === "")) {
         msg[i] = "Port is required.";
         i = i + 1;
     }

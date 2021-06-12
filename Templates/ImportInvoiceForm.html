@@ -1,0 +1,279 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Invoice Form {% endblock title %}
+
+{% block script %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'scripts/ImportInvoiceForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Invoice Registration</h2>
+<hr />
+
+<form method="POST">
+
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.No|attr:"readonly:readonly" id="No" class="form-control input-sm" %}
+                    {% render_field Form.InvoiceID|attr:"hidden:true" id="InvoiceID" %}
+                </div>
+                <label class="col-md-2 control-label">Initial Quantity :</label>
+                <div class="col-md-3">
+                    {% render_field Form.InitialQuantity|attr:"readonly:readonly" id="InitialQuantity" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Issue Date :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.IssueDate|attr:"readonly:readonly" id="IssueDate" class="form-control input-sm" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-calendar" id="btnPickIssueDate"
+                                onclick="$('#InvoiceID').val() === '' ? PickIssueDate() : null"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Initial Weight :</label>
+                <div class="col-md-3">
+                    {% render_field Form.InitialWeight|attr:"readonly:readonly" id="InitialWeight" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Hbl :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.HblNo|attr:"readonly:readonly" id="HblNo" class="form-control input-sm" %}
+                        {% render_field Form.HblID|attr:"hidden:true" id="HblID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchHbl" onclick="$('#InvoiceID').val() === '' ? SearchHbl() : null"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Initial Volume :</label>
+                <div class="col-md-3">
+                    {% render_field Form.InitialVolume|attr:"readonly:readonly" id="InitialVolume" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Obl :</label>
+                <div class="col-md-3">
+                    {% render_field Form.OblNo|attr:"readonly:readonly" id="OblNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Balance Quantity :</label>
+                <div class="col-md-3">
+                    {% render_field Form.BalanceQuantity|attr:"readonly:readonly" id="BalanceQuantity" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Voyage :</label>
+                <div class="col-md-3">
+                    {% render_field Form.VoyageNo|attr:"readonly:readonly" id="VoyageNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Balance Weight :</label>
+                <div class="col-md-3">
+                    {% render_field Form.BalanceWeight|attr:"readonly:readonly" id="BalanceWeight" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Call No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ShipCallNo|attr:"readonly:readonly" id="ShipCallNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Balance Volume :</label>
+                <div class="col-md-3">
+                    {% render_field Form.BalanceVolume|attr:"readonly:readonly" id="BalanceVolume" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Eta :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Eta|attr:"readonly:readonly" id="Eta" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Partial :</label>
+                <div class="col-md-3">
+                    <div class="form-inline">
+                        {% render_field Form.IsPartial id="IsPartial" class="checkbox" onclick="IssuePartial(event.target.checked)" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Vessel :</label>
+                <div class="col-md-3">
+                    {% render_field Form.VesselName|attr:"readonly:readonly" id="VesselName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Quantity :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IssuedQuantity|attr:"readonly:readonly" id="IssuedQuantity" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Load Port :</label>
+                <div class="col-md-3">
+                    {% render_field Form.LoadPortName|attr:"readonly:readonly" id="LoadPortName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Weight :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IssuedWeight|attr:"readonly:readonly" id="IssuedWeight" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">UnLoad Port :</label>
+                <div class="col-md-3">
+                    {% render_field Form.UnLoadPortName|attr:"readonly:readonly" id="UnLoadPortName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Volume :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IssuedVolume|attr:"readonly:readonly" id="IssuedVolume" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Storage Day :</label>
+                <div class="col-md-3">
+                    {% render_field Form.StorageDay|attr:"readonly:readonly" id="StorageDay" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Bill To :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.ConsigneeName|attr:"readonly:readonly" id="ConsigneeName" class="form-control input-sm" %}
+                        {% render_field Form.ConsigneeID|attr:"hidden:true" id="ConsigneeID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchConsignee"
+                                onclick="SearchConsignee();"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Unstuff Date :</label>
+                <div class="col-md-3">
+                    {% render_field Form.UnstuffDate|attr:"readonly:readonly" id="UnstuffDate" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Payment Type :</label>
+                <div class="col-md-4">
+                    {% for radio in Form.PaymentType %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Location Description :</label>
+                <div class="col-md-3">
+                    {% render_field Form.LocationDesc|attr:"readonly:readonly" style="resize:none" id="LocationDesc" rows="5" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Reference No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.RefNo|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="RefNo" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Package Description :</label>
+                <div class="col-md-3">
+                    {% render_field Form.PackageDesc|attr:"readonly:readonly" style="resize:none" id="PackageDesc" rows="5" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">IID No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IidNo|attr:"onkeyup:ConvertUpperCase(event.target.name)" id="IidNo" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Invoice Item</h2>
+            </div>
+        </div>
+        <hr />
+
+        <div id="PartialInvoiceItemListLoading" style="display:none">
+            <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" style="float: right;" onclick="UpsertDefaultInvoiceItem()"><span class="glyphicon glyphicon-plus-sign"></span> Add Default Item</button>
+            </div>
+        </div>
+        
+        <div class="row">&nbsp;</div>
+
+        <div id="PartialInvoiceItemList"></div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}

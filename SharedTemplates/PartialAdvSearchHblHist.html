@@ -1,0 +1,22 @@
+<table class="table">
+    <tr>
+        <th style="width:30%">No</th>
+        <th style="width:30%">Obl</th>
+        <th></th>
+    </tr>
+
+
+    {% for Hbl in Hbls %}
+    <tr>
+        <td>{{ Hbl.1 }}</td>
+        <td>{{ Hbl.8 }}</td>
+        <td><button type="button"
+                onclick="AdvSearchCustomSel('{{ Hbl.0}}', '{{ Hbl.1 }}', '{{ Hbl.8 }}', '{{ Hbl.9 }}', '{{ Hbl.10 }}',
+                                            '{{ Hbl.11 }}', '{{ Hbl.12 }}', '{{ Hbl.13 }}', '{{ Hbl.14 }}', '{{ Hbl.15 }}',
+                                            '{{ Hbl.16 }}', '{{ Hbl.17 }}', '{{ Hbl.18}}', '{{ Hbl.19 }}', '{{ Hbl.2 }}',
+                                            '{{ Hbl.3 }}', '{{ Hbl.4 }}', '{{ Hbl.5 }}', '{{ Hbl.6 }}', '{{ Hbl.7 }}')">select</button>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>

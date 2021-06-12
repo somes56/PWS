@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render
 from DataAccess.MasterRepo import masterRepo
 from DataAccess.ImportRepo import importRepo
@@ -85,3 +86,15 @@ def AdvSearchHblByContainer(request, ContainerID=None, SearchBy=""):
     Hbls = []
     Hbls = importRepo.AdvSearchHblByContainer(ContainerID, SearchBy)
     return render(request, "PartialAdvSearchHblByContainer.html", {"Hbls": Hbls})
+
+
+def AdvSearchHblHist(request, SearchBy=""):
+    Hbls = []
+    Hbls = importRepo.AdvSearchHblHist(SearchBy)
+    return render(request, "PartialAdvSearchHblHist.html", {"Hbls": Hbls})
+
+
+def AdvSearchItem(request, SearchBy=""):
+    Items = []
+    Items = masterRepo.AdvSearchItem(SearchBy)
+    return render(request, "PartialAdvSearchItem.html", {"Items": Items})
