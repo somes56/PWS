@@ -252,3 +252,69 @@ class Operator(models.Model):
 
     class Meta:
         db_table = "mst_Operator"
+
+
+class SysCompany(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Code = models.CharField(max_length=2)  ##HQ,WP,NP
+    Name = models.CharField(max_length=100)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = "sys_Company"
+
+
+class SysRunningNoHist(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Company = models.ForeignKey(
+        SysCompany,
+        db_column="CompanyID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    AccountType = models.CharField(
+        max_length=2
+    )  # Invoice(IN),Credit Note(CN),DebitNote(DN), Export Invoice(EN), Container Shipping Note (CS)
+    RollNo = models.IntegerField(default=0)
+    LastYear = models.IntegerField(default=0)
+    LastMonth = models.IntegerField(default=0)
+    LastDay = models.IntegerField(default=0)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = "sys_RunningNoHist"
+
+
+class DefaultItem(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    AccountType = models.CharField(
+        max_length=2
+    )  # Invoice(IN),Credit Note(CN),DebitNote(DN), Export Invoice(EN), All(AN)
+    Code = models.CharField(max_length=15)
+    Item = models.ForeignKey(
+        Item,
+        db_column="ItemID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    Amount = models.DecimalField(max_digits=18, decimal_places=2, null=True, default=0)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = "mst_DefaultItem"

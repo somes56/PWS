@@ -1,5 +1,5 @@
 from django import forms
-from Import.models import Obl, Container, Hbl
+from Import.models import Obl, Container, Hbl, Invoice, Credit
 
 
 class OblFormModel(forms.ModelForm):
@@ -236,4 +236,141 @@ class UnstuffContainerFormModel(forms.ModelForm):
             "HealthHold",
             "PreventiveHold",
             "CustomsHold",
+        ]
+
+
+class InvoiceFormModel(forms.ModelForm):
+    InvoiceID = forms.UUIDField(required=False)
+    No = forms.CharField(max_length=50, required=False)
+    IssueDate = forms.DateField(required=False)
+    HblID = forms.UUIDField(required=False)
+    HblNo = forms.CharField(max_length=50, required=False)
+    OblNo = forms.CharField(max_length=250, required=False)
+    VoyageNo = forms.CharField(max_length=15, required=False)
+    ShipCallNo = forms.CharField(max_length=15, required=False)
+    Eta = forms.DateField(required=False)
+    VesselName = forms.CharField(max_length=250, required=False)
+    LoadPortName = forms.CharField(max_length=250, required=False)
+    UnLoadPortName = forms.CharField(max_length=250, required=False)
+    StorageDay = forms.IntegerField(required=False)
+    UnstuffDate = forms.DateField(required=False)
+    IsPartial = forms.BooleanField(required=False)
+    IssuedQuantity = forms.IntegerField(required=False)
+    IssuedWeight = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    IssuedVolume = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    InitialQuantity = forms.IntegerField(required=False)
+    InitialWeight = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    InitialVolume = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    BalanceQuantity = forms.IntegerField(required=False)
+    BalanceWeight = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    BalanceVolume = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    LocationDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    PackageDesc = forms.CharField(widget=forms.Textarea(), required=False)
+    ConsigneeID = forms.UUIDField(required=False)
+    ConsigneeName = forms.CharField(max_length=250, required=False)
+    PaymentType = forms.ChoiceField(
+        choices=[(0, "Cash"), (1, "Credit"), (2, "Cheque"), (3, "Online Transfer")],
+        widget=forms.RadioSelect(),
+    )
+    RefNo = forms.CharField(max_length=50, required=False)
+    IidNo = forms.CharField(max_length=50, required=False)
+
+    class Meta:
+        model = Invoice
+        fields = [
+            "InvoiceID",
+            "No",
+            "IssueDate",
+            "HblID",
+            "HblNo",
+            "OblNo",
+            "VoyageNo",
+            "ShipCallNo",
+            "Eta",
+            "VesselName",
+            "LoadPortName",
+            "UnLoadPortName",
+            "StorageDay",
+            "UnstuffDate",
+            "IsPartial",
+            "IssuedQuantity",
+            "IssuedWeight",
+            "IssuedVolume",
+            "InitialQuantity",
+            "InitialWeight",
+            "InitialVolume",
+            "BalanceQuantity",
+            "BalanceWeight",
+            "BalanceVolume",
+            "LocationDesc",
+            "PackageDesc",
+            "ConsigneeID",
+            "ConsigneeName",
+            "PaymentType",
+            "RefNo",
+            "IidNo",
+        ]
+
+
+class CreditFormModel(forms.ModelForm):
+    CreditID = forms.UUIDField(required=False)
+    No = forms.CharField(max_length=50, required=False)
+    IssueDate = forms.DateField(required=False)
+    InvoiceID = forms.UUIDField(required=False)
+    InvoiceNo = forms.CharField(max_length=50, required=False)
+    InvoiceIssueDate = forms.DateField(required=False)
+    IsPartial = forms.BooleanField(required=False)
+    IssuedQuantity = forms.IntegerField(required=False)
+    IssuedWeight = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    IssuedVolume = forms.DecimalField(max_digits=18, decimal_places=3, required=False)
+    ConsigneeName = forms.CharField(max_length=250, required=False)
+    PaymentType = forms.ChoiceField(
+        choices=[(0, "Cash"), (1, "Credit"), (2, "Cheque"), (3, "Online Transfer")],
+        widget=forms.RadioSelect(),
+        required=False,
+    )
+    RefNo = forms.CharField(max_length=50, required=False)
+    IidNo = forms.CharField(max_length=50, required=False)
+    HblNo = forms.CharField(max_length=50, required=False)
+    ClassShortName = forms.CharField(max_length=250, required=False)
+    OblNo = forms.CharField(max_length=250, required=False)
+    VoyageNo = forms.CharField(max_length=15, required=False)
+    ShipCallNo = forms.CharField(max_length=15, required=False)
+    Eta = forms.DateField(required=False)
+    VesselName = forms.CharField(max_length=250, required=False)
+    LoadPortName = forms.CharField(max_length=250, required=False)
+    UnLoadPortName = forms.CharField(max_length=250, required=False)
+    StorageDay = forms.IntegerField(required=False)
+    UnstuffDate = forms.DateField(required=False)
+    LocationDesc = forms.CharField(widget=forms.Textarea(), required=False)
+
+    class Meta:
+        model = Credit
+        fields = [
+            "CreditID",
+            "No",
+            "IssueDate",
+            "InvoiceID",
+            "InvoiceNo",
+            "InvoiceIssueDate",
+            "IsPartial",
+            "IssuedQuantity",
+            "IssuedWeight",
+            "IssuedVolume",
+            "ConsigneeName",
+            "PaymentType",
+            "RefNo",
+            "IidNo",
+            "HblNo",
+            "ClassShortName",
+            "OblNo",
+            "VoyageNo",
+            "ShipCallNo",
+            "Eta",
+            "VesselName",
+            "LoadPortName",
+            "UnLoadPortName",
+            "StorageDay",
+            "UnstuffDate",
+            "LocationDesc",
         ]

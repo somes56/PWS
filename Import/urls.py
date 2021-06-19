@@ -67,5 +67,92 @@ urlpatterns = [
         views.PartialUnstuffContainerCompletedList,
         name="PartialUnstuffContainerCompletedList",
     ),
-    path("UnstuffContainerForm/<uuid:ContainerID>/", views.UnstuffContainerForm, name="UnstuffContainerForm"),
+    path(
+        "UnstuffContainerForm/<uuid:ContainerID>/",
+        views.UnstuffContainerForm,
+        name="UnstuffContainerForm",
+    ),
+    path("InvoiceList", views.InvoiceList, name="InvoiceList"),
+    path("PartialInvoiceList", views.PartialInvoiceList, name="PartialInvoiceList"),
+    path(
+        "PartialInvoiceList/<str:SearchBy>/",
+        views.PartialInvoiceList,
+        name="PartialInvoiceList",
+    ),
+    path(
+        "PartialInvoiceItemList",
+        views.PartialInvoiceItemList,
+        name="PartialInvoiceItemList",
+    ),
+    path(
+        "PartialInvoiceItemList/<uuid:InvoiceID>/",
+        views.PartialInvoiceItemList,
+        name="PartialInvoiceItemList",
+    ),
+    path("InvoiceForm", views.InvoiceForm, name="InvoiceForm"),
+    path("InvoiceForm/<uuid:InvoiceID>/", views.InvoiceForm, name="InvoiceForm"),
+    path(
+        "DeleteInvoice/<uuid:InvoiceID>/<str:DeleteRemark>",
+        views.DeleteInvoice,
+        name="DeleteInvoice",
+    ),
+    path(
+        "UpsertInvoiceItem/<uuid:InvoiceID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/",
+        views.UpsertInvoiceItem,
+        name="UpsertInvoiceItem",
+    ),
+    path(
+        "UpsertInvoiceItem/<uuid:InvoiceID>/<uuid:InvoiceItemID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/",
+        views.UpsertInvoiceItem,
+        name="UpsertInvoiceItem",
+    ),
+    path(
+        "DeleteInvoiceItem/<uuid:InvoiceItemID>/",
+        views.DeleteInvoiceItem,
+        name="DeleteInvoiceItem",
+    ),
+    path(
+        "UpsertDefaultInvoiceItem/<uuid:InvoiceID>/",
+        views.UpsertDefaultInvoiceItem,
+        name="UpsertDefaultInvoiceItem",
+    ),
+    path("CreditList", views.CreditList, name="CreditList"),
+    path("PartialCreditList", views.PartialCreditList, name="PartialCreditList"),
+    path(
+        "PartialCreditList/<str:SearchBy>/",
+        views.PartialCreditList,
+        name="PartialCreditList",
+    ),
+    path(
+        "PartialCreditItemList",
+        views.PartialCreditItemList,
+        name="PartialCreditItemList",
+    ),
+    path(
+        "PartialCreditItemList/<uuid:CreditID>/",
+        views.PartialCreditItemList,
+        name="PartialCreditItemList",
+    ),
+    path("CreditForm", views.CreditForm, name="CreditForm"),
+    path("CreditForm/<uuid:CreditID>/", views.CreditForm, name="CreditForm"),
+    path(
+        "UpsertCreditItem/<uuid:CreditID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/<int:IsDefaultItem>/",
+        views.UpsertCreditItem,
+        name="UpsertCreditItem",
+    ),
+    path(
+        "UpsertCreditItem/<uuid:CreditID>/<uuid:CreditItemID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/<int:IsDefaultItem>/",
+        views.UpsertCreditItem,
+        name="UpsertCreditItem",
+    ),
+    path(
+        "DeleteCredit/<uuid:CreditID>/<str:DeleteRemark>",
+        views.DeleteCredit,
+        name="DeleteCredit",
+    ),
+    path(
+        "DeleteCreditItem/<uuid:CreditItemID>/",
+        views.DeleteCreditItem,
+        name="DeleteCreditItem",
+    ),
 ]

@@ -1,0 +1,41 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Credit Note {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/Credit.js' %}"></script>
+{% endblock script %}
+
+{% block content %}
+
+<h2>Credit Note</h2>
+<hr />
+
+<div class="row">
+    <div class="form-group">
+        <div class="col-md-9">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" id="SearchString" name="SearchString" value=""
+                    placeholder="Search Credit Note">
+                <span class="input-group-addon   input-sm">
+                    <span class="glyphicon glyphicon-search" onclick="PartialCreditList()"></span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-success" onclick="GoToAddPage();">Add</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="PartialCreditListLoading" style="display:none">
+    <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div id="PartialCreditList"></div>
+
+
+{% endblock content %}

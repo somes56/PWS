@@ -1,0 +1,66 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for InvoiceItem in InvoiceItems %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit"
+                    onclick="UpdateInvoiceItem('{{ InvoiceItem.ID }}', '{{ InvoiceItem.Item.ID }}', '{{ InvoiceItem.Item.Name }}', '{{ InvoiceItem.Quantity }}', '{{ InvoiceItem.UnitAmount }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash"
+                    onclick="DeleteInvoiceItem('{{ InvoiceItem.ID }}', '{{ InvoiceItem.Item.Name }}')"></span>
+            </td>
+            <td>{{ InvoiceItem.Item.Name }}</td>
+            <td>{{ InvoiceItem.Quantity }}</td>
+            <td>{{ InvoiceItem.UnitAmount }}</td>
+            <td>{{ InvoiceItem.Amount }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td>
+                <span class="glyphicon glyphicon-ok" onclick="UpsertInvoiceItem()"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-remove" onclick="CancelInvoiceItem()"></span>
+            </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control input-sm" id="ItemName" readonly />
+                    <input type="hidden" id="InvoiceItemID" />
+                    <input type="hidden" id="ItemID" />
+                    <span class="input-group-addon input-sm">
+                        <span class="glyphicon glyphicon-search" id="btnSearchtest" onclick="SearchItem()"></span>
+                    </span>
+                </div>
+            </td>
+            <td><input type="number" class="form-control input-sm" id="ItemQuantity" /></td>
+            <td><input type="number" class="form-control input-sm" id="ItemUnitAmount" /></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align:right;">Total</td>
+            <td>
+                {% if InvoiceItems|length > 0 %}
+                <b>{{ InvoiceItems.0.Invoice.Amount }}</b>
+                {% else %}
+                <b>0.00</b>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>

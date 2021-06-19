@@ -1,0 +1,221 @@
+{% extends 'Layout.html' %}
+{% load static %}
+{% block title %} Credit Note Form {% endblock title %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/CreditForm.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/AdvSearch.js' %}"></script>
+{% endblock script %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Credit Note Registration</h2>
+<hr />
+
+<form method="POST">
+
+    {% if SysGoodMsg %}
+    <div id="SysGoodMsg" class="alert alert-success"><strong>{{ SysGoodMsg }}</strong></div>
+    {% endif %}
+
+    {% if SysBadMsg %}
+    <div id="SysBagMsg" class="alert alert-danger"><strong>{{ SysBadMsg }}</strong></div>
+    {% endif %}
+
+    <div id="ClientVerifyBlock" class="alert alert-danger"><strong><span id="ClientVerifyMsg"></span></strong></div>
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.No|attr:"readonly:readonly" id="No" class="form-control input-sm" %}
+                    {% render_field Form.CreditID|attr:"hidden:true" id="CreditID" %}
+                    {% render_field Form.IssueDate|attr:"hidden:true" id="IssueDate" %}
+                </div>
+                <label class="col-md-2 control-label">Storage Day :</label>
+                <div class="col-md-3">
+                    {% render_field Form.StorageDay|attr:"readonly:readonly" id="StorageDay" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Invoice :</label>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        {% render_field Form.InvoiceNo|attr:"readonly:readonly" id="InvoiceNo" class="form-control input-sm" %}
+                        {% render_field Form.InvoiceID|attr:"hidden:true" id="InvoiceID" %}
+                        <span class="input-group-addon input-sm">
+                            <span class="glyphicon glyphicon-search" id="btnSearchInvoice" onclick="$('#CreditID').val() === '' ? SearchInvoice() : null"></span>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Hbl :</label>
+                <div class="col-md-3">
+                    {% render_field Form.HblNo|attr:"readonly:readonly" id="HblNo" class="form-control input-sm" %}
+                    {% render_field Form.ClassShortName|attr:"hidden:true" id="ClassShortName" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Invoice Issue Date :</label>
+                <div class="col-md-3">
+                    {% render_field Form.InvoiceIssueDate|attr:"readonly:readonly" id="InvoiceIssueDate" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Obl :</label>
+                <div class="col-md-3">
+                    {% render_field Form.OblNo|attr:"readonly:readonly" id="OblNo" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Partial :</label>
+                <div class="col-md-3">
+                    <div class="form-inline">
+                        {% render_field Form.IsPartial|attr:"readonly:readonly" id="IsPartial" class="checkbox" %}
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">Voyage :</label>
+                <div class="col-md-3">
+                    {% render_field Form.VoyageNo|attr:"readonly:readonly" id="VoyageNo" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Quantity :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IssuedQuantity|attr:"readonly:readonly" id="IssuedQuantity" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Ship Call No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ShipCallNo|attr:"readonly:readonly" id="ShipCallNo" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Weight :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IssuedWeight|attr:"readonly:readonly" id="IssuedWeight" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Eta :</label>
+                <div class="col-md-3">
+                    {% render_field Form.Eta|attr:"readonly:readonly" id="Eta" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Volume :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IssuedVolume|attr:"readonly:readonly" id="IssuedVolume" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Vessel :</label>
+                <div class="col-md-3">
+                    {% render_field Form.VesselName|attr:"readonly:readonly" id="VesselName" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Bill To :</label>
+                <div class="col-md-3">
+                    {% render_field Form.ConsigneeName|attr:"readonly:readonly" id="ConsigneeName" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Load Port :</label>
+                <div class="col-md-3">
+                    {% render_field Form.LoadPortName|attr:"readonly:readonly" id="LoadPortName" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Payment Type :</label>
+                <div class="col-md-3">
+                    {% for radio in Form.PaymentType %}
+                    {{ radio.tag }}&nbsp;{{radio.choice_label}}&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+                <label class="col-md-2 control-label">Unload Port :</label>
+                <div class="col-md-3">
+                    {% render_field Form.UnLoadPortName|attr:"readonly:readonly" id="UnLoadPortName" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Reference No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.RefNo|attr:"readonly:readonly" id="RefNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Unstuff Date :</label>
+                <div class="col-md-3">
+                    {% render_field Form.UnstuffDate|attr:"readonly:readonly" id="UnstuffDate" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2 control-label">IID No :</label>
+                <div class="col-md-3">
+                    {% render_field Form.IidNo|attr:"readonly:readonly" id="IidNo" class="form-control input-sm" %}
+                </div>
+                <label class="col-md-2 control-label">Location Description :</label>
+                <div class="col-md-3">
+                    {% render_field Form.LocationDesc|attr:"readonly:readonly" style="resize:none" id="LocationDesc" rows="5" class="form-control input-sm" %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Credit Note Item</h2>
+            </div>
+        </div>
+        <hr />
+
+        <div id="PartialCreditItemListLoading" style="display:none">
+            <img id="img-spinner" src="{% static 'spinner/clock-loader.gif' %}" alt="Loading..." />
+        </div>
+        
+        <div class="row">&nbsp;</div>
+
+        <div id="PartialCreditItemList"></div>
+
+        <div class="row">&nbsp;</div>
+        <hr />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-5 col-md-offset-5">
+                    <button type="submit" id="Save" class="btn btn-success"
+                        onclick="return SubmitValidation();">Save</button>
+                    <span>&nbsp;</span>
+                    <button type="reset" id="Reset" class="btn btn-danger" onclick="ResetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+{% include 'PartialAdvSearchModal.html' %}
+
+{% endblock content %}
