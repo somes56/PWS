@@ -1,0 +1,23 @@
+<table class="table">
+    <tr>
+        <th style="width:30%">No</th>
+        <th style="width:30%">Hbl</th>
+        <th></th>
+    </tr>
+
+
+    {% for Invoice in Invoices %}
+    <tr>
+        <td>{{ Invoice.1 }}</td>
+        <td>{{ Invoice.11 }}</td>
+        <td><button type="button"
+                onclick="AdvSearchCustomSel('{{ Invoice.0 }}', '{{ Invoice.1 }}', '{{ Invoice.2 }}', '{{ Invoice.3 }}', '{{ Invoice.4 }}',
+                                            '{{ Invoice.5 }}', '{{ Invoice.6 }}', '{{ Invoice.7 }}', '{{ Invoice.8 }}', '{{ Invoice.9 }}',
+                                            '{{ Invoice.10 }}','{{ Invoice.21 }}','{{ Invoice.11 }}','{{ Invoice.20 }}','{{ Invoice.12 }}', 
+                                            '{{ Invoice.13 }}', '{{ Invoice.14 }}', '{{ Invoice.22 }}', '{{ Invoice.15 }}', '{{ Invoice.16 }}',
+                                            '{{ Invoice.17 }}', '{{ Invoice.18 }}', '{{ Invoice.19 }}'  )">select</button>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>

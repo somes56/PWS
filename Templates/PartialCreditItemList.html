@@ -1,0 +1,66 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for CreditItem in CreditItems %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <span class="glyphicon glyphicon-edit"
+                    onclick="UpdateCreditItem('{{ CreditItem.ID }}', '{{ CreditItem.Item.ID }}', '{{ CreditItem.Item.Name }}', '{{ CreditItem.Quantity }}', '{{ CreditItem.UnitAmount }}', '{{ CreditItem.IsDefault }}')"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-trash"
+                    onclick="DeleteCreditItem('{{ CreditItem.ID }}', '{{ CreditItem.Item.Name }}')"></span>
+            </td>
+            <td>{{ CreditItem.Item.Name }}</td>
+            <td>{{ CreditItem.Quantity }}</td>
+            <td>{{ CreditItem.UnitAmount }}</td>
+            <td>{{ CreditItem.Amount }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td>
+                <span class="glyphicon glyphicon-ok" onclick="UpsertCreditItem()"></span>
+                <span>&nbsp;</span>
+                <span class="glyphicon glyphicon-remove" onclick="CancelCreditItem()"></span>
+            </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control input-sm" id="ItemName" readonly />
+                    <input type="hidden" id="CreditItemID" />
+                    <input type="hidden" id="ItemID" />
+                    <span class="input-group-addon input-sm">
+                        <span class="glyphicon glyphicon-search" id="btnSearchItem" onclick="SearchItem()"></span>
+                    </span>
+                </div>
+            </td>
+            <td><input type="number" class="form-control input-sm" id="ItemQuantity" /></td>
+            <td><input type="number" class="form-control input-sm" id="ItemUnitAmount" /></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align:right;">Total</td>
+            <td>
+                {% if CreditItems|length > 0 %}
+                <b>{{ CreditItems.0.Credit.Amount }}</b>
+                {% else %}
+                <b>0.00</b>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>

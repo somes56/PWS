@@ -4,6 +4,7 @@ from Import.formModels import (
     HblFormModel,
     UnstuffContainerFormModel,
     InvoiceFormModel,
+    CreditFormModel,
 )
 from Import.dtos import DefaultInvoiceItemUpsertDto
 from datetime import datetime
@@ -613,3 +614,200 @@ class importBL:
         importRepo.UpdateInvoiceAmount(InvoiceItemDto.Invoice.ID)
 
         return rtn
+
+    def InitialiseCreditFormModel(CreditID=None):
+        form = CreditFormModel()
+
+        try:
+            if CreditID == None:
+                form.initial["CreditID"] = None
+                form.initial["IssueDate"] = datetime.now(tz=timezone.utc)
+                form.initial["PaymentType"] = 0
+            else:
+                Dto = importRepo.LoadCredit(CreditID)
+                form.initial["CreditID"] = Dto.ID
+                form.initial["No"] = Dto.No
+                form.initial["IssueDate"] = Dto.IssueDate
+                form.initial["InvoiceID"] = (
+                    None if Dto.Invoice == None else Dto.Invoice.ID
+                )
+                form.initial["InvoiceNo"] = (
+                    "" if Dto.Invoice == None else Dto.Invoice.No
+                )
+                form.initial["InvoiceIssueDate"] = (
+                    None if Dto.Invoice == None else Dto.Invoice.IssueDate
+                )
+                form.initial["IsPartial"] = (
+                    False if Dto.Invoice == None else Dto.Invoice.IsPartial
+                )
+                form.initial["IssuedQuantity"] = (
+                    0 if Dto.Invoice == None else Dto.Invoice.IssuedQuantity
+                )
+                form.initial["IssuedWeight"] = (
+                    0 if Dto.Invoice == None else Dto.Invoice.IssuedWeight
+                )
+                form.initial["IssuedVolume"] = (
+                    0 if Dto.Invoice == None else Dto.Invoice.IssuedVolume
+                )
+                form.initial["ConsigneeName"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Consignee == None
+                    else Dto.Invoice.Consignee.Name
+                )
+                form.initial["PaymentType"] = (
+                    0 if Dto.Invoice == None else Dto.Invoice.PaymentType
+                )
+                form.initial["RefNo"] = "" if Dto.Invoice == None else Dto.Invoice.RefNo
+                form.initial["IidNo"] = "" if Dto.Invoice == None else Dto.Invoice.IidNo
+                form.initial["HblNo"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else Dto.Invoice.Hbl.No
+                )
+                form.initial["ClassShortName"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Class == None
+                    else Dto.Invoice.Hbl.Class.ShortName
+                )
+                form.initial["OblNo"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else Dto.Invoice.Hbl.Obl.No
+                )
+                form.initial["VoyageNo"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.Voyage == None
+                    else Dto.Invoice.Hbl.Obl.Voyage.No
+                )
+                form.initial["ShipCallNo"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.Voyage == None
+                    else Dto.Invoice.Hbl.Obl.Voyage.ShipCallNo
+                )
+                form.initial["Eta"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.Voyage == None
+                    else Dto.Invoice.Hbl.Obl.Voyage.Eta
+                )
+                form.initial["VesselName"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.Voyage == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.Voyage.Vessel == None
+                    else Dto.Invoice.Hbl.Obl.Voyage.Vessel.Name
+                )
+                form.initial["LoadPortName"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.LoadPort == None
+                    else Dto.Invoice.Hbl.Obl.LoadPort.Name
+                )
+                form.initial["UnLoadPortName"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Obl.UnloadPort == None
+                    else Dto.Invoice.Hbl.Obl.UnloadPort.Name
+                )
+                form.initial["StorageDay"] = Dto.StorageDay
+                form.initial["UnstuffDate"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else ""
+                    if Dto.Invoice.Hbl.Container == None
+                    else Dto.Invoice.Hbl.Container.UnstuffDate
+                )
+                form.initial["LocationDesc"] = (
+                    ""
+                    if Dto.Invoice == None
+                    else ""
+                    if Dto.Invoice.Hbl == None
+                    else Dto.Invoice.Hbl.LocationDesc
+                )
+
+        except Exception as e:
+            print(e)
+
+        return form
+
+    def InitialiseErrorCreditFormModel(_Form):
+        form = CreditFormModel()
+
+        try:
+            form.initial["CreditID"] = _Form["CreditID"]
+            form.initial["No"] = _Form["No"]
+            form.initial["IssueDate"] = _Form["IssueDate"]
+            form.initial["InvoiceID"] = _Form["InvoiceID"]
+            form.initial["InvoiceNo"] = _Form["InvoiceNo"]
+            form.initial["InvoiceIssueDate"] = _Form["InvoiceIssueDate"]
+            form.initial["IsPartial"] = _Form["IsPartial"]
+            form.initial["IssuedQuantity"] = _Form["IssuedQuantity"]
+            form.initial["IssuedWeight"] = _Form["IssuedWeight"]
+            form.initial["IssuedVolume"] = _Form["IssuedVolume"]
+            form.initial["ConsigneeName"] = _Form["ConsigneeName"]
+            form.initial["PaymentType"] = _Form["PaymentType"]
+            form.initial["RefNo"] = _Form["RefNo"]
+            form.initial["IidNo"] = _Form["IidNo"]
+            form.initial["HblNo"] = _Form["HblNo"]
+            form.initial["ClassShortName"] = _Form["ClassShortName"]
+            form.initial["OblNo"] = _Form["OblNo"]
+            form.initial["VoyageNo"] = _Form["VoyageNo"]
+            form.initial["ShipCallNo"] = _Form["ShipCallNo"]
+            form.initial["Eta"] = _Form["Eta"]
+            form.initial["VesselName"] = _Form["VesselName"]
+            form.initial["LoadPortName"] = _Form["LoadPortName"]
+            form.initial["UnLoadPortName"] = _Form["UnLoadPortName"]
+            form.initial["StorageDay"] = _Form["StorageDay"]
+            form.initial["UnstuffDate"] = _Form["UnstuffDate"]
+            form.initial["LocationDesc"] = _Form["LocationDesc"]
+        except Exception as e:
+            print(e)
+
+        return form

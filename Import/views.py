@@ -1,3 +1,4 @@
+from DataAccess.MasterRepo import masterRepo
 from django.shortcuts import render, HttpResponse
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,6 +12,7 @@ from Import.formModels import (
     HblFormModel,
     UnstuffContainerFormModel,
     InvoiceFormModel,
+    CreditFormModel,
 )
 
 
@@ -584,6 +586,168 @@ def DeleteInvoiceItem(request, InvoiceItemID=None):
 
     if request.method == "POST":
         rtn = importBL.DeleteInvoiceItem(InvoiceItemID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+def CreditList(request):
+    return render(request, "Credit.html")
+
+
+def PartialCreditList(request, SearchBy=""):
+    Credits = []
+    Credits = importRepo.PartialCreditList(SearchBy)
+
+    Page = request.GET.get("page", 1)
+    _Paginator = Paginator(Credits, 50)
+
+    try:
+        CreditPaginator = _Paginator.page(Page)
+    except PageNotAnInteger:
+        CreditPaginator = _Paginator.page(1)
+    except EmptyPage:
+        CreditPaginator = _Paginator.page(_Paginator.num_pages)
+
+    return render(request, "PartialCreditList.html", {"Credits": CreditPaginator})
+
+
+def PartialCreditItemList(request, CreditID=None):
+    CreditItems = []
+    CreditItems = importRepo.PartialCreditItemList(CreditID)
+
+    return render(request, "PartialCreditItemList.html", {"CreditItems": CreditItems})
+
+
+@csrf_exempt
+def CreditForm(request, CreditID=None):
+    SysGoodMsg = ""
+    SysBadMsg = ""
+
+    if request.method == "GET":
+        creditFormModel = CreditFormModel()
+
+        if CreditID == None:
+            creditFormModel = importBL.InitialiseCreditFormModel(None)
+        else:
+            creditFormModel = importBL.InitialiseCreditFormModel(CreditID)
+
+        return render(
+            request,
+            "CreditForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": creditFormModel,
+            },
+        )
+
+    else:
+        IsUpdate = False
+        CreditNo = None
+        UpsertResult = {}
+        creditFormModel = CreditFormModel()
+        _post = CreditFormModel(request.POST)
+
+        if _post.is_valid():
+            _Form = _post.cleaned_data
+
+            if _Form["CreditID"] != None:
+                IsUpdate = True
+                CreditNo = _Form["No"]
+            else:
+                CreditNo = sysBL.GenerateRunningNo(
+                    "d1c508dc-ff6b-4aa5-b478-8098e84aadc5", "CN"
+                )
+
+            if CreditNo != None:
+                _Form["No"] = CreditNo
+                UpsertResult = importRepo.UpsertCredit(_Form)
+
+                if UpsertResult["rtn"] == True:
+                    creditFormModel = importBL.InitialiseCreditFormModel(
+                        UpsertResult["CreditID"]
+                    )
+
+                    if IsUpdate == False:
+                        SysGoodMsg = "Inserted Successfully"
+                    else:
+                        SysGoodMsg = "Updated Successfully"
+
+                else:
+                    creditFormModel = importBL.InitialiseErrorCreditFormModel(_Form)
+
+                    if IsUpdate == False:
+                        SysBadMsg = "Insert Fail"
+                    else:
+                        SysBadMsg = "Update Fail"
+
+            else:
+                creditFormModel = importBL.InitialiseErrorCreditFormModel(_Form)
+
+                if IsUpdate:
+                    SysBadMsg = "No is required"
+                else:
+                    SysBadMsg = "Credit No Generation Fail"
+
+        else:
+            SysBadMsg = "Invalid Input"
+
+        return render(
+            request,
+            "CreditForm.html",
+            {
+                "SysGoodMsg": SysGoodMsg,
+                "SysBadMsg": SysBadMsg,
+                "Form": creditFormModel,
+            },
+        )
+
+
+@csrf_exempt
+def UpsertCreditItem(
+    request,
+    CreditID=None,
+    CreditItemID=None,
+    ItemID=None,
+    ItemQuantity=0,
+    ItemUnitAmount=None,
+    IsDefaultItem=0,
+):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = importRepo.UpsertCreditItem(
+            importRepo,
+            CreditID,
+            CreditItemID,
+            ItemID,
+            ItemQuantity,
+            float(ItemUnitAmount),
+            True if IsDefaultItem == 1 else False,
+        )
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+@csrf_exempt
+def DeleteCreditItem(request, CreditItemID=None):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = importRepo.DeleteCreditItem(importRepo, CreditItemID)
+    else:
+        rtn = False
+    return HttpResponse(rtn)
+
+
+@csrf_exempt
+def DeleteCredit(request, CreditID=None, DeleteRemark=None):
+    rtn = False
+
+    if request.method == "POST":
+        rtn = importRepo.DeleteCredit(CreditID, DeleteRemark)
     else:
         rtn = False
     return HttpResponse(rtn)

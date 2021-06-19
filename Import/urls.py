@@ -116,4 +116,43 @@ urlpatterns = [
         views.UpsertDefaultInvoiceItem,
         name="UpsertDefaultInvoiceItem",
     ),
+    path("CreditList", views.CreditList, name="CreditList"),
+    path("PartialCreditList", views.PartialCreditList, name="PartialCreditList"),
+    path(
+        "PartialCreditList/<str:SearchBy>/",
+        views.PartialCreditList,
+        name="PartialCreditList",
+    ),
+    path(
+        "PartialCreditItemList",
+        views.PartialCreditItemList,
+        name="PartialCreditItemList",
+    ),
+    path(
+        "PartialCreditItemList/<uuid:CreditID>/",
+        views.PartialCreditItemList,
+        name="PartialCreditItemList",
+    ),
+    path("CreditForm", views.CreditForm, name="CreditForm"),
+    path("CreditForm/<uuid:CreditID>/", views.CreditForm, name="CreditForm"),
+    path(
+        "UpsertCreditItem/<uuid:CreditID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/<int:IsDefaultItem>/",
+        views.UpsertCreditItem,
+        name="UpsertCreditItem",
+    ),
+    path(
+        "UpsertCreditItem/<uuid:CreditID>/<uuid:CreditItemID>/<uuid:ItemID>/<int:ItemQuantity>/<str:ItemUnitAmount>/<int:IsDefaultItem>/",
+        views.UpsertCreditItem,
+        name="UpsertCreditItem",
+    ),
+    path(
+        "DeleteCredit/<uuid:CreditID>/<str:DeleteRemark>",
+        views.DeleteCredit,
+        name="DeleteCredit",
+    ),
+    path(
+        "DeleteCreditItem/<uuid:CreditItemID>/",
+        views.DeleteCreditItem,
+        name="DeleteCreditItem",
+    ),
 ]

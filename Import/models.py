@@ -239,6 +239,7 @@ class Invoice(models.Model):
     class Meta:
         db_table = "imp_Invoice"
 
+
 class InvoiceItem(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     Invoice = models.ForeignKey(
@@ -258,7 +259,9 @@ class InvoiceItem(models.Model):
         default=None,
     )
     Quantity = models.IntegerField(default=0)
-    UnitAmount = models.DecimalField(max_digits=18, decimal_places=2, null=True, default=0)
+    UnitAmount = models.DecimalField(
+        max_digits=18, decimal_places=2, null=True, default=0
+    )
     Amount = models.DecimalField(max_digits=18, decimal_places=2, null=True, default=0)
     IsDefault = models.BooleanField(default=False)
     IsActive = models.BooleanField(default=False)
@@ -269,3 +272,63 @@ class InvoiceItem(models.Model):
 
     class Meta:
         db_table = "imp_InvoiceItem"
+
+
+class Credit(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    No = models.CharField(max_length=50)
+    IssueDate = models.DateField(null=True)
+    Invoice = models.ForeignKey(
+        Invoice,
+        db_column="InvoiceID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    StorageDay = models.IntegerField(default=0)
+    Amount = models.DecimalField(max_digits=18, decimal_places=2, null=True, default=0)
+    AmountWord = models.TextField(null=True, default="")
+    DeleteRemark = models.CharField(max_length=250, null=True, default="")
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = "imp_Credit"
+
+
+class CreditItem(models.Model):
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Credit = models.ForeignKey(
+        Credit,
+        db_column="CreditID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    Item = models.ForeignKey(
+        Item,
+        db_column="ItemID",
+        on_delete=models.PROTECT,
+        unique=False,
+        null=True,
+        default=None,
+    )
+    Quantity = models.IntegerField(default=0)
+    UnitAmount = models.DecimalField(
+        max_digits=18, decimal_places=2, null=True, default=0
+    )
+    Amount = models.DecimalField(max_digits=18, decimal_places=2, null=True, default=0)
+    IsDefault = models.BooleanField(default=False)
+    IsActive = models.BooleanField(default=False)
+    CreateDate = models.DateTimeField(null=True, default=datetime.today())
+    CreateBy = models.UUIDField(null=True)
+    UpdateDate = models.DateTimeField(null=True, default=datetime.today())
+    UpdateBy = models.UUIDField(null=True)
+
+    class Meta:
+        db_table = "imp_CreditItem"
